@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using EcomerceApp.Data;
 
 namespace EcomerceApp.Controllers
 {
@@ -14,10 +15,12 @@ namespace EcomerceApp.Controllers
     public class ApplicationUsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public ApplicationUsersController(UserManager<ApplicationUser> userManager)
+        public ApplicationUsersController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         // GET: api/ApplicationUsers
@@ -26,6 +29,23 @@ namespace EcomerceApp.Controllers
         {
             var users = await _userManager.Users.ToListAsync();
             return users;
+        }
+
+        [HttpGet("{id}/roles")]
+        public async Task<ActionResult<IEnumerable<string>>> GetUserRoles(string id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var roles = await _context.UserRoles.Where(ur => ur.UserId == id).ToListAsync();
+            string[] roleList = roles.Select(r => r.RoleId).ToArray();
+            var UserRoles = await _context.Roles.Where(r => roleList.Contains(r.Id)).Select(r => r.Name).ToListAsync();
+
+
+            return UserRoles;
         }
 
         // GET: api/ApplicationUsers/5

@@ -312,15 +312,16 @@ namespace EcomerceApp.Data
             {
                 var userList = context.Users.ToList();
                 var roleList = context.Roles.ToList();
+
                 foreach (var user in userList)
                 {
-                    // Số lượng vai trò ngẫu nhiên từ 1 đến 3
+                    // Random number of roles between 1 and 3
                     int numberOfRoles = random.Next(1, 4);
 
-                    // Chọn ngẫu nhiên các vai trò
+                    // Select random roles
                     var selectedRoles = roleList.OrderBy(r => random.Next()).Take(numberOfRoles).ToList();
 
-                    // Thêm vai trò cho người dùng
+                    // Add roles to user
                     foreach (var role in selectedRoles)
                     {
                         context.UserRoles.Add(new IdentityUserRole<string>
@@ -330,6 +331,8 @@ namespace EcomerceApp.Data
                         });
                     }
                 }
+
+                // Save changes
                 try
                 {
                     context.SaveChanges();
@@ -339,6 +342,7 @@ namespace EcomerceApp.Data
                     Console.WriteLine("UserRole-----------" + ex.Message);
                 }
             }
+
 
             if (!context.Blogs.Any())
             {

@@ -33,19 +33,33 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\assets\**" />
+    <Compile Remove="ClientApp\src\layouts\**" />
+    <Compile Remove="ClientApp\src\pages\**" />
+    <Compile Remove="ClientApp\src\redux\**" />
+    <Compile Remove="mailssave\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\assets\**" />
+    <Content Remove="ClientApp\src\layouts\**" />
+    <Content Remove="ClientApp\src\pages\**" />
+    <Content Remove="ClientApp\src\redux\**" />
+    <Content Remove="mailssave\**" />
+    <EmbeddedResource Remove="ClientApp\src\assets\**" />
+    <EmbeddedResource Remove="ClientApp\src\layouts\**" />
+    <EmbeddedResource Remove="ClientApp\src\pages\**" />
+    <EmbeddedResource Remove="ClientApp\src\redux\**" />
+    <EmbeddedResource Remove="mailssave\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\assets\**" />
+    <None Remove="ClientApp\src\layouts\**" />
+    <None Remove="ClientApp\src\pages\**" />
+    <None Remove="ClientApp\src\redux\**" />
+    <None Remove="mailssave\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ClientApp\public\img\" />
-    <Folder Include="ClientApp\src\assets\css\" />
-    <Folder Include="ClientApp\src\assets\img\" />
-    <Folder Include="ClientApp\src\layouts\" />
-    <Folder Include="ClientApp\src\pages\" />
-    <Folder Include="ClientApp\src\redux\" />
-    <Folder Include="mailssave\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

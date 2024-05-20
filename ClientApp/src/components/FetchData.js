@@ -53,12 +53,21 @@ export class FetchData extends Component {
   }
 
   async populateWeatherData() {
-    const token = await authService.getAccessToken();
-    console.log(token);
-    const response = await fetch('weatherforecast', {
-      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-    });
-    const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
+      const token = await authService.getAccessToken();
+
+      var roles = await authService.isinRole('Blogger');
+      if (roles) {
+          const response = await fetch('weatherforecast', {
+              headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+          });
+          const data = await response.json();
+          this.setState({ forecasts: data, loading: false });
+      } else {
+          window.location.href = '/Identity/Account/AccessDenied';
+          this.setState({ forecasts: [], loading: false });
+      }
+
+
+ 
   }
 }

@@ -1,4 +1,4 @@
-import { UserManager, WebStorageStateStore } from 'oidc-client';
+﻿import { UserManager, WebStorageStateStore } from 'oidc-client';
 import { ApplicationPaths, ApplicationName } from './ApiAuthorizationConstants';
 
 export class AuthorizeService {
@@ -15,6 +15,31 @@ export class AuthorizeService {
     const user = await this.getUser();
     return !!user;
   }
+
+    async isinRole(role) {
+    try {
+        // Lấy thông tin người dùng từ server
+        var user = await this.getUser();
+        var userId = user.sub;
+        const url = `https://localhost:44412/api/applicationUsers/${userId}/roles`;
+
+        // Gửi yêu cầu lấy danh sách các vai trò của người dùng
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // Kiểm tra xem vai trò được cung cấp có trong danh sách không
+        const roles = data;
+        const hasRole = roles.includes(role);
+
+        console.log(roles); // In ra danh sách các vai trò để kiểm tra
+        console.log(hasRole); // In ra kết quả kiểm tra
+
+        return hasRole;
+    } catch (error) {
+        console.error('Lỗi:', error);
+        return false;
+    }
+}
 
   async getUser() {
     if (this._user && this._user.profile) {

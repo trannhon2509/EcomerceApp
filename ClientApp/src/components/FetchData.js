@@ -55,7 +55,7 @@ export class FetchData extends Component {
   async populateWeatherData() {
       const token = await authService.getAccessToken();
 
-      var roles = await authService.isinRole('Blogger');
+      var roles = await authService.isinRole('Admin');
       if (roles) {
           const response = await fetch('weatherforecast', {
               headers: !token ? {} : { 'Authorization': `Bearer ${token}` }

@@ -154,6 +154,8 @@ namespace EcomerceApp.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                user.imgUrl = "https://lordlibidan.com/wp-content/uploads/2019/03/Animated-Pokemon-Pikachu-Cross-Stitch-by-Lord-Libidan.gif";
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
@@ -164,6 +166,8 @@ namespace EcomerceApp.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+
+                        await _userManager.AddToRoleAsync(user, "User");
 
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

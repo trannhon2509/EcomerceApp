@@ -7,6 +7,7 @@ import blogPostReducer from './reducers/blogPostReducer';
 import orderReducer from './reducers/orderReducer';
 import orderDetailReducer  from './reducers/orderDetailReducer';
 import blogReducer from './reducers/blogReducer';
+import couponReducer from './reducers/couponReducer';
 
 const rootReducer = combineReducers({
     category: categoryReducer,
@@ -16,7 +17,7 @@ const rootReducer = combineReducers({
     order: orderReducer,
     orderDetail: orderDetailReducer,
     blog: blogReducer,
-
+    coupon: couponReducer
 });
 
 export default rootReducer;

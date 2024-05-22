@@ -8,6 +8,7 @@ import CategoriesComponent from '../components/CategoriesComponent';
 import BlogPostComponent from '../components/BlogPostComponent';
 import OrderComponent from '../components/OrderComponent';
 import BlogComponent from '../components/BlogComponent';
+import CouponComponent from '../components/CouponComponent';
 const AppRoutes = [
   {
     index: true,
@@ -51,7 +52,12 @@ const AppRoutes = [
     path: '/fetch-blogs',
     requireAuth: true,
     element: <BlogComponent />
-  },
+    },
+    {
+        path: '/fetch-coupons',
+        requireAuth: true,
+        element: <CouponComponent />
+    },
   
   ...ApiAuthorzationRoutes
 ];

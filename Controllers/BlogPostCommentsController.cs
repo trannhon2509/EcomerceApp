@@ -25,21 +25,23 @@ namespace EcomerceApp.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BlogPostComment>>> GetBlogPostComments()
         {
-          if (_context.BlogPostComments == null)
-          {
-              return NotFound();
-          }
+            if (_context.BlogPostComments == null)
+            {
+                return NotFound();
+            }
             return await _context.BlogPostComments.ToListAsync();
         }
+
+        
 
         // GET: api/BlogPostComments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogPostComment>> GetBlogPostComment(int id)
         {
-          if (_context.BlogPostComments == null)
-          {
-              return NotFound();
-          }
+            if (_context.BlogPostComments == null)
+            {
+                return NotFound();
+            }
             var blogPostComment = await _context.BlogPostComments.FindAsync(id);
 
             if (blogPostComment == null)
@@ -86,10 +88,10 @@ namespace EcomerceApp.Controllers
         [HttpPost]
         public async Task<ActionResult<BlogPostComment>> PostBlogPostComment(BlogPostComment blogPostComment)
         {
-          if (_context.BlogPostComments == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.BlogPostComments'  is null.");
-          }
+            if (_context.BlogPostComments == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.BlogPostComments'  is null.");
+            }
             _context.BlogPostComments.Add(blogPostComment);
             await _context.SaveChangesAsync();
 

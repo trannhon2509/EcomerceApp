@@ -59,7 +59,7 @@ namespace EcomerceApp.Data
                         Description = "Description for " + productName,
                         Price = randomPrice,
                         Quantity = randomQuantity,
-                        ImageUrl = "https://example.com/image.jpg", // URL hình ảnh của sản phẩm
+                        ImageUrl = "https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/blta784fa17e264af96/5fa1efbb209f0756c89d6c7a/3031_Marksman_T3_InfinityEdge.png", // URL hình ảnh của sản phẩm
                         Status = true, // Mặc định sản phẩm là hoạt động
                         ProductCategoryId = category.Id // Gán ID của danh mục đã chọn
                     });
@@ -116,7 +116,7 @@ namespace EcomerceApp.Data
                         NormalizedUserName = userName.ToUpper(),
                         SecurityStamp = Guid.NewGuid().ToString("D"),
                         PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, password),
-                        imgUrl = "https://example.com/avatar.jpg", // URL hình ảnh đại diện của người dùng
+                        imgUrl = "https://i1.sndcdn.com/artworks-000065334969-gmnp3t-t500x500.jpg", // URL hình ảnh đại diện của người dùng
                     });
                 }
                 try
@@ -201,6 +201,7 @@ namespace EcomerceApp.Data
                     {
                         UserId = randomUserId,
                         OrderDate = RandomDateTime(2023, 2024),
+                        note = GenerateRandomString(random, 400),
                         Status = RandomStringFromArray(new string[] { "Pending", "Processing", "Completed", "Cancelled", "Delivering" })
                     };
 

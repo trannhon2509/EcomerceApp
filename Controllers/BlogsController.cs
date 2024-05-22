@@ -31,6 +31,22 @@ namespace EcomerceApp.Controllers
           }
             return await _context.Blogs.ToListAsync();
         }
+         // GET: api/Blogs/GetBlogName/5
+        [HttpGet("GetBlogName/{blogId}")]
+        public async Task<ActionResult<string>> GetBlogName(int blogId)
+        {
+            var blog = await _context.Blogs
+                                     .Where(b => b.Id == blogId)
+                                     .Select(b => b.Title)
+                                     .FirstOrDefaultAsync();
+
+            if (blog == null)
+            {
+                return NotFound();
+            }
+
+            return blog;
+        }
 
         // GET: api/Blogs/5
         [HttpGet("{id}")]

@@ -21,6 +21,28 @@ namespace EcomerceApp.Controllers
             _context = context;
         }
 
+
+ // GET: api/OrderDetails/ByOrder/5
+        [HttpGet("ByOrder/{orderId}")]
+        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetailsByOrderId(int orderId)
+        {
+            if (_context.OrderDetails == null)
+            {
+                return NotFound();
+            }
+
+            var orderDetails = await _context.OrderDetails
+                                             .Where(od => od.OrderId == orderId)
+                                             .Include(od => od.Product) // Include related Product if necessary
+                                             .ToListAsync();
+
+            if (orderDetails == null || !orderDetails.Any())
+            {
+                return NotFound();
+            }
+
+            return orderDetails;
+        }
         // GET: api/OrderDetails
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetails()

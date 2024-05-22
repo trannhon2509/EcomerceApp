@@ -5,11 +5,17 @@ import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import { Layout } from './components/Layout';
 import './custom.css';
 
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
+
+
 export default class App extends Component {
   static displayName = App.name;
 
   render() {
     return (
+      <Provider store={store}>
       <Layout>
         <Routes>
           {AppRoutes.map((route, index) => {
@@ -18,6 +24,7 @@ export default class App extends Component {
           })}
         </Routes>
       </Layout>
+      </Provider>
     );
   }
 }

@@ -39,6 +39,24 @@ export class NavMenu extends Component {
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
               </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/fetch-user">Fetch user</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/fetch-product">Fetch product</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/fetch-categories">Fetch categories</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/fetch-blogPosts">Fetch blog post</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/fetch-orders">Fetch orders</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/fetch-blogs">Fetch blogs</NavLink>
+              </NavItem>
               <LoginMenu>
               </LoginMenu>
             </ul>

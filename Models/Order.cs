@@ -6,6 +6,8 @@
         public string UserId { get; set; } // Khóa ngoại đến bảng User
         public DateTime OrderDate { get; set; }
         public int? CouponId { get; set; } = null;// Khóa ngoại đến bảng Coupon, cho phép null
+
+        public string? note { get; set; }
         public string Status { get; set; }
 
         // Các thuộc tính khác tùy thuộc vào yêu cầu cụ thể

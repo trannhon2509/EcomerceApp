@@ -32,6 +32,15 @@ namespace EcomerceApp.Controllers
             return await _context.Addresses.ToListAsync();
         }
 
+         [HttpGet("GetAddressesByUserId/{userId}")]
+        public async Task<ActionResult<IEnumerable<Address>>> GetAddressesByUserId(string userId){
+            if (_context.Addresses == null)
+            {
+                return NotFound();
+            }
+            return await _context.Addresses.Where(a => a.UserId == userId).ToListAsync();
+        }
+
         // GET: api/Addresses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Address>> GetAddress(int id)

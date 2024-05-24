@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Table, Button, Modal, ModalBody, ModalHeader, ModalFooter, Input, Form, FormGroup, Label, Row, Col } from 'reactstrap';
+import { Container, Table, Button, Modal, ModalBody, ModalHeader, ModalFooter, Input, Form, FormGroup, Label, Row, Col, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { connect } from 'react-redux';
 import { getOrders } from '../redux/actions/orderActions';
 import { getOrderDetails } from '../redux/actions/orderDetailActions'; // Import getOrderDetails action
@@ -33,7 +33,9 @@ class OrderComponent extends Component {
             searchQuery: '',
             filterStatus: '',
             startDate: '',
-            endDate: ''
+            endDate: '',
+            currentPage: 1, // Current page
+            itemsPerPage: 10 // Items per page
         };
     }
 
@@ -89,19 +91,23 @@ class OrderComponent extends Component {
     }
 
     handleSearchChange = (event) => {
-        this.setState({ searchQuery: event.target.value });
+        this.setState({ searchQuery: event.target.value, currentPage: 1 });
     };
 
     handleStatusChange = (event) => {
-        this.setState({ filterStatus: event.target.value });
+        this.setState({ filterStatus: event.target.value, currentPage: 1 });
     };
 
     handleStartDateChange = (event) => {
-        this.setState({ startDate: event.target.value });
+        this.setState({ startDate: event.target.value, currentPage: 1 });
     };
 
     handleEndDateChange = (event) => {
-        this.setState({ endDate: event.target.value });
+        this.setState({ endDate: event.target.value, currentPage: 1 });
+    };
+
+    handlePageChange = (page) => {
+        this.setState({ currentPage: page });
     };
 
     toggleExpandNote = (orderId) => {
@@ -176,52 +182,82 @@ class OrderComponent extends Component {
     };
 
     renderOrdersTable(orders) {
-        return (
-            <Table responsive>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>User ID</th>
-                        <th>Order Date</th>
-                        <th>Coupon Code</th>
-                        <th>Status</th>
-                        <th>Note</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {orders.map(order => (
-                        <tr key={order.id} onClick={() => this.toggleDetailsModal(order.id)}>
-                            <td>{order.id}</td>
-                            <td>{this.state.userNames[order.userId] || 'Loading...'}</td>
-                            <td>{new Date(order.orderDate).toLocaleDateString()}</td>
-                            <td>{order.couponId ? (this.state.couponCodes[order.couponId] || 'Loading...') : 'N/A'}</td>
-                            <td>{order.status}</td>
-                            <td>
-                                {order.note.length > 30 ? (
-                                    <span>
-                                        {order.note.substring(0, 30)}...
-                                        <Button color="link" onClick={(e) => { e.stopPropagation(); this.toggleExpandNote(order.id); }}>
-                                            {this.state.expandedNote === order.id ? "Collapse" : "Read more"}
-                                        </Button>
-                                    </span>
-                                ) : (
-                                    order.note
-                                )}
+        const { currentPage, itemsPerPage } = this.state;
+        const indexOfLastOrder = currentPage * itemsPerPage;
+        const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
+        const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
-                                <Modal isOpen={this.state.expandedNote === order.id} toggle={() => this.toggleExpandNote(order.id)}>
-                                    <ModalHeader toggle={() => this.toggleExpandNote(order.id)}>Order Note</ModalHeader>
-                                    <ModalBody className="modal-body-content">
-                                        {order.note}
-                                    </ModalBody>
-                                    <ModalFooter>
-                                        <Button color="secondary" onClick={() => this.toggleExpandNote(order.id)}>Close</Button>
-                                    </ModalFooter>
-                                </Modal>
-                            </td>
+        const totalPages = Math.ceil(orders.length / itemsPerPage);
+
+        return (
+            <React.Fragment>
+                <Table responsive>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User ID</th>
+                            <th>Order Date</th>
+                            <th>Coupon Code</th>
+                            <th>Status</th>
+                            <th>Note</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        {currentOrders.map(order => (
+                            <tr key={order.id} onClick={() => this.toggleDetailsModal(order.id)}>
+                                <td>{order.id}</td>
+                                <td>{this.state.userNames[order.userId] || 'Loading...'}</td>
+                                <td>{new Date(order.orderDate).toLocaleDateString()}</td>
+                                <td>{order.couponId ? (this.state.couponCodes[order.couponId] || 'Loading...') : 'N/A'}</td>
+                                <td>{order.status}</td>
+                                <td>
+                                    {order.note.length > 30 ? (
+                                        <span>
+                                            {order.note.substring(0, 30)}...
+                                            <Button color="link" onClick={(e) => { e.stopPropagation(); this.toggleExpandNote(order.id); }}>
+                                                {this.state.expandedNote === order.id ? "Collapse" : "Read more"}
+                                            </Button>
+                                        </span>
+                                    ) : (
+                                        order.note
+                                    )}
+
+                                    <Modal isOpen={this.state.expandedNote === order.id} toggle={() => this.toggleExpandNote(order.id)}>
+                                        <ModalHeader toggle={() => this.toggleExpandNote(order.id)}>Order Note</ModalHeader>
+                                        <ModalBody className="modal-body-content">
+                                            {order.note}
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <Button color="secondary" onClick={() => this.toggleExpandNote(order.id)}>Close</Button>
+                                        </ModalFooter>
+                                    </Modal>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+                <Pagination>
+                    <PaginationItem disabled={currentPage <= 1}>
+                        <PaginationLink
+                            previous
+                            onClick={() => this.handlePageChange(currentPage - 1)}
+                        />
+                    </PaginationItem>
+                    {[...Array(totalPages)].map((page, i) => (
+                        <PaginationItem active={i + 1 === currentPage} key={i}>
+                            <PaginationLink onClick={() => this.handlePageChange(i + 1)}>
+                                {i + 1}
+                            </PaginationLink>
+                        </PaginationItem>
                     ))}
-                </tbody>
-            </Table>
+                    <PaginationItem disabled={currentPage >= totalPages}>
+                        <PaginationLink
+                            next
+                            onClick={() => this.handlePageChange(currentPage + 1)}
+                        />
+                    </PaginationItem>
+                </Pagination>
+            </React.Fragment>
         );
     }
 
@@ -293,7 +329,7 @@ class OrderComponent extends Component {
                             </FormGroup>
                         </Col>
                         <Col md={3} className="align-self-end">
-                            <Button type="button" onClick={() => this.setState({ searchQuery: '', filterStatus: '', startDate: '', endDate: '' })} className="mt-2">Reset</Button>
+                            <Button type="button" onClick={() => this.setState({ searchQuery: '', filterStatus: '', startDate: '', endDate: '', currentPage: 1 })} className="mt-2">Reset</Button>
                         </Col>
                     </Row>
                 </Form>

@@ -3,8 +3,9 @@ import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from '
 import { Link } from 'react-router-dom';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
+import RoutePath from '../routes/RoutePath';
 
-export class NavMenu extends Component {
+export  class NavMenu extends Component {
   static displayName = NavMenu.name;
 
   constructor(props) {
@@ -24,9 +25,9 @@ export class NavMenu extends Component {
 
   render() {
     return (
-      <header>
-        <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>
-          <NavbarBrand tag={Link} to="/">EcomerceApp</NavbarBrand>
+      <header >
+        <Navbar className="nav-menu navbar-expand-sm navbar-toggleable-sm mb-3" container light>
+          <NavbarBrand tag={Link} to="/"><img alt='logo' src='/logo.png'  width={40}/> RevibeCo</NavbarBrand>
           <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
           <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
             <ul className="navbar-nav flex-grow">
@@ -36,32 +37,9 @@ export class NavMenu extends Component {
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
               </NavItem>
+             
               <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-user">Fetch user</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-product">Fetch product</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-categories">Fetch categories</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-blogPosts">Fetch blog post</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-orders">Fetch orders</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-blogs">Fetch blogs</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-coupons">Fetch coupons</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/fetch-chat">Fetch chat</NavLink>
+                <NavLink tag={Link} className="text-dark" to={RoutePath.DASHBOARD}>Admin</NavLink>
               </NavItem>
               <LoginMenu>
               </LoginMenu>

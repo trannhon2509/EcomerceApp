@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Table, Input, Button, Form, FormGroup, Label, Row, Col } from 'reactstrap';
+import { Container, Table, Input, Button, Form, FormGroup, Label, Row, Col, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { connect } from 'react-redux';
 import { getBlogPosts } from '../redux/actions/blogPostActions';
 import authService from './api-authorization/AuthorizeService';
@@ -9,12 +9,14 @@ class BlogPostComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            blogNames: {}, // Store blog names by blogId
-            userNames: {}, // Store usernames by userId
+            blogNames: {},
+            userNames: {},
             searchQuery: '',
             filterType: '',
             startDate: '',
-            endDate: ''
+            endDate: '',
+            currentPage: 1, // Current page
+            itemsPerPage: 12 // Items per page
         };
     }
 
@@ -66,19 +68,23 @@ class BlogPostComponent extends Component {
     }
 
     handleSearchChange = (event) => {
-        this.setState({ searchQuery: event.target.value });
+        this.setState({ searchQuery: event.target.value, currentPage: 1 });
     };
 
     handleTypeChange = (event) => {
-        this.setState({ filterType: event.target.value });
+        this.setState({ filterType: event.target.value, currentPage: 1 });
     };
 
     handleStartDateChange = (event) => {
-        this.setState({ startDate: event.target.value });
+        this.setState({ startDate: event.target.value, currentPage: 1 });
     };
 
     handleEndDateChange = (event) => {
-        this.setState({ endDate: event.target.value });
+        this.setState({ endDate: event.target.value, currentPage: 1 });
+    };
+
+    handlePageChange = (page) => {
+        this.setState({ currentPage: page });
     };
 
     filterBlogPosts = (blogPosts) => {
@@ -95,29 +101,59 @@ class BlogPostComponent extends Component {
     };
 
     renderBlogPostsTable(blogPosts) {
+        const { currentPage, itemsPerPage } = this.state;
+        const indexOfLastBlogPost = currentPage * itemsPerPage;
+        const indexOfFirstBlogPost = indexOfLastBlogPost - itemsPerPage;
+        const currentBlogPosts = blogPosts.slice(indexOfFirstBlogPost, indexOfLastBlogPost);
+
+        const totalPages = Math.ceil(blogPosts.length / itemsPerPage);
+
         return (
-            <Table hover responsive>
-                <thead>
-                    <tr>
-                        <th>Author</th>
-                        <th>Title</th>
-                        <th>Type</th>
-                        <th>Content</th>
-                        <th>Posted On</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {blogPosts.map(blogPost => (
-                        <tr key={blogPost.id}>
-                            <td>{this.state.userNames[blogPost.authorId] || 'Loading...'}</td>
-                            <td>{blogPost.title}</td>
-                            <td>{this.state.blogNames[blogPost.blogId] || 'Loading...'}</td>
-                            <td>{blogPost.content}</td>
-                            <td>{new Date(blogPost.postedOn).toLocaleDateString()}</td>
+            <React.Fragment>
+                <Table hover responsive>
+                    <thead>
+                        <tr>
+                            <th>Author</th>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Content</th>
+                            <th>Posted On</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        {currentBlogPosts.map(blogPost => (
+                            <tr key={blogPost.id}>
+                                <td>{this.state.userNames[blogPost.authorId] || 'Loading...'}</td>
+                                <td>{blogPost.title}</td>
+                                <td>{this.state.blogNames[blogPost.blogId] || 'Loading...'}</td>
+                                <td>{blogPost.content}</td>
+                                <td>{new Date(blogPost.postedOn).toLocaleDateString()}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+                <Pagination>
+                    <PaginationItem disabled={currentPage <= 1}>
+                        <PaginationLink
+                            previous
+                            onClick={() => this.handlePageChange(currentPage - 1)}
+                        />
+                    </PaginationItem>
+                    {[...Array(totalPages)].map((page, i) => (
+                        <PaginationItem active={i + 1 === currentPage} key={i}>
+                            <PaginationLink onClick={() => this.handlePageChange(i + 1)}>
+                                {i + 1}
+                            </PaginationLink>
+                        </PaginationItem>
                     ))}
-                </tbody>
-            </Table>
+                    <PaginationItem disabled={currentPage >= totalPages}>
+                        <PaginationLink
+                            next
+                            onClick={() => this.handlePageChange(currentPage + 1)}
+                        />
+                    </PaginationItem>
+                </Pagination>
+            </React.Fragment>
         );
     }
 
@@ -189,7 +225,7 @@ class BlogPostComponent extends Component {
                             </FormGroup>
                         </Col>
                         <Col md={3} className="align-self-end">
-                            <Button type="button" onClick={() => this.setState({ searchQuery: '', filterType: '', startDate: '', endDate: '' })} className="mt-2">Reset</Button>
+                            <Button type="button" onClick={() => this.setState({ searchQuery: '', filterType: '', startDate: '', endDate: '', currentPage: 1 })} className="mt-2">Reset</Button>
                         </Col>
                     </Row>
                 </Form>

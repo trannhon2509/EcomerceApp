@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getProducts } from '../redux/actions/productActions';
 import { getCategories } from '../redux/actions/categoryActions';
 import authService from './api-authorization/AuthorizeService';
+import ReactPaginate from 'react-paginate';
 
 class ProductComponent extends Component {
     state = {
@@ -12,7 +13,9 @@ class ProductComponent extends Component {
         minPrice: '',
         maxPrice: '',
         minQuantity: '',
-        maxQuantity: ''
+        maxQuantity: '',
+        currentPage: 0,
+        productsPerPage: 5 // Show 5 products per page
     };
 
     componentDidMount() {
@@ -22,37 +25,43 @@ class ProductComponent extends Component {
 
     handleSearchChange = (e) => {
         this.setState({
-            searchQuery: e.target.value
+            searchQuery: e.target.value,
+            currentPage: 0 // Reset to first page on search
         });
     };
 
     handleCategoryFilterChange = (e) => {
         this.setState({
-            categoryFilter: e.target.value
+            categoryFilter: e.target.value,
+            currentPage: 0 // Reset to first page on category filter change
         });
     };
 
     handleMinPriceChange = (e) => {
         this.setState({
-            minPrice: e.target.value
+            minPrice: e.target.value,
+            currentPage: 0 // Reset to first page on price filter change
         });
     };
 
     handleMaxPriceChange = (e) => {
         this.setState({
-            maxPrice: e.target.value
+            maxPrice: e.target.value,
+            currentPage: 0 // Reset to first page on price filter change
         });
     };
 
     handleMinQuantityChange = (e) => {
         this.setState({
-            minQuantity: e.target.value
+            minQuantity: e.target.value,
+            currentPage: 0 // Reset to first page on quantity filter change
         });
     };
 
     handleMaxQuantityChange = (e) => {
         this.setState({
-            maxQuantity: e.target.value
+            maxQuantity: e.target.value,
+            currentPage: 0 // Reset to first page on quantity filter change
         });
     };
 
@@ -61,8 +70,12 @@ class ProductComponent extends Component {
         return category ? category.name : 'Unknown';
     };
 
+    handlePageClick = (data) => {
+        this.setState({ currentPage: data.selected });
+    };
+
     renderProductsTable(products) {
-        const { searchQuery, categoryFilter, minPrice, maxPrice, minQuantity, maxQuantity } = this.state;
+        const { searchQuery, categoryFilter, minPrice, maxPrice, minQuantity, maxQuantity, currentPage, productsPerPage } = this.state;
         const { categories } = this.props;
 
         const filteredProducts = products.filter(product =>
@@ -73,6 +86,10 @@ class ProductComponent extends Component {
             (minQuantity === '' || product.quantity >= parseInt(minQuantity)) &&
             (maxQuantity === '' || product.quantity <= parseInt(maxQuantity))
         );
+
+        const pageCount = Math.ceil(filteredProducts.length / productsPerPage);
+        const offset = currentPage * productsPerPage;
+        const currentProducts = filteredProducts.slice(offset, offset + productsPerPage);
 
         return (
             <React.Fragment>
@@ -137,7 +154,7 @@ class ProductComponent extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredProducts.map(product => (
+                        {currentProducts.map(product => (
                             <tr key={product.id}>
                                 <td><img src={product.imageUrl} width={80} alt="Product" /></td>
                                 <td>{product.name}</td>
@@ -150,6 +167,26 @@ class ProductComponent extends Component {
                         ))}
                     </tbody>
                 </Table>
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={'pagination'}
+                    subContainerClassName={'pages pagination'}
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakLinkClassName="page-link"
+                    activeClassName="active"
+                />
             </React.Fragment>
         );
     }

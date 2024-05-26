@@ -5,7 +5,7 @@ import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
 import RoutePath from '../routes/RoutePath';
 
-export  class NavMenu extends Component {
+export class NavMenu extends Component {
   static displayName = NavMenu.name;
 
   constructor(props) {
@@ -25,24 +25,38 @@ export  class NavMenu extends Component {
 
   render() {
     return (
-      <header >
+      <header>
         <Navbar className="nav-menu navbar-expand-sm navbar-toggleable-sm mb-3" container light>
-          <NavbarBrand tag={Link} to="/"><img alt='logo' src='/logo.png'  width={40}/> RevibeCo</NavbarBrand>
+          <NavbarBrand tag={Link} to="/">
+            <img alt='logo' src='/logo.png' width={50} />
+          </NavbarBrand>
           <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-          <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
-            <ul className="navbar-nav flex-grow">
+          <Collapse isOpen={!this.state.collapsed} navbar>
+            <ul className="navbar-nav mr-auto mainNav">
               <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+                <NavLink tag={Link} className="text-dark fw-bold" to="/">Home</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
+                <NavLink tag={Link} className="text-dark fw-bold" to={RoutePath.ProductPage}>Product</NavLink>
               </NavItem>
-             
               <NavItem>
-                <NavLink tag={Link} className="text-dark" to={RoutePath.DASHBOARD}>Admin</NavLink>
+                <NavLink tag={Link} className="text-dark fw-bold" to={RoutePath.BlogPage}>Blog</NavLink>
               </NavItem>
-              <LoginMenu>
-              </LoginMenu>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark fw-bold" to={RoutePath.CONTACTPage}>Contact</NavLink>
+              </NavItem>
+            </ul>
+            <ul className="navbar-nav ml-auto">
+            <NavItem>
+                <NavLink tag={Link} className="text-dark fw-bold" to={RoutePath.FAVORITEPRODUCT}><i class="bi bi-bag-heart-fill"></i></NavLink>
+              </NavItem>
+            <NavItem>
+                <NavLink tag={Link} className="text-dark fw-bold" to={RoutePath.CARDPRODUCT}><i class="bi bi-cart-check-fill"></i></NavLink>
+              </NavItem>
+              <NavItem>
+                <LoginMenu className= 'd-flex' />
+              </NavItem>
+            
             </ul>
           </Collapse>
         </Navbar>

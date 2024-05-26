@@ -15,6 +15,12 @@ import DefaultLayout from '../Layouts/DefaultLayout';
 import RoutePath from './RoutePath';
 import DashBoard from '../components/DashBoard';
 import HomePage from '../views/HomePage';
+import Product from '../views/Product';
+import Blog from '../views/Blog';
+import Contact from '../views/Contact';
+import ProductInfo from '../views/ProductInfo';
+import CardProduct from '../views/CardProduct';
+import LikeProduct from '../views/LikeProduct';
 const AppRoutes = [
   {
     index: true,
@@ -86,6 +92,44 @@ const AppRoutes = [
     element: <DashBoard />,
     layout: AdminLayout
   },
+  {
+    path: RoutePath.ProductPage,
+    requireAuth: true,
+    element: <Product />,
+    layout: DefaultLayout
+  },
+  {
+    path: RoutePath.BlogPage,
+    requireAuth: true,
+    element: <Blog />,
+    layout: DefaultLayout
+  },
+  {
+    path: RoutePath.CONTACTPage,
+    requireAuth: true,
+    element: <Contact />,
+    layout: DefaultLayout
+  },
+  {
+    path: RoutePath.PRODUCTINFO,
+    requireAuth: true,
+    element: <ProductInfo />,
+    layout: DefaultLayout
+  },
+  {
+    path: RoutePath.CARDPRODUCT,
+    requireAuth: true,
+    element: <CardProduct />,
+    layout: DefaultLayout
+  },
+  {
+    path: RoutePath.FAVORITEPRODUCT,
+    requireAuth: true,
+    element: <LikeProduct />,
+    layout: DefaultLayout
+  },
+
+ 
 
   ...ApiAuthorzationRoutes
 ];

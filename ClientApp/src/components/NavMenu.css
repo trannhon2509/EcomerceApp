@@ -1,8 +1,4 @@
-﻿a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-}
+﻿
 
 html {
   font-size: 14px;
@@ -13,23 +9,7 @@ html {
   }
 }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-.nav-menu {
-  position: relative;
-  width: 100%;
-  z-index: 1000;
-  transition: all 0.3s ease;
-}
-
-.nav-menu.sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.container>.navbar-collapse{
+  margin-left: 0px;
 }
 

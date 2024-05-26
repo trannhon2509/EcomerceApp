@@ -34,6 +34,7 @@ export class Logout extends Component {
         break;
       case LogoutActions.LoggedOut:
         this.setState({ isReady: true, message: "You successfully logged out!" });
+        window.history.replaceState({}, document.title, window.location.pathname);
         break;
       default:
         throw new Error(`Invalid action '${action}'`);

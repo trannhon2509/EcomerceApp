@@ -6,7 +6,10 @@ body {
   font-family: 'Poppins', sans-serif;
   text-rendering: optimizeLegibility !important;
   background: #f3f3f5;
+
 }
+
+
 
 body::-webkit-scrollbar{
   display: none;

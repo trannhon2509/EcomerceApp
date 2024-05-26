@@ -11,6 +11,13 @@ const RoutePath = {
     COUPON: '/coupon',
     CHAT: '/chat',
     DASHBOARD: '/dashboard',
+    ProductPage: '/productpage',
+    BlogPage: '/blogpage',
+    FAQPage:  'FAQPage',
+    CONTACTPage: '/contactpage',
+    PRODUCTINFO: '/productinfo',
+    CARDPRODUCT: '/cardproduct',
+    FAVORITEPRODUCT: '/favoriteproduct',
 }
 
 export default RoutePath;

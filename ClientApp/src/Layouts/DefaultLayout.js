@@ -3,6 +3,7 @@ import { NavMenu } from '../components/NavMenu';
 import { Container } from 'reactstrap';
 import '../assets/css/DefaultLayout.css'; // Ensure you have a CSS file for styling
 import Footer from '../components/Footer';
+import Devider from '../components/Devider';
 
 export default class DefaultLayout extends Component {
     constructor(props) {
@@ -12,50 +13,21 @@ export default class DefaultLayout extends Component {
         };
     }
 
-    componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
-    }
-
-    handleScroll = () => {
-        const navMenu = document.querySelector('.nav-menu');
-        if (window.scrollY > 50) {
-            navMenu.classList.add('sticky');
-        } else {
-            navMenu.classList.remove('sticky');
-        }
-
-        // Show or hide scroll to top button
-        if (window.scrollY > 200) {
-            this.setState({ showScrollToTop: true });
-        } else {
-            this.setState({ showScrollToTop: false });
-        }
-    };
-
-    scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
     render() {
+        const childComponentName = this.props.children.type.displayName || this.props.children.type.name || 'Component';
         return (
             <div>
-           
                 <Container fluid tag="main">
-                <NavMenu />
+                    {childComponentName !== 'HomePage' && <div className='section-top'><Devider title={childComponentName} /></div>}
+                    <NavMenu />
                     {this.props.children}
-                    
                 </Container>
                 {this.state.showScrollToTop && (
                     <button className="scroll-to-top" onClick={this.scrollToTop}>
                         <i class="bi bi-arrow-up-circle-fill"></i>
                     </button>
                 )}
-                
-                <div className='container-fluid'><Footer/></div>
+                <div className='container-fluid'><Footer /></div>
             </div>
         );
     }

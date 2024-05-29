@@ -16,19 +16,15 @@ export default class App extends Component {
           {AppRoutes.map((route, index) => {
             const { element, requireAuth, layout: Layout = React.Fragment, ...rest } = route;
             const RouteElement = requireAuth ? (
-              <AuthorizeRoute {...rest} element={element} />
+              <AuthorizeRoute {...rest} element={<Layout>{element}</Layout>} />
             ) : (
-              element
+              <Layout>{element}</Layout>
             );
             return (
               <Route
                 key={index}
                 {...rest}
-                element={
-                  <Layout>
-                    {RouteElement}
-                  </Layout>
-                }
+                element={RouteElement}
               />
             );
           })}

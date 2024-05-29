@@ -1,14 +1,22 @@
 import React, { Component } from 'react'
 import '../assets/css/Product.css'
 import ProductCard from '../components/ProductCard'
+import Card from '../components/Card';
 export default class Product extends Component {
-  
+
   render() {
+    const cardData = [
+      { img: "/panel/bada.svg", name: "Green Lamp", category: "Lamp", quantity: 100, price: 5, rating: 5 },
+      { img: "/img/p2.png", name: "Green Lamp", category: "Lamp", quantity: 100, price: 5, rating: 5 },
+      { img: "/img/p3.png", name: "Green Lamp", category: "Lamp", quantity: 100, price: 5, rating: 5 },
+      { img: "/img/p4.png", name: "Green Lamp", category: "Lamp", quantity: 100, price: 5, rating: 5 },
+      // Add more card data objects here
+    ];
     return (
       <div className='gray-bg py-5'>
-        <div className="container-fluid">
+        <div className="container">
           <div className="row">
-            <div className="col-sm-4 col-md-3">
+            <div className="col-sm-3 col-md-3 col-lg-3">
               <div className="row d-block d-sm-none">
                 <div className="col-12">
                   <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
@@ -178,7 +186,7 @@ export default class Product extends Component {
                   <input type="radio" name="shop-filter__price" id="shop-filter-price_3" defaultValue />
                   <label htmlFor="shop-filter-price_3">$50 to $100</label>
                 </div>
-                
+
                 <div className="radio">
                   <input type="radio" name="shop-filter__price" id="shop-filter-price_4" defaultValue="specify" />
                   <label htmlFor="shop-filter-price_4">Other (specify)</label>
@@ -269,15 +277,31 @@ export default class Product extends Component {
                 </div>
               </form>
             </div>
-            <div className="col-sm-8 col-md-9 mt-5 mt-md-0 mt-sm-5">
-             
+            <div className="col-sm-9 col-md-9 mt-5 mt-md-0 mt-sm-5">
+
               <div className="row">
-                <ProductCard name="Apple Watch Series 3" price="$550.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/1.jpg" />
-                <ProductCard name="Beat Solo3 Wearless" price="$159.99" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/2.jpg" />
-                <ProductCard name="Apple MacBook" price="$2249.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/3.jpg" />
-                <ProductCard name="Apple MacBook" price="$2249.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/3.jpg" />
-                <ProductCard name="Apple MacBook" price="$2249.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/3.jpg" />
-                <ProductCard name="Apple MacBook" price="$2249.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/3.jpg" />
+
+                <div className='container'>
+                  <div className="menu-list-row">
+                    <div className="row g-xxl-5 bydefault_show" id="menu-dish">
+                      {cardData.map((card, index) => (
+                        <Card
+                          key={index}
+                          img={card.img}
+                          name={card.name}
+                          category={card.category}
+                          quantity={card.quantity}
+                          price={card.price}
+                          rating={card.rating}
+                        />
+                      ))}
+                    </div>
+                    <div className='mt-5'>
+                      {/* <Pagging startPage={1} endPage={3} itemsPerPage={4} /> */}
+                    </div>
+                  </div>
+                </div>
+
 
               </div>
               <div className="row">

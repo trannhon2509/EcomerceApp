@@ -1,24 +1,49 @@
+// GridProduct.js
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchProducts } from '../redux/actions/productActions';
 import ProductCard from './ProductCard';
-import '../assets/css/GridProduct.css';
 
-export default class GridProduct extends Component {
-    render() {
-        return (
-            <div>
-                <h3 className="heading text-decoration-none">Shopping</h3>
-                <div className="container">
-                    <div className="row product">
-                        <ProductCard name="Apple Watch Series 3" price="$550.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/1.jpg" />
-                        <ProductCard name="Beat Solo3 Wearless" price="$159.99" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/2.jpg" />
-                        <ProductCard name="Apple MacBook" price="$2249.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/3.jpg" />
-                        <ProductCard name="Apple MacBook" price="$2249.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/3.jpg" />
-                        <ProductCard name="Apple MacBook" price="$2249.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/3.jpg" />
-                        <ProductCard name="Apple MacBook" price="$2249.00" imageUrl="https://raw.githubusercontent.com/rxhack/productImage/main/3.jpg" />
-                        
-                    </div>
-                </div>
-            </div>
-        );
+class GridProduct extends Component {
+  componentDidMount() {
+    this.props.fetchProducts(1, 6); // Fetch first page with 6 products
+  }
+
+  render() {
+    const { loading, error, products } = this.props;
+
+    if (loading) {
+      return <div>Loading...</div>;
     }
+
+    if (error) {
+      return <div>Error: {error}</div>;
+    }
+
+    return (
+      <div>
+        <h3 className="heading text-decoration-none text-center">Mua sắm</h3>
+        <div className="container">
+          <div className="row product">
+            {products.map(product => (
+              <ProductCard
+                key={product.id}
+                name={product.name}
+                price={product.price}
+                imageUrl={product.imageUrl}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
+
+const mapStateToProps = state => ({
+  loading: state.products.loading,
+  error: state.products.error,
+  products: state.products.products
+});
+
+export default connect(mapStateToProps, { fetchProducts })(GridProduct);

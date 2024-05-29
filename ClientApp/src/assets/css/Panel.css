@@ -9,26 +9,26 @@
     font-size: 50px;
   }
   .panel-dark.panel-colorful {
-    border-color: #3b4146;
+    border-color: ##137228;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
-    background-color: #63728B;
+    background-color: #137228;
   }
   
   .panel-danger.panel-colorful {
     border-color: #f76c51;
-    background-color: #63728B;
+    background-color: #137228;
   }
   
   .panel-primary.panel-colorful {
     border-color: #5fa2dd;
-    background-color: #63728B;
+    background-color: #137228;
   }
   .panel-info.panel-colorful {
     border-color: #4ebcda;
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
-    background-color: #63728B;
+    background-color: #137228;
   }
   .panel hr {
     border-color: rgba(0,0,0,0.1);

@@ -78,6 +78,11 @@ public class Program
             options.CallbackPath = "/signin-google";
         });
 
+ builder.Services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.AddConsole();
+            loggingBuilder.AddDebug();
+        });
 
         var app = builder.Build();
 

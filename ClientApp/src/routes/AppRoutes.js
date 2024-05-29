@@ -21,6 +21,8 @@ import Contact from '../views/Contact';
 import ProductInfo from '../views/ProductInfo';
 import CardProduct from '../views/CardProduct';
 import LikeProduct from '../views/LikeProduct';
+import Checkout from '../views/Checkout';
+import BlogDetail from '../views/BlogDetail';
 const AppRoutes = [
   {
     index: true,
@@ -94,38 +96,42 @@ const AppRoutes = [
   },
   {
     path: RoutePath.ProductPage,
-    requireAuth: true,
     element: <Product />,
     layout: DefaultLayout
   },
   {
     path: RoutePath.BlogPage,
-    requireAuth: true,
     element: <Blog />,
     layout: DefaultLayout
   },
   {
     path: RoutePath.CONTACTPage,
-    requireAuth: true,
     element: <Contact />,
     layout: DefaultLayout
   },
   {
     path: RoutePath.PRODUCTINFO,
-    requireAuth: true,
     element: <ProductInfo />,
     layout: DefaultLayout
   },
   {
     path: RoutePath.CARDPRODUCT,
-    requireAuth: true,
     element: <CardProduct />,
     layout: DefaultLayout
   },
   {
     path: RoutePath.FAVORITEPRODUCT,
-    requireAuth: true,
     element: <LikeProduct />,
+    layout: DefaultLayout
+  },
+  {
+    path: RoutePath.CHECKOUT,
+    element: <Checkout />,
+    layout: DefaultLayout
+  },
+  {
+    path: RoutePath.BLOGDETAIL,
+    element: <BlogDetail />,
     layout: DefaultLayout
   },
 

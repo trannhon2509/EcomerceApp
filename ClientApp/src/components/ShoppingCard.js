@@ -95,7 +95,7 @@ export default function ShoppingCard() {
                             <Link to={RoutePath.ProductPage} className="btn btn-primary"><i className="fa fa-arrow-circle-left" /> Continue
                                 Shopping</Link>
                             <button type="button" className="btn btn-primary">Update Cart</button>
-                            <Link to={RoutePath.ProductPage} className="btn btn-primary">Checkout <i className="fa fa-arrow-circle-right" /></Link>
+                            <Link to={RoutePath.CHECKOUT} className="btn btn-primary">Checkout <i className="fa fa-arrow-circle-right" /></Link>
                         </div>
                     </div>
                 </div>

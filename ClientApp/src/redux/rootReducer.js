@@ -1,23 +1,13 @@
-// src/redux/rootReducer.js
+﻿// src/redux/rootReducer.js
 import { combineReducers } from 'redux';
-import userReducer from './reducers/userReducer';
-import productReducer from './reducers/productReducer';
-import categoryReducer from './reducers/categoryReducer';
-import blogPostReducer from './reducers/blogPostReducer';
-import orderReducer from './reducers/orderReducer';
-import orderDetailReducer  from './reducers/orderDetailReducer';
-import blogReducer from './reducers/blogReducer';
-import couponReducer from './reducers/couponReducer';
+import userReducer from '../redux/reducers/userReducer'; // Import userReducer từ file userReducer.js
+import productReducer from '../redux/reducers/productReducer'; // Import productReducer từ file productReducer.js
+
+
 
 const rootReducer = combineReducers({
-    category: categoryReducer,
-    user: userReducer,
-    product: productReducer,
-    blogPost: blogPostReducer,
-    order: orderReducer,
-    orderDetail: orderDetailReducer,
-    blog: blogReducer,
-    coupon: couponReducer
+    userReducer: userReducer, // Đặt tên cho reducer và gán reducer tương ứng vào đó
+    products: productReducer // Đặt tên cho reducer và gán reducer tương ứng vào đó
 });
 
 export default rootReducer;

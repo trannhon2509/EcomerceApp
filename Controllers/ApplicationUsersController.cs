@@ -25,11 +25,52 @@ namespace EcomerceApp.Controllers
 
         // GET: api/ApplicationUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetApplicationUsers()
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetApplicationUsers(int? page = 1, int? pageSize = 10)
         {
-            var users = await _userManager.Users.ToListAsync();
-            return users;
+            if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
+            {
+                return BadRequest("Invalid page or pageSize value.");
+            }
+
+            var query = from user in _context.Users
+                        join userRole in _context.UserRoles on user.Id equals userRole.UserId into userRoleGroup
+                        from ur in userRoleGroup.DefaultIfEmpty()
+                        join role in _context.Roles on ur.RoleId equals role.Id into roleGroup
+                        from r in roleGroup.DefaultIfEmpty()
+                        group r by new
+                        {
+                            user.Id,
+                            user.UserName,
+                            user.Email,
+                            user.imgUrl,
+                            user.EmailConfirmed,
+                            user.PhoneNumber,
+                            user.Address1,
+                            user.Address2,
+                            user.isDeleted
+                        } into g
+                        select new
+                        {
+                            Id = g.Key.Id,
+                            UserName = g.Key.UserName,
+                            Email = g.Key.Email,
+                            imgUrl = g.Key.imgUrl,
+                            EmailConfirmed = g.Key.EmailConfirmed,
+                            PhoneNumber = g.Key.PhoneNumber,
+                            Address1 = g.Key.Address1,
+                            Address2 = g.Key.Address2,
+                            IsDeleted = g.Key.isDeleted,
+                            Roles = string.Join(", ", g.Select(x => x.Name))
+                        };
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
+
+            var results = await query.Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value).ToListAsync();
+
+            return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
         }
+
 
         [HttpGet("{id}/roles")]
         public async Task<ActionResult<IEnumerable<string>>> GetUserRoles(string id)
@@ -107,10 +148,25 @@ namespace EcomerceApp.Controllers
                 return NotFound();
             }
 
-            await _userManager.DeleteAsync(user);
-
+            user.isDeleted = true;
+            _context.SaveChanges();
             return NoContent();
         }
+        
+        [HttpDelete("{id}/restore")]
+        public async Task<IActionResult> RestoreApplicationUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.isDeleted = false;
+            _context.SaveChanges();
+            return NoContent();
+        }
+
 
         // PUT: api/ApplicationUsers/5/roles
         [HttpPut("{id}/roles")]

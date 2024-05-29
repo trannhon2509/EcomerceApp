@@ -53,16 +53,32 @@ namespace EcomerceApp.Data
                     decimal randomPrice = GenerateRandomPrice(random);
                     int randomQuantity = GenerateRandomQuantity(random);
 
-                    context.Products.Add(new Product
+                    context.Products.AddRange(new Product
                     {
                         Name = productName,
                         Description = "Description for " + productName,
                         Price = randomPrice,
                         Quantity = randomQuantity,
-                        ImageUrl = "https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/blta784fa17e264af96/5fa1efbb209f0756c89d6c7a/3031_Marksman_T3_InfinityEdge.png", // URL hình ảnh của sản phẩm
+                        ProductImages = new List<ProductImage> // Thêm hình ảnh cho sản phẩm
+                        {
+                            new ProductImage
+                            {
+                                ImageUrl = "https://via.placeholder.com/150"
+                            },
+                            new ProductImage
+                            {
+                                ImageUrl = "https://via.placeholder.com/150"
+                            },
+                            new ProductImage
+                            {
+                                ImageUrl = "https://via.placeholder.com/150"
+                            }
+                        },
                         Status = true, // Mặc định sản phẩm là hoạt động
-                        ProductCategoryId = category.Id // Gán ID của danh mục đã chọn
+                        ProductCategoryId = category.Id, // Gán ID của danh mục đã chọn
+                        Information = GenerateRandomString(random, 1000)
                     });
+                    
                 }
 
                 try
@@ -263,51 +279,7 @@ namespace EcomerceApp.Data
             }
 
 
-
-            if (!context.Addresses.Any())
-            {
-                const int numberOfAddresses = 250; // Số lượng địa chỉ muốn tạo
-
-                // Lấy danh sách UserId trực tiếp từ cơ sở dữ liệu
-                var userIds = context.Users.Select(u => u.Id).ToList();
-
-                for (int i = 0; i < numberOfAddresses; i++)
-                {
-                    string randomUserId = userIds[random.Next(userIds.Count)]; // Chọn ngẫu nhiên một người dùng
-
-                    bool hasDefaultAddress = context.Addresses.Any(a => a.UserId == randomUserId && a.IsDefault == true); // Kiểm tra xem người dùng đã có địa chỉ mặc định chưa
-                    
-
-                    // Tạo mới địa chỉ
-                    var newAddress = new Address
-                    {
-                        UserId = randomUserId,
-                        City = "City " + i,
-                        Street = "Street " + i,
-                        State = "State " + i,
-                        ZipCode = "ZipCode " + i,
-                        IsDefault = true
-                    };
-
-                    if (hasDefaultAddress)
-                    {
-                        newAddress.IsDefault = false;
-                    }
-
-                    context.Addresses.Add(newAddress);
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (Exception ex)
-                    {
-                        // Ghi log lỗi
-                        Console.WriteLine("Address-----------" + ex.Message);
-                    }
-                }
-
-                
-            }
+           
 
             if (!context.UserRoles.Any())
             {

@@ -1,25 +1,59 @@
-import React, { Component } from 'react'
-import '../assets/css/HeroComponent.css'
-import { Link } from 'react-router-dom'
-export default class HeroComponent extends Component {
-    render() {
-        return (
-           <div className='container'>
-             <div className="hero">
-                <section className="hero-left">
-                    <h1>All your files are in one secure location, accessible anywhere.</h1>
-                    <p>
-                        Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface
-                        without relying on meaningful content.
-                    </p>
-                    <Link to={'/'} className='text-decoration-none'>Get Started</Link>
-                </section>
-                <section className="right">
-                    <img className='rounded-circle' src="https://citta.com.vn/wp-content/uploads/2023/07/O1CN01gK5Y0I1gZ2Pg0xhVQ_2209928604155-e1691473629859.jpeg" alt="Hero illustration" />
-                </section>
-            </div>
-           </div>
+import React from 'react';
+import '../assets/css/HeroComponent.css';
+import { Link } from 'react-router-dom';
+import { useTypewriter, Cursor } from 'react-simple-typewriter'; // Ensure this is the correct import for your typewriter hook
 
-        )
-    }
-}
+const HeroComponent = () => {
+    const [text] = useTypewriter({
+        words: ['protect', 'cherish', 'conserve'],
+        loop: {},
+        deleteSpeed: 200,
+        typeSpeed: 100,
+    });
+
+    return (
+        <section className="main-banner" id="home">
+            <div className='shape-img'>
+                <div className="banner-shape-1 w-100" data-depth="0.30">
+                    <img src="/img/berry.png" alt='' />
+                </div>
+                <div className="banner-shape-2 w-100" data-depth="0.25">
+                    <img src="/img/leaf.png" alt='' />
+                </div>
+            </div>
+            <div className="sec-wp">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="banner-text">
+                                <h1 className="h1-title">
+                                    Let's { }
+                                    <span className='text-success'>{text}<Cursor /></span>
+                                    {'\n'}
+                                    Enviroment.
+                                </h1>
+                                <p>This is Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam eius
+                                    vel tempore consectetur nesciunt? Nam eius tenetur recusandae optio aperiam.</p>
+                                <div className="banner-btn mt-4">
+                                    <Link to={''} className="sec-btn fw-bold">Check our Menu</Link>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <div className="banner-img-wp">
+                                <div className="banner-img" style={{ backgroundImage: 'url(/PRODUCT/HOMEPage/HomePage1.jpg)' }}>
+                                </div>
+                            </div>
+                            <div className="banner-img-text mt-4 m-auto">
+                                {/* <h5 className="h5-title">Lamp</h5>
+                                <p>this is Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> */}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default HeroComponent;

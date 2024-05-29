@@ -17,10 +17,11 @@ export default class ProductCard extends Component {
         if (name && price && imageUrl && productId) {
             this.setState({ loading: false });
         } else {
-            // Simulate data fetchinga
-            setTimeout(() => {
-                this.setState({ loading: false });
-            }, 2000); // Simulated loading time
+            // // Simulate data fetchinga
+            // setTimeout(() => {
+            //     this.setState({ loading: false });
+            // }, 2000); // Simulated loading time
+            this.setState({ loading: false });
         }
     }
 
@@ -46,7 +47,7 @@ export default class ProductCard extends Component {
             <div className="col-md-4" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
                 <div className="card" style={{ position: 'relative', minHeight: '373px'}}>
                     {loading ? (
-                        <div className="loading-overlay d-flex justify-content-center align-items-center" style={{ minHeight: '373px' }}>
+                        <div className="loading-overlay d-flex justify-content-center align-items-center" style={{ minHeight: '400px' }}>
                             <div className="spinner-border text-primary" role="status">
                                 <span className="sr-only">Loading...</span>
                             </div>
@@ -54,14 +55,14 @@ export default class ProductCard extends Component {
                     ) : (
                         <>
                             <div className="ccc" style={{ position: 'relative' }}>
-                                <p className="text-center"><img src={imageUrl} className="imw" alt={name} /></p>
+                                <p className="text-center"><img src={imageUrl} className="imw mt-5" style={{maxHeight:'270px', boxSizing:'content-box'}} alt={name} /></p>
                                 {isHovered && (
                                     <div className="hover-icons" style={{ position: 'absolute', top: '10px', right: '10px' }}>
                                         <Link to={RoutePath.PRODUCTINFO} className="text-decoration-none mr-2">
                                             <i className="bi bi-info-circle"></i>
                                         </Link>
                                         <i
-                                            className={`bi ${isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}`}
+                                            className={`bi ${isLiked ? 'bi-heart-fill text-danger' : 'bi-heart-fill text-warning'}`}
                                             onClick={this.handleLikeClick}
                                             style={{ cursor: 'pointer' }}
                                         ></i>

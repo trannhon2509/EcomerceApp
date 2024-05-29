@@ -19,11 +19,11 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<OrderDetail> OrderDetails { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<Coupon> Coupons { get; set; }
-    public DbSet<Address> Addresses { get; set; }
     public DbSet<Blog> Blogs { get; set; }
     public DbSet<BlogPost> BlogPosts { get; set; }
     public DbSet<ProductComment> ProductComments { get; set; }
     public DbSet<BlogPostComment> BlogPostComments { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -60,12 +60,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .HasOne(o => o.User)
             .WithMany(u => u.Orders)
             .HasForeignKey(o => o.UserId);
-        // Thiết lập quan hệ n-1 giữa Address và User
-        builder.Entity<Address>()
-            .HasOne(a => a.User)
-            .WithMany(u => u.Addresses)
-            .HasForeignKey(a => a.UserId);
-        // Thiết lập quan hệ n-1 giữa Order và Coupon
+       
         builder.Entity<Order>()
             .HasOne(o => o.Coupon)
             .WithMany() // Một coupon có thể được sử dụng cho nhiều đơn hàng

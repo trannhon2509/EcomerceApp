@@ -18,6 +18,8 @@ const RoutePath = {
     PRODUCTINFO: '/productinfo',
     CARDPRODUCT: '/cardproduct',
     FAVORITEPRODUCT: '/favoriteproduct',
+    CHECKOUT: '/checkout',
+    BLOGDETAIL: '/blogdetail',
 }
 
 export default RoutePath;

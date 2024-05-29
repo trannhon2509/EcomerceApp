@@ -15,8 +15,9 @@ export default class HomePage extends Component {
             imageUrl={"https://cdn.eva.vn/upload/3-2022/images/2022-08-12/image24-1660292012-373-width2048height1696.jpg"}
             title="Tiêu đề"
             subtitle="Phụ đề"
+
           />
-          <Panel />
+        
           <div className='my-5'>
             <WhyChoose />
           </div>

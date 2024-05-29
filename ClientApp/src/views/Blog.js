@@ -8,14 +8,41 @@ export default class Blog extends Component {
   render() {
 
     const latestTags = ['Design', 'Development', 'Travel', 'Web Design', 'Marketing', 'Research', 'Managment'];
+    const blogs = [
+      {
+        date: "September.15.2021",
+        content:
+          "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Pariatur ipsa explicabo atque reprehenderit beatae! Accusantium soluta consequuntur blanditiis amet ad.",
+        title: "Energy Drink Which You Can Make At Home."
+      },
+      {
+        date: "September.15.2021",
+        content:
+          "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Pariatur ipsa explicabo atque reprehenderit beatae! Accusantium soluta consequuntur blanditiis amet ad.",
+        title: "Energy Drink Which You Can Make At Home."
+      },
+      {
+        date: "September.15.2021",
+        content:
+          "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Pariatur ipsa explicabo atque reprehenderit beatae! Accusantium soluta consequuntur blanditiis amet ad.",
+        title: "Energy Drink Which You Can Make At Home."
+      },
+      {
+        date: "September.15.2021",
+        content:
+          "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Pariatur ipsa explicabo atque reprehenderit beatae! Accusantium soluta consequuntur blanditiis amet ad.",
+        title: "Energy Drink Which You Can Make At Home."
+      },
 
+      // Add more blog objects here
+    ];
 
     return (
       <section className="blog-listing gray-bg">
-        <div className="container-fluid">
+        <div className="container">
           <div className="row align-items-start">
 
-            <div className="col-lg-3 m-15px-tb blog-aside">
+            <div className="col-lg-4 m-15px-tb blog-aside">
               <div className="widget widget-author">
                 <div className="widget-title">
                   <h3>Author</h3>
@@ -38,7 +65,7 @@ export default class Blog extends Component {
                   <h3>Trending Now</h3>
                 </div>
                 <div className="widget-body">
-                <LatestPostItem
+                  <LatestPostItem
                     title="Prevent 75% of visitors from google analytics"
                     author="Rachel Roth"
                     date="26 FEB 2020"
@@ -63,7 +90,7 @@ export default class Blog extends Component {
                   <h3>Latest Post</h3>
                 </div>
                 <div className="widget-body">
-                <LatestPostItem
+                  <LatestPostItem
                     title="Prevent 75% of visitors from google analytics"
                     author="Rachel Roth"
                     date="26 FEB 2020"
@@ -85,84 +112,16 @@ export default class Blog extends Component {
               </div>
               <LatestTags tags={latestTags} />
             </div>
-            <div className="col-lg-9 m-15px-tb">
+            <div className="col-lg-8 m-15px-tb">
               <div className="row">
-                <BlogCard
-                  date="04"
-                  month="FEB"
-                  imageUrl="https://www.bootdey.com/image/400x200/FFB6C1/000000"
-                  title="Prevent 75% of visitors from google analytics"
-                  description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  link="/blog/prevent-75-percent-google-analytics"
-                  author="John Doe"
-                />
-
-                <BlogCard
-                  date="04"
-                  month="FEB"
-                  imageUrl="https://www.bootdey.com/image/400x200/FFB6C1/000000"
-                  title="Prevent 75% of visitors from google analytics"
-                  description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  link="/blog/prevent-75-percent-google-analytics"
-                  author="John Doe"
-                />
-                <BlogCard
-                  date="04"
-                  month="FEB"
-                  imageUrl="https://www.bootdey.com/image/400x200/FFB6C1/000000"
-                  title="Prevent 75% of visitors from google analytics"
-                  description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  link="/blog/prevent-75-percent-google-analytics"
-                  author="John Doe"
-                />  <BlogCard
-                  date="04"
-                  month="FEB"
-                  imageUrl="https://www.bootdey.com/image/400x200/FFB6C1/000000"
-                  title="Prevent 75% of visitors from google analytics"
-                  description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  link="/blog/prevent-75-percent-google-analytics"
-                  author="John Doe"
-                />  <BlogCard
-                  date="04"
-                  month="FEB"
-                  imageUrl="https://www.bootdey.com/image/400x200/FFB6C1/000000"
-                  title="Prevent 75% of visitors from google analytics"
-                  description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  link="/blog/prevent-75-percent-google-analytics"
-                  author="John Doe"
-                />  <BlogCard
-                  date="04"
-                  month="FEB"
-                  imageUrl="https://www.bootdey.com/image/400x200/FFB6C1/000000"
-                  title="Prevent 75% of visitors from google analytics"
-                  description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  link="/blog/prevent-75-percent-google-analytics"
-                  author="John Doe"
-                />  <BlogCard
-                  date="04"
-                  month="FEB"
-                  imageUrl="https://www.bootdey.com/image/400x200/FFB6C1/000000"
-                  title="Prevent 75% of visitors from google analytics"
-                  description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  link="/blog/prevent-75-percent-google-analytics"
-                  author="John Doe"
-                />  <BlogCard
-                  date="04"
-                  month="FEB"
-                  imageUrl="https://www.bootdey.com/image/400x200/FFB6C1/000000"
-                  title="Prevent 75% of visitors from google analytics"
-                  description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  link="/blog/prevent-75-percent-google-analytics"
-                  author="John Doe"
-                />  <BlogCard
-                  date="04"
-                  month="FEB"
-                  imageUrl="https://www.bootdey.com/image/400x200/FFB6C1/000000"
-                  title="Prevent 75% of visitors from google analytics"
-                  description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  link="/blog/prevent-75-percent-google-analytics"
-                  author="John Doe"
-                />
+                {blogs.map((blog, index) => (
+                  <BlogCard
+                    key={index}
+                    date={blog.date}
+                    content={blog.content}
+                    title={blog.title}
+                  />
+                ))}
 
                 <div className="col-12">
                   <ul className="pagination justify-content-center">

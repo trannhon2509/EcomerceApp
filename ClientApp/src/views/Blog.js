@@ -38,7 +38,7 @@ export default class Blog extends Component {
     ];
 
     return (
-      <section className="blog-listing gray-bg">
+      <section className="blog-listing">
         <div className="container">
           <div className="row align-items-start">
 

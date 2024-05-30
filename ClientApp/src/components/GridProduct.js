@@ -26,11 +26,13 @@ class GridProduct extends Component {
         <div className="container">
           <div className="row product">
             {products.map(product => (
+              console.log(product),
               <ProductCard
                 key={product.id}
                 name={product.name}
                 price={product.price}
-                imageUrl={product.imageUrl}
+                    imageUrl={product.imageUrl}
+                    productId ={product.id}
               />
             ))}
           </div>

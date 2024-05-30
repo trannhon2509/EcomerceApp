@@ -2,18 +2,27 @@ import React, { Component } from 'react'
 import '../assets/css/Product.css'
 import ProductCard from '../components/ProductCard'
 import Card from '../components/Card';
-export default class Product extends Component {
+import { connect } from 'react-redux';
+import { fetchProducts } from '../redux/actions/productActions';
+class Product extends Component {
+
+    componentDidMount() {
+        this.props.fetchProducts(1, 6); // Fetch first page with 6 products
+    }
 
   render() {
-    const cardData = [
-      { img: "/panel/bada.svg", name: "Green Lamp", category: "Lamp", quantity: 100, price: 5, rating: 5 },
-      { img: "/img/p2.png", name: "Green Lamp", category: "Lamp", quantity: 100, price: 5, rating: 5 },
-      { img: "/img/p3.png", name: "Green Lamp", category: "Lamp", quantity: 100, price: 5, rating: 5 },
-      { img: "/img/p4.png", name: "Green Lamp", category: "Lamp", quantity: 100, price: 5, rating: 5 },
-      // Add more card data objects here
-    ];
+      const { loading, error, products } = this.props;
+
+      if (loading) {
+          return <div>Loading...</div>;
+      }
+
+      if (error) {
+          return <div>Error: {error}</div>;
+      }
+
     return (
-      <div className='gray-bg py-5'>
+      <div className='py-5'>
         <div className="container">
           <div className="row">
             <div className="col-sm-3 col-md-3 col-lg-3">
@@ -284,16 +293,14 @@ export default class Product extends Component {
                 <div className='container'>
                   <div className="menu-list-row">
                     <div className="row g-xxl-5 bydefault_show" id="menu-dish">
-                      {cardData.map((card, index) => (
-                        <Card
-                          key={index}
-                          img={card.img}
-                          name={card.name}
-                          category={card.category}
-                          quantity={card.quantity}
-                          price={card.price}
-                          rating={card.rating}
-                        />
+                                        {products.map((product) => (
+                                            <ProductCard
+                                                key={product.id}
+                                                name={product.name}
+                                                price={product.price}
+                                                imageUrl={product.imageUrl}
+                                                productId={product.id}
+                                            />
                       ))}
                     </div>
                     <div className='mt-5'>
@@ -325,3 +332,11 @@ export default class Product extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+    loading: state.products.loading,
+    error: state.products.error,
+    products: state.products.products
+});
+
+export default connect(mapStateToProps, { fetchProducts })(Product);

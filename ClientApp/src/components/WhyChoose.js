@@ -20,13 +20,7 @@ export default class WhyChoose extends Component {
                                 <h4 className="sub-info">Chất Lượng Cao Cấp</h4>
                                 <p className="display-30 mb-0">ReVibe Co cam kết sử dụng nguyên liệu chất lượng cao nhất để tạo ra những sản phẩm nến thơm và quà tặng tinh tế. Mỗi sản phẩm được kiểm tra kỹ lưỡng để đảm bảo sự hài lòng tối đa cho khách hàng.</p>
                             </div>
-                            <div className="text-center text-sm-right mb-2-9">
-                                <div className="mb-4">
-                                    <img src="/why/1.gif" alt="..." className="rounded-circle" width={84} />
-                                </div>
-                                <h4 className="sub-info">An Toàn Và Thân Thiện Với Môi Trường</h4>
-                                <p className="display-30 mb-0">ReVibe Co ưu tiên sử dụng các nguyên liệu tự nhiên, an toàn cho sức khỏe và thân thiện với môi trường. Nến thơm của ReVibe Co không chứa hóa chất độc hại, các sản phẩm đóng gói làm bằng giấy góp phần bảo vệ hành tinh xanh.</p>
-                            </div>
+                          
                             <div className="text-center text-sm-right">
                                 <div className="mb-4">
                                     <img src="/why/2.gif" alt="..." className="rounded-circle" width={84} />
@@ -59,13 +53,7 @@ export default class WhyChoose extends Component {
                                 <h4 className="sub-info">Dịch Vụ Khách Hàng Tận Tâm</h4>
                                 <p className="display-30 mb-0">Đội ngũ nhân viên của ReVibe Co luôn sẵn sàng hỗ trợ và giải đáp mọi thắc mắc của khách hàng. ReVibe Co đặt khách hàng lên hàng đầu và nỗ lực mang đến trải nghiệm mua sắm tuyệt vời nhất.</p>
                             </div>
-                            <div className="text-center text-sm-left">
-                                <div className="mb-4">
-                                    <img src="/why/3.gif" alt="..." className="rounded-circle" width={84} />
-                                </div>
-                                <h4 className="sub-info">Ưu Đãi Đặc Biệt</h4>
-                                <p className="display-30 mb-0">Khách hàng thân thiết của ReVibe Co luôn nhận được những ưu đãi và chương trình khuyến mãi đặc biệt. Hãy theo dõi website và các kênh truyền thông xã hội của ReVibe Co để không bỏ lỡ bất kỳ cơ hội nào.</p>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>

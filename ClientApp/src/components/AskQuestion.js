@@ -28,18 +28,14 @@ export default class AskQuestion extends Component {
                   <div className="card-header p-0" id="headingOne">
                     <h2 className="mb-0">
                       <button href="#collapseOne" className="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link text-decoration-none" data-parent="#accordion" data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">
-                        <p className="mb-0">How to train your pet dog?</p>
+                        <p className="mb-0">Làm sao để đặt hàng ở xa ?</p>
                       </button>
                     </h2>
                   </div>
                   <div className="collapse show" id="collapseOne" role="tabpanel" aria-labelledby="headingOne" style={{}}>
                     <div className="card-body py-3 px-0">
                       <ol>
-                        <li>Far far away, behind the word mountains</li>
-                        <li>Consonantia, there live the blind texts</li>
-                        <li>When she reached the first hills of the Italic Mountains</li>
-                        <li>Bookmarksgrove, the headline of Alphabet Village</li>
-                        <li>Separated they live in Bookmarksgrove right</li>
+                        <li>Revibe Co. đa dạng phương thức giao hàng và đặt hàng. Các bạn có thể đặt hàng trực tiếp thông qua website, các trang mạng xã hội của Revibe Co.</li>
                       </ol>
                     </div>
                   </div>
@@ -48,18 +44,16 @@ export default class AskQuestion extends Component {
                   <div className="card-header p-0" id="headingTwo" role="tab">
                     <h2 className="mb-0">
                       <button href="#collapseTwo" className="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link text-decoration-none collapsed" data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="collapseTwo">
-                        <p className="mb-0">How to manage your pets?</p>
+                        <p className="mb-0">Nến thơm có thể dùng được trong vòng bao lâu?</p>
                       </button>
                     </h2>
                   </div>
                   <div className="collapse" id="collapseTwo" role="tabpanel" aria-labelledby="headingTwo" style={{}}>
                     <div className="card-body py-3 px-0">
                       <ol>
-                        <li>Far far away, behind the word mountains</li>
-                        <li>Consonantia, there live the blind texts</li>
-                        <li>When she reached the first hills of the Italic Mountains</li>
-                        <li>Bookmarksgrove, the headline of Alphabet Village</li>
-                        <li>Separated they live in Bookmarksgrove right</li>
+                        <li>Với các nguyên liệu từ thiên nhiên, nến thơm của Revibe Co. có thể  sử dụng trong vòng 15h.
+</li>
+                       
                       </ol>
                     </div>
                   </div>
@@ -68,18 +62,16 @@ export default class AskQuestion extends Component {
                   <div className="card-header p-0" id="headingThree" role="tab">
                     <h2 className="mb-0">
                       <button href="#collapseThree" className="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link text-decoration-none collapsed" data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="collapseThree">
-                        <p className="mb-0">What is the best grooming for your pets?</p>
+                        <p className="mb-0">Làm sao để có mùi hương mang tính cá nhân từ nến thơm?</p>
                       </button>
                     </h2>
                   </div>
                   <div className="collapse" id="collapseThree" role="tabpanel" aria-labelledby="headingTwo" style={{}}>
                     <div className="card-body py-3 px-0">
                       <ol>
-                        <li>Far far away, behind the word mountains</li>
-                        <li>Consonantia, there live the blind texts</li>
-                        <li>When she reached the first hills of the Italic Mountains</li>
-                        <li>Bookmarksgrove, the headline of Alphabet Village</li>
-                        <li>Separated they live in Bookmarksgrove right</li>
+                        <li>Khách hàng có thể gửi mùi hương nước hoa cá nhân để Revibe Co. có thể tạo ra sản phầm mang hương thơm của khách hàng</li>
+                        <li>Revibe Co. sẽ có bảng mùi miêu tả cụ thể để khách hàng có thể lựa chọn mùi giống nhất với mùi hương cá nhân mà khách hàng mong muốn.</li>
+                       
                       </ol>
                     </div>
                   </div>
@@ -88,18 +80,21 @@ export default class AskQuestion extends Component {
                   <div className="card-header p-0" id="headingFour" role="tab">
                     <h2 className="mb-0">
                       <button href="#collapseFour" className="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link text-decoration-none collapsed" data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="collapseFour">
-                        <p className="mb-0">What are those requirements for sitting pets?</p>
+                        <p className="mb-0">Gợi ý các phong cách khi sử dụng Bandana
+</p>
                       </button>
                     </h2>
                   </div>
                   <div className="collapse" id="collapseFour" role="tabpanel" aria-labelledby="headingTwo">
                     <div className="card-body py-3 px-0">
-                      <p>
-                        Far far away, behind the word mountains, far from the countries Vokalia and
-                        Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
-                        right at the coast of the Semantics, a large
-                        language ocean.
-                      </p>
+                      <ol>
+                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
+                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
+                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
+                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
+                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
+                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
+                      </ol>
                     </div>
                   </div>
                 </div>

@@ -16,7 +16,7 @@
         // Quan hệ n-1 với ProductCategory
         public ProductCategory ProductCategory { get; set; }
         // Quan hệ 1-n với ProductComment
-        public ICollection<ProductComment> ProductComments { get; set; }
+        public ICollection<ProductComment>? ProductComments { get; set; }
 
         // Quan hệ 1-n với ProductImage
         public ICollection<ProductImage> ProductImages { get; set; }

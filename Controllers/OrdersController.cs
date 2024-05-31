@@ -21,7 +21,7 @@ namespace EcomerceApp.Controllers
             _context = context;
         }
 
-        // GET: api/Orders
+        /*// GET: api/Orders
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
@@ -30,6 +30,50 @@ namespace EcomerceApp.Controllers
               return NotFound();
           }
             return await _context.Orders.ToListAsync();
+        }*/
+
+        // GET: api/Orders
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders(int? page = 1, int? pageSize = 10)
+        {
+            if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
+            {
+                return BadRequest("Invalid page or pageSize value.");
+            }
+
+            var query = _context.Orders.Include(o => o.User)
+                                       .Include(o => o.Coupon)
+                                       .Include(o => o.OrderDetails)
+                                       .ThenInclude(od => od.Product)
+                                       .AsQueryable();
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)System.Math.Ceiling((double)totalCount / pageSize.Value);
+
+            var results = await query.Skip((page.Value - 1) * pageSize.Value)
+                                     .Take(pageSize.Value)
+                                     .ToListAsync();
+
+            return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
+        }
+
+        // GET: api/Orders/user/5
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByUser(string userId)
+        {
+            var orders = await _context.Orders.Include(o => o.User)
+                                              .Include(o => o.Coupon)
+                                              .Include(o => o.OrderDetails)
+                                              .ThenInclude(od => od.Product)
+                                              .Where(o => o.UserId == userId)
+                                              .ToListAsync();
+
+            if (orders == null || orders.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return orders;
         }
 
         // GET: api/Orders/5
@@ -111,6 +155,21 @@ namespace EcomerceApp.Controllers
             }
 
             _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] string status)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            order.Status = status;
             await _context.SaveChangesAsync();
 
             return NoContent();

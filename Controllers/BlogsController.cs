@@ -20,9 +20,61 @@ namespace EcomerceApp.Controllers
         {
             _context = context;
         }
+		// GET: api/BlogTypes
+		[HttpGet]
+		public async Task<ActionResult<IEnumerable<object>>> GetBlogTypes(int? page = 1, int? pageSize = 10)
+		{
+			if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
+			{
+				return BadRequest("Invalid page or pageSize value.");
+			}
 
-        // GET: api/Blogs
-        [HttpGet]
+			var query = from blogType in _context.Blogs
+						join blogPost in _context.BlogPosts on blogType.Id equals blogPost.BlogId into blogPostGroup
+						from bp in blogPostGroup.DefaultIfEmpty()
+						join user in _context.Users on bp.AuthorId equals user.Id into userGroup
+						from u in userGroup.DefaultIfEmpty()
+						group new { blogType, bp, u } by new
+						{
+							blogType.Id,
+							blogType.Title,
+							blogType.Description
+						} into g
+						select new
+						{
+							g.Key.Id,
+							g.Key.Title,
+							g.Key.Description,
+							BlogPosts = g.Select(x => new
+							{
+								x.bp.Id,
+								x.bp.Title,
+								x.bp.Content,
+								x.bp.PostedOn,
+								x.bp.AuthorId,
+								UserName = x.u.UserName,
+								Comments = x.bp.BlogPostComments.Select(comment => new
+								{
+									comment.Id,
+									comment.Content,
+									comment.CreatedAt,
+									comment.UserId,
+									UserName = comment.User.UserName
+								}).ToList()
+							}).Where(bp => bp.Id != 0).ToList()
+						};
+
+			var totalCount = await query.CountAsync();
+			var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
+
+			var results = await query.Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value).ToListAsync();
+
+			return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
+		}
+
+
+		// GET: api/Blogs
+		[HttpGet]
         public async Task<ActionResult<IEnumerable<Blog>>> GetBlogs()
         {
           if (_context.Blogs == null)

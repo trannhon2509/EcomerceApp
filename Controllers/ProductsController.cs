@@ -39,8 +39,6 @@ namespace EcomerceApp.Controllers
 
             return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = products });
         }
-
-
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)

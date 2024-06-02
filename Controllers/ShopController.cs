@@ -88,6 +88,29 @@ namespace EcomerceApp.Controllers
             }
         }
 
+        [HttpPut("{productId}")]
+        public IActionResult UpdateCartItemQuantity(int productId, int quantity)
+        {
+            if (quantity < 1)
+            {
+                return BadRequest("Quantity must be at least 1.");
+            }
+
+            var cartItems = HttpContext.Session.GetObjectFromJson<List<CartItem>>(CartSessionKey) ?? new List<CartItem>();
+
+            var existingCartItem = cartItems.FirstOrDefault(p => p.ProductId == productId);
+            if (existingCartItem != null)
+            {
+                existingCartItem.Quantity = quantity;
+                HttpContext.Session.SetObjectAsJson(CartSessionKey, cartItems);
+                return Ok(cartItems);
+            }
+            else
+            {
+                return NotFound("Product not found in the cart.");
+            }
+        }
+
     }
 
 

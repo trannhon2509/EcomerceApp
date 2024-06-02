@@ -19,6 +19,70 @@ const ShoppingCard = () => {
         fetchCartItems();
     }, []);
 
+    const removeCard = async (id) => {
+        try {
+            console.log('Item removed from cart', id);
+            await axios.delete(`api/shop/${id}`);
+            // Update the cart items after removing the item
+            setCartItems(prevItems => prevItems.filter(item => item.productId !== id));
+        } catch (error) {
+            console.error('Error removing item from cart:', error);
+            // Handle error appropriately, such as displaying an error message.
+        }
+    };
+
+    const updateQuantity = async (productId, quantity) => {
+        try {
+            console.log('Updating quantity for item', productId, 'to', quantity);
+            await axios.put(`api/shop/${productId}?quantity=${quantity}`);
+            // Update the cart items with the new quantity
+            setCartItems(prevItems => 
+                prevItems.map(item => 
+                    item.productId === productId ? { ...item, quantity } : item
+                )
+            );
+        } catch (error) {
+            console.error('Error updating item quantity:', error);
+            // Handle error appropriately, such as displaying an error message.
+        }
+    };
+
+    const handleQuantityChange = (productId, event) => {
+        const newQuantity = parseInt(event.target.value, 10);
+        if (newQuantity > 0) {
+            // Update the cart item quantity in state immediately for responsive UI
+            setCartItems(prevItems =>
+                prevItems.map(item =>
+                    item.productId === productId ? { ...item, quantity: newQuantity } : item
+                )
+            );
+            // Send the update to the server
+            updateQuantity(productId, newQuantity);
+        }
+    };
+
+    const incrementQuantity = (productId) => {
+        const item = cartItems.find(item => item.productId === productId);
+        const newQuantity = item.quantity + 1;
+        setCartItems(prevItems =>
+            prevItems.map(item =>
+                item.productId === productId ? { ...item, quantity: newQuantity } : item
+            )
+        );
+        updateQuantity(productId, newQuantity);
+    };
+
+    const decrementQuantity = (productId) => {
+        const item = cartItems.find(item => item.productId === productId);
+        const newQuantity = Math.max(1, item.quantity - 1);
+        setCartItems(prevItems =>
+            prevItems.map(item =>
+                item.productId === productId ? { ...item, quantity: newQuantity } : item
+            )
+        );
+        updateQuantity(productId, newQuantity);
+    };
+
     return (
         <div className="container mb-5">
             <div className="row bootstrap snippets">
@@ -41,31 +105,65 @@ const ShoppingCard = () => {
                                 </thead>
                                 <tbody>
                                     {cartItems.map(item => (
-                                        <tr key={item.id}>
+                                        <tr key={item.productId}>
                                             <td className="hidden-xs">
                                                 <img src={item.imageUrl} alt={item.name} title width={47} height={47} />
                                             </td>
                                             <td>{item.name}</td>
-                                            <td>${item.price}</td>
-                                            <td>{item.quantity}</td>
-                                            <td>${item.quantity * item.price}</td>
+                                            <td>${item.price.toFixed(2)}</td>
+                                            <td>
+                                                <div className="input-group">
+                                                    <span className="input-group-btn">
+                                                        <button
+                                                            className="btn btn-default"
+                                                            type="button"
+                                                            onClick={() => decrementQuantity(item.productId)}
+                                                        >
+                                                            <i className="bi bi-dash-lg"></i>
+                                                        </button>
+                                                    </span>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        value={item.quantity}
+                                                        onChange={(e) => handleQuantityChange(item.productId, e)}
+                                                        min="1"
+                                                    />
+                                                    <span className="input-group-btn">
+                                                        <button
+                                                            className="btn btn-default"
+                                                            type="button"
+                                                            onClick={() => incrementQuantity(item.productId)}
+                                                        >
+                                                            <i className="bi bi-plus-lg"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>${(item.quantity * item.price).toFixed(2)}</td>
                                             <td className="text-center">
-                                                <Link to={`/remove/${item.id}`} className="remove_cart" rel={2}>
+                                                <button className='btn btn-success' onClick={() => removeCard(item.productId)}>
                                                     <i className="bi bi-trash3-fill"></i>
-                                                </Link>
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
                                     <tr>
-                                        <td colSpan={6} align="right">Total: ${cartItems.reduce((acc, item) => acc + item.price, 0)}</td>
+                                        <td colSpan={6} align="right">
+                                            Total: ${cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div className="btn-group btns-cart">
-                            <Link to={RoutePath.ProductPage} className="btn btn-primary"><i className="fa fa-arrow-circle-left" /> Continue Shopping</Link>
+                            <Link to={RoutePath.ProductPage} className="btn btn-primary">
+                                <i className="fa fa-arrow-circle-left" /> Continue Shopping
+                            </Link>
                             <button type="button" className="btn btn-primary">Update Cart</button>
-                            <Link to={RoutePath.CHECKOUT} className="btn btn-primary">Checkout <i className="fa fa-arrow-circle-right" /></Link>
+                            <Link to={RoutePath.CHECKOUT} className="btn btn-primary">
+                                Checkout <i className="fa fa-arrow-circle-right" />
+                            </Link>
                         </div>
                     </div>
                 </div>

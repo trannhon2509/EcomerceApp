@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import RoutePath from '../routes/RoutePath';
 
-const ProductCard = ({ name, price, imageUrl, productId }) => {
+const ProductCard = ({ name, price, imageUrl, productId, maxQuantity }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
 

@@ -21,7 +21,6 @@ class UserComponent extends Component {
     async populateUserData() {
         const token = await authService.getAccessToken();
         const roles = await authService.isinRole('Admin');
-
         if (roles) {
             const { currentPage, pageSize } = this.state;
             this.props.fetchUsers(currentPage + 1, pageSize, token);
@@ -29,14 +28,12 @@ class UserComponent extends Component {
             window.location.href = '/Identity/Account/AccessDenied';
         }
     }
-
     handlePageClick = (data) => {
         let selected = data.selected;
         this.setState({ currentPage: selected }, () => {
             this.populateUserData();
         });
     };
-
     render() {
         const { loadingUsers, loadingDelete, users, error, totalPages, deleteUser, restoreUser } = this.props;
 

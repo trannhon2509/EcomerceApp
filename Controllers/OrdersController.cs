@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EcomerceApp.Data;
 using EcomerceApp.Models;
+using EcomerceApp.DTOs;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace EcomerceApp.Controllers
 {
@@ -145,25 +148,62 @@ namespace EcomerceApp.Controllers
 
         // POST: api/Orders
         [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder(Order order)
+        public async Task<ActionResult<Order>> CreateOrder(OrderDTO orderDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+
+            var json = JsonSerializer.Serialize(orderDTO, options);
+
+
             try
             {
+                var order = new Order
+                {
+                    UserId = orderDTO.UserId,
+                    CouponId = orderDTO.CouponId,
+                    note = orderDTO.Note,
+                    Status = orderDTO.Status ?? "Pending", // Nếu không được chỉ định, sẽ mặc định thành "Pending"
+                    OrderDate = DateTime.Now, // Bạn có thể điều chỉnh để lấy thời gian từ client nếu cần
+                    OrderDetails = new List<OrderDetail>()
+                };
+
+                foreach (var orderDetailDTO in orderDTO.OrderDetails)
+                {
+                    var product = await _context.Products.FindAsync(orderDetailDTO.ProductId);
+                    if (product == null)
+                    {
+                        return BadRequest($"Invalid product ID: {orderDetailDTO.ProductId}");
+                    }
+
+                    var orderDetail = new OrderDetail
+                    {
+                        ProductId = orderDetailDTO.ProductId,
+                        Quantity = orderDetailDTO.Quantity,
+                        UnitPrice = product.Price // Có thể cần lấy giá từ cơ sở dữ liệu thay vì từ client
+                    };
+
+                    order.OrderDetails.Add(orderDetail);
+                }
+
                 _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
         }
+
 
         // DELETE: api/Orders/5
         [HttpDelete("{id}")]

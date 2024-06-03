@@ -14,18 +14,28 @@ namespace EcomerceApp.Data
             // Kiểm tra xem bảng ProductCategory đã có dữ liệu chưa
             if (!context.ProductCategories.Any())
             {
-                // Thêm dữ liệu ngẫu nhiên cho ProductCategory
-                const int numberOfCategories = 10; // Số lượng danh mục sản phẩm muốn tạo
-
-                for (int i = 0; i < numberOfCategories; i++)
-                {
-                    string categoryName = GenerateRandomString(random, 10); // Tạo tên ngẫu nhiên
-
-                    context.ProductCategories.Add(new EcomerceApp.Models.ProductCategory
+                context.AddRange(
+                    new ProductCategory
                     {
-                        Name = categoryName
-                    });
-                }
+
+                    },
+                    new ProductCategory
+                    {
+
+                    },
+                    new ProductCategory
+                    {
+
+                    },
+                    new ProductCategory
+                    {
+
+                    },
+                    new ProductCategory
+                    {
+
+                    }
+                );
                 try
                 {
                     context.SaveChanges();

@@ -31,7 +31,6 @@ namespace EcomerceApp.Controllers
             {
                 return BadRequest("Invalid page or pageSize value.");
             }
-
             var query = from user in _context.Users
                         join userRole in _context.UserRoles on user.Id equals userRole.UserId into userRoleGroup
                         from ur in userRoleGroup.DefaultIfEmpty()
@@ -62,16 +61,11 @@ namespace EcomerceApp.Controllers
                             IsDeleted = g.Key.isDeleted,
                             Roles = string.Join(", ", g.Select(x => x.Name))
                         };
-
             var totalCount = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
-
             var results = await query.Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value).ToListAsync();
-
             return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
         }
-
-
         [HttpGet("{id}/roles")]
         public async Task<ActionResult<IEnumerable<string>>> GetUserRoles(string id)
         {
@@ -84,8 +78,6 @@ namespace EcomerceApp.Controllers
             var roles = await _context.UserRoles.Where(ur => ur.UserId == id).ToListAsync();
             string[] roleList = roles.Select(r => r.RoleId).ToArray();
             var UserRoles = await _context.Roles.Where(r => roleList.Contains(r.Id)).Select(r => r.Name).ToListAsync();
-
-
             return UserRoles;
         }
 
@@ -152,7 +144,7 @@ namespace EcomerceApp.Controllers
             _context.SaveChanges();
             return NoContent();
         }
-        
+
         [HttpDelete("{id}/restore")]
         public async Task<IActionResult> RestoreApplicationUser(string id)
         {

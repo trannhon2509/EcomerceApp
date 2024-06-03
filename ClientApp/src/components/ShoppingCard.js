@@ -1,8 +1,88 @@
-import React from 'react'
-import '../assets/css/ShoppingCard.css'
-import { Link } from 'react-router-dom'
-import RoutePath from '../routes/RoutePath'
-export default function ShoppingCard() {
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import RoutePath from '../routes/RoutePath';
+
+const ShoppingCard = () => {
+    const [cartItems, setCartItems] = useState([]);
+
+    useEffect(() => {
+        async function fetchCartItems() {
+            try {
+                const response = await axios.get('api/shop');
+                setCartItems(response.data);
+            } catch (error) {
+                console.error('Error fetching cart items:', error);
+            }
+        }
+
+        fetchCartItems();
+    }, []);
+
+    const removeCard = async (id) => {
+        try {
+            console.log('Item removed from cart', id);
+            await axios.delete(`api/shop/${id}`);
+            // Update the cart items after removing the item
+            setCartItems(prevItems => prevItems.filter(item => item.productId !== id));
+        } catch (error) {
+            console.error('Error removing item from cart:', error);
+            // Handle error appropriately, such as displaying an error message.
+        }
+    };
+
+    const updateQuantity = async (productId, quantity) => {
+        try {
+            console.log('Updating quantity for item', productId, 'to', quantity);
+            await axios.put(`api/shop/${productId}?quantity=${quantity}`);
+            // Update the cart items with the new quantity
+            setCartItems(prevItems => 
+                prevItems.map(item => 
+                    item.productId === productId ? { ...item, quantity } : item
+                )
+            );
+        } catch (error) {
+            console.error('Error updating item quantity:', error);
+            // Handle error appropriately, such as displaying an error message.
+        }
+    };
+
+    const handleQuantityChange = (productId, event) => {
+        const newQuantity = parseInt(event.target.value, 10);
+        if (newQuantity > 0) {
+            // Update the cart item quantity in state immediately for responsive UI
+            setCartItems(prevItems =>
+                prevItems.map(item =>
+                    item.productId === productId ? { ...item, quantity: newQuantity } : item
+                )
+            );
+            // Send the update to the server
+            updateQuantity(productId, newQuantity);
+        }
+    };
+
+    const incrementQuantity = (productId) => {
+        const item = cartItems.find(item => item.productId === productId);
+        const newQuantity = item.quantity + 1;
+        setCartItems(prevItems =>
+            prevItems.map(item =>
+                item.productId === productId ? { ...item, quantity: newQuantity } : item
+            )
+        );
+        updateQuantity(productId, newQuantity);
+    };
+
+    const decrementQuantity = (productId) => {
+        const item = cartItems.find(item => item.productId === productId);
+        const newQuantity = Math.max(1, item.quantity - 1);
+        setCartItems(prevItems =>
+            prevItems.map(item =>
+                item.productId === productId ? { ...item, quantity: newQuantity } : item
+            )
+        );
+        updateQuantity(productId, newQuantity);
+    };
+
     return (
         <div className="container mb-5">
             <div className="row bootstrap snippets">
@@ -15,92 +95,81 @@ export default function ShoppingCard() {
                             <table className="table table-bordered tbl-cart">
                                 <thead>
                                     <tr>
-                                        <td className="hidden-xs">Image</td>
-                                        <td>Product Name</td>
-                                        <td>Size</td>
-                                        <td>Color</td>
-                                        <td className="td-qty">Quantity</td>
-                                        <td>Unit Price</td>
-                                        <td>Sub Total</td>
-                                        <td>Remove</td>
+                                        <th className="hidden-xs">Image</th>
+                                        <th>Product Name</th>
+                                        <th>Unit price</th>
+                                        <th>Quantity</th>
+                                        <th className="text-center">Price</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {cartItems.map(item => (
+                                        <tr key={item.productId}>
+                                            <td className="hidden-xs">
+                                                <img src={item.imageUrl} alt={item.name} title width={47} height={47} />
+                                            </td>
+                                            <td>{item.name}</td>
+                                            <td>${item.price.toFixed(2)}</td>
+                                            <td>
+                                                <div className="input-group">
+                                                    <span className="input-group-btn">
+                                                        <button
+                                                            className="btn btn-default"
+                                                            type="button"
+                                                            onClick={() => decrementQuantity(item.productId)}
+                                                        >
+                                                            <i className="bi bi-dash-lg"></i>
+                                                        </button>
+                                                    </span>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        value={item.quantity}
+                                                        onChange={(e) => handleQuantityChange(item.productId, e)}
+                                                        min="1"
+                                                    />
+                                                    <span className="input-group-btn">
+                                                        <button
+                                                            className="btn btn-default"
+                                                            type="button"
+                                                            onClick={() => incrementQuantity(item.productId)}
+                                                        >
+                                                            <i className="bi bi-plus-lg"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>${(item.quantity * item.price).toFixed(2)}</td>
+                                            <td className="text-center">
+                                                <button className='btn btn-success' onClick={() => removeCard(item.productId)}>
+                                                    <i className="bi bi-trash3-fill"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
                                     <tr>
-                                        <td className="hidden-xs">
-                                            <a href="#">
-                                                <img src="https://www.bootdey.com/image/200x200/" alt="Age Of Wisdom Tan Graphic Tee" title width={47} height={47} />
-                                            </a>
-                                        </td>
-                                        <td><a href="#">Age Of Wisdom Tan Graphic Tee</a>
-                                        </td>
-                                        <td>
-                                            <select name>
-                                                <option value selected="selected">S</option>
-                                                <option value>M</option>
-                                            </select>
-                                        </td>
-                                        <td>-</td>
-                                        <td>
-                                            <div className="input-group bootstrap-touchspin"><span className="input-group-btn"><button className="btn btn-default bootstrap-touchspin-down" type="button">-</button></span><span className="input-group-addon bootstrap-touchspin-prefix" style={{ display: 'none' }} /><input type="text" name defaultValue={1} className="input-qty form-control text-center" style={{ display: 'block' }} /><span className="input-group-addon bootstrap-touchspin-postfix" style={{ display: 'none' }} /><span className="input-group-btn"><button className="btn btn-default bootstrap-touchspin-up" type="button">+</button></span></div>
-                                        </td>
-                                        <td className="price">$ 122.21</td>
-                                        <td>$ 122.21</td>
-                                        <td className="text-center">
-                                            <Link to={''} className="remove_cart" rel={2}>
-                                                <i class="bi bi-trash3-fill"></i>
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="hidden-xs">
-                                            <a href="#">
-                                                <img src="https://www.bootdey.com/image/200x200/" alt="Adidas Men Red Printed T-shirt" title width={47} height={47} />
-                                            </a>
-                                        </td>
-                                        <td><a href="#">Adidas Men Red Printed T-shirt</a>
-                                        </td>
-                                        <td>
-                                            <select name>
-                                                <option value>S</option>
-                                                <option value selected="selected">M</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select name>
-                                                <option value selected="selected">Red</option>
-                                                <option value>Blue</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <div className="input-group bootstrap-touchspin"><span className="input-group-btn"><button className="btn btn-default bootstrap-touchspin-down" type="button">-</button></span><span className="input-group-addon bootstrap-touchspin-prefix" style={{ display: 'none' }} /><input type="text" name defaultValue={2} className="input-qty form-control text-center" style={{ display: 'block' }} /><span className="input-group-addon bootstrap-touchspin-postfix" style={{ display: 'none' }} /><span className="input-group-btn"><button className="btn btn-default bootstrap-touchspin-up" type="button">+</button></span></div>
-                                        </td>
-                                        <td className="price">$ 20.63</td>
-                                        <td>$ 41.26</td>
-                                        <td className="text-center">
-                                            <Link to={''} className="remove_cart" rel={2}>
-                                                <i class="bi bi-trash3-fill"></i>
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={6} align="right">Total</td>
-                                        <td className="total" colSpan={2}><b>$ 163.47</b>
+                                        <td colSpan={6} align="right">
+                                            Total: ${cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div className="btn-group btns-cart">
-                            <Link to={RoutePath.ProductPage} className="btn btn-primary"><i className="fa fa-arrow-circle-left" /> Continue
-                                Shopping</Link>
+                            <Link to={RoutePath.ProductPage} className="btn btn-primary">
+                                <i className="fa fa-arrow-circle-left" /> Continue Shopping
+                            </Link>
                             <button type="button" className="btn btn-primary">Update Cart</button>
-                            <Link to={RoutePath.CHECKOUT} className="btn btn-primary">Checkout <i className="fa fa-arrow-circle-right" /></Link>
+                            <Link to={RoutePath.CHECKOUT} className="btn btn-primary">
+                                Checkout <i className="fa fa-arrow-circle-right" />
+                            </Link>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    );
+};
 
-    )
-}
+export default ShoppingCard;

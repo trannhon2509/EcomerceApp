@@ -23,46 +23,93 @@ namespace EcomerceApp.Controllers
 
         // GET: api/BlogPostComments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPostComment>>> GetBlogPostComments()
+        public async Task<ActionResult<IEnumerable<object>>> GetBlogPostComments(int? page = 1, int? pageSize = 10)
         {
-            if (_context.BlogPostComments == null)
+            if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
             {
-                return NotFound();
+                return BadRequest("Invalid page or pageSize value.");
             }
-            return await _context.BlogPostComments.ToListAsync();
-        }
 
-        
+            var query = from comment in _context.BlogPostComments
+                        select new
+                        {
+                            comment.Id,
+                            comment.Content,
+                            comment.CreatedAt,
+                            BlogPost = (from post in _context.BlogPosts
+                                        where post.Id == comment.BlogPostId
+                                        select new
+                                        {
+                                            post.Id,
+                                            post.Title
+                                        }).FirstOrDefault(),
+                            User = (from user in _context.Users
+                                    where user.Id == comment.UserId
+                                    select new
+                                    {
+                                        user.Id,
+                                        user.UserName
+                                    }).FirstOrDefault()
+                        };
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
+
+            var results = await query
+                .Skip((page.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value)
+                .ToListAsync();
+
+            return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
+        }
 
         // GET: api/BlogPostComments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogPostComment>> GetBlogPostComment(int id)
+        public async Task<ActionResult<object>> GetBlogPostComment(int id)
         {
             if (_context.BlogPostComments == null)
             {
                 return NotFound();
             }
-            var blogPostComment = await _context.BlogPostComments.FindAsync(id);
+            var comment = await _context.BlogPostComments
+                .Include(c => c.BlogPost)
+                .Include(c => c.User)
+                .Where(c => c.Id == id)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Content,
+                    c.CreatedAt,
+                    BlogPost = new
+                    {
+                        c.BlogPost.Id,
+                        c.BlogPost.Title
+                    },
+                    User = new
+                    {
+                        c.User.Id,
+                        c.User.UserName
+                    }
+                }).FirstOrDefaultAsync();
 
-            if (blogPostComment == null)
+            if (comment == null)
             {
                 return NotFound();
             }
 
-            return blogPostComment;
+            return comment;
         }
 
         // PUT: api/BlogPostComments/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBlogPostComment(int id, BlogPostComment blogPostComment)
+        public async Task<IActionResult> PutBlogPostComment(int id, BlogPostComment comment)
         {
-            if (id != blogPostComment.Id)
+            if (id != comment.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(blogPostComment).State = EntityState.Modified;
+            _context.Entry(comment).State = EntityState.Modified;
 
             try
             {
@@ -84,18 +131,25 @@ namespace EcomerceApp.Controllers
         }
 
         // POST: api/BlogPostComments
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<BlogPostComment>> PostBlogPostComment(BlogPostComment blogPostComment)
+        public async Task<ActionResult<BlogPostComment>> CreateBlogPostComment(BlogPostComment comment)
         {
-            if (_context.BlogPostComments == null)
+            if (!ModelState.IsValid)
             {
-                return Problem("Entity set 'ApplicationDbContext.BlogPostComments'  is null.");
+                return BadRequest(ModelState);
             }
-            _context.BlogPostComments.Add(blogPostComment);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBlogPostComment", new { id = blogPostComment.Id }, blogPostComment);
+            try
+            {
+                _context.BlogPostComments.Add(comment);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+            return CreatedAtAction(nameof(GetBlogPostComment), new { id = comment.Id }, comment);
         }
 
         // DELETE: api/BlogPostComments/5
@@ -106,13 +160,13 @@ namespace EcomerceApp.Controllers
             {
                 return NotFound();
             }
-            var blogPostComment = await _context.BlogPostComments.FindAsync(id);
-            if (blogPostComment == null)
+            var comment = await _context.BlogPostComments.FindAsync(id);
+            if (comment == null)
             {
                 return NotFound();
             }
 
-            _context.BlogPostComments.Remove(blogPostComment);
+            _context.BlogPostComments.Remove(comment);
             await _context.SaveChangesAsync();
 
             return NoContent();

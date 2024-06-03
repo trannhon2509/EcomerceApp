@@ -21,68 +21,108 @@ namespace EcomerceApp.Controllers
             _context = context;
         }
 
+        // GET: api/OrderDetails
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<object>>> GetOrderDetails(int? page = 1, int? pageSize = 10)
+        {
+            if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
+            {
+                return BadRequest("Invalid page or pageSize value.");
+            }
 
- // GET: api/OrderDetails/ByOrder/5
-        [HttpGet("ByOrder/{orderId}")]
-        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetailsByOrderId(int orderId)
+            var query = from detail in _context.OrderDetails
+                        select new
+                        {
+                            detail.Id,
+                            detail.Quantity,
+                            detail.UnitPrice,
+                            Order = (from order in _context.Orders
+                                     where order.Id == detail.OrderId
+                                     select new
+                                     {
+                                         order.Id,
+                                         order.OrderDate,
+                                         User = (from user in _context.Users
+                                                 where user.Id == order.UserId
+                                                 select new
+                                                 {
+                                                     user.Id,
+                                                     user.UserName
+                                                 }).FirstOrDefault()
+                                     }).FirstOrDefault(),
+                            Product = (from product in _context.Products
+                                       where product.Id == detail.ProductId
+                                       select new
+                                       {
+                                           product.Id,
+                                           product.Name,
+                                           product.Price
+                                       }).FirstOrDefault()
+                        };
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
+
+            var results = await query
+                .Skip((page.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value)
+                .ToListAsync();
+
+            return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
+        }
+
+        // GET: api/OrderDetails/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<object>> GetOrderDetail(int id)
         {
             if (_context.OrderDetails == null)
             {
                 return NotFound();
             }
 
-            var orderDetails = await _context.OrderDetails
-                                             .Where(od => od.OrderId == orderId)
-                                             .Include(od => od.Product) // Include related Product if necessary
-                                             .ToListAsync();
+            var detail = await _context.OrderDetails
+                .Include(od => od.Order)
+                .ThenInclude(o => o.User)
+                .Include(od => od.Product)
+                .Where(od => od.Id == id)
+                .Select(od => new
+                {
+                    od.Id,
+                    od.Quantity,
+                    od.UnitPrice,
+                    Order = new
+                    {
+                        od.Order.Id,
+                        od.Order.OrderDate,
+                        User = new { od.Order.User.Id, od.Order.User.UserName }
+                    },
+                    Product = new
+                    {
+                        od.Product.Id,
+                        od.Product.Name,
+                        od.Product.Price
+                    }
+                })
+                .FirstOrDefaultAsync();
 
-            if (orderDetails == null || !orderDetails.Any())
+            if (detail == null)
             {
                 return NotFound();
             }
 
-            return orderDetails;
-        }
-        // GET: api/OrderDetails
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetails()
-        {
-          if (_context.OrderDetails == null)
-          {
-              return NotFound();
-          }
-            return await _context.OrderDetails.ToListAsync();
-        }
-
-        // GET: api/OrderDetails/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<OrderDetail>> GetOrderDetail(int id)
-        {
-          if (_context.OrderDetails == null)
-          {
-              return NotFound();
-          }
-            var orderDetail = await _context.OrderDetails.FindAsync(id);
-
-            if (orderDetail == null)
-            {
-                return NotFound();
-            }
-
-            return orderDetail;
+            return detail;
         }
 
         // PUT: api/OrderDetails/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrderDetail(int id, OrderDetail orderDetail)
+        public async Task<IActionResult> PutOrderDetail(int id, OrderDetail detail)
         {
-            if (id != orderDetail.Id)
+            if (id != detail.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(orderDetail).State = EntityState.Modified;
+            _context.Entry(detail).State = EntityState.Modified;
 
             try
             {
@@ -104,18 +144,25 @@ namespace EcomerceApp.Controllers
         }
 
         // POST: api/OrderDetails
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<OrderDetail>> PostOrderDetail(OrderDetail orderDetail)
+        public async Task<ActionResult<OrderDetail>> CreateOrderDetail(OrderDetail detail)
         {
-          if (_context.OrderDetails == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.OrderDetails'  is null.");
-          }
-            _context.OrderDetails.Add(orderDetail);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return CreatedAtAction("GetOrderDetail", new { id = orderDetail.Id }, orderDetail);
+            try
+            {
+                _context.OrderDetails.Add(detail);
+                await _context
+                .SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+            return CreatedAtAction(nameof(GetOrderDetail), new { id = detail.Id }, detail);
         }
 
         // DELETE: api/OrderDetails/5
@@ -126,13 +173,13 @@ namespace EcomerceApp.Controllers
             {
                 return NotFound();
             }
-            var orderDetail = await _context.OrderDetails.FindAsync(id);
-            if (orderDetail == null)
+            var detail = await _context.OrderDetails.FindAsync(id);
+            if (detail == null)
             {
                 return NotFound();
             }
 
-            _context.OrderDetails.Remove(orderDetail);
+            _context.OrderDetails.Remove(detail);
             await _context.SaveChangesAsync();
 
             return NoContent();

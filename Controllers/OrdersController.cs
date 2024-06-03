@@ -21,70 +21,89 @@ namespace EcomerceApp.Controllers
             _context = context;
         }
 
-        /*// GET: api/Orders
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
-        {
-          if (_context.Orders == null)
-          {
-              return NotFound();
-          }
-            return await _context.Orders.ToListAsync();
-        }*/
-
         // GET: api/Orders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders(int? page = 1, int? pageSize = 10)
+        public async Task<ActionResult<IEnumerable<object>>> GetOrders(int? page = 1, int? pageSize = 10)
         {
             if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
             {
                 return BadRequest("Invalid page or pageSize value.");
             }
 
-            var query = _context.Orders.Include(o => o.User)
-                                       .Include(o => o.Coupon)
-                                       .Include(o => o.OrderDetails)
-                                       .ThenInclude(od => od.Product)
-                                       .AsQueryable();
+            var query = from order in _context.Orders
+                        join user in _context.Users on order.UserId equals user.Id into userGroup
+                        from u in userGroup.DefaultIfEmpty()
+                        join coupon in _context.Coupons on order.CouponId equals coupon.Id into couponGroup
+                        from c in couponGroup.DefaultIfEmpty()
+                        select new
+                        {
+                            order.Id,
+                            order.OrderDate,
+                            User = u != null ? new { u.Id, u.UserName } : null,
+                            Coupon = c != null ? new { c.Id, c.Code, c.DiscountAmount } : null,
+                            order.note,
+                            order.Status,
+                            OrderDetails = (from detail in _context.OrderDetails
+                                            where detail.OrderId == order.Id
+                                            select new
+                                            {
+                                                detail.Id,
+                                                detail.Quantity,
+                                                detail.UnitPrice,
+                                                Product = (from product in _context.Products
+                                                           where product.Id == detail.ProductId
+                                                           select new
+                                                           {
+                                                               product.Id,
+                                                               product.Name,
+                                                               product.Price
+                                                           }).FirstOrDefault()
+                                            }).ToList()
+                        };
 
             var totalCount = await query.CountAsync();
-            var totalPages = (int)System.Math.Ceiling((double)totalCount / pageSize.Value);
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
 
-            var results = await query.Skip((page.Value - 1) * pageSize.Value)
-                                     .Take(pageSize.Value)
-                                     .ToListAsync();
+            var results = await query
+                .Skip((page.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value)
+                .ToListAsync();
 
             return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
         }
 
-        // GET: api/Orders/user/5
-        [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByUser(string userId)
+        // GET: api/Orders/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<object>> GetOrder(int id)
         {
-            var orders = await _context.Orders.Include(o => o.User)
-                                              .Include(o => o.Coupon)
-                                              .Include(o => o.OrderDetails)
-                                              .ThenInclude(od => od.Product)
-                                              .Where(o => o.UserId == userId)
-                                              .ToListAsync();
-
-            if (orders == null || orders.Count == 0)
+            if (_context.Orders == null)
             {
                 return NotFound();
             }
 
-            return orders;
-        }
-
-        // GET: api/Orders/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
-        {
-          if (_context.Orders == null)
-          {
-              return NotFound();
-          }
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .Include(o => o.User)
+                .Include(o => o.Coupon)
+                .Where(o => o.Id == id)
+                .Select(o => new
+                {
+                    o.Id,
+                    o.OrderDate,
+                    User = new { o.User.Id, o.User.UserName },
+                    Coupon = o.Coupon != null ? new { o.Coupon.Id, o.Coupon.Code, o.Coupon.DiscountAmount } : null,
+                    o.note,
+                    o.Status,
+                    OrderDetails = o.OrderDetails.Select(od => new
+                    {
+                        od.Id,
+                        od.Quantity,
+                        od.UnitPrice,
+                        Product = new { od.Product.Id, od.Product.Name, od.Product.Price }
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
 
             if (order == null)
             {
@@ -95,7 +114,6 @@ namespace EcomerceApp.Controllers
         }
 
         // PUT: api/Orders/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOrder(int id, Order order)
         {
@@ -126,18 +144,25 @@ namespace EcomerceApp.Controllers
         }
 
         // POST: api/Orders
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
+        public async Task<ActionResult<Order>> CreateOrder(Order order)
         {
-          if (_context.Orders == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Orders'  is null.");
-          }
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
+            try
+            {
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+            return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
         }
 
         // DELETE: api/Orders/5
@@ -155,21 +180,6 @@ namespace EcomerceApp.Controllers
             }
 
             _context.Orders.Remove(order);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpPatch("{id}/status")]
-        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] string status)
-        {
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            order.Status = status;
             await _context.SaveChangesAsync();
 
             return NoContent();

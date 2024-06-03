@@ -20,95 +20,113 @@ namespace EcomerceApp.Controllers
         {
             _context = context;
         }
-		// GET: api/BlogTypes
-		[HttpGet]
-		public async Task<ActionResult<IEnumerable<object>>> GetBlogTypes(int? page = 1, int? pageSize = 10)
-		{
-			if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
-			{
-				return BadRequest("Invalid page or pageSize value.");
-			}
 
-			var query = from blogType in _context.Blogs
-						join blogPost in _context.BlogPosts on blogType.Id equals blogPost.BlogId into blogPostGroup
-						from bp in blogPostGroup.DefaultIfEmpty()
-						join user in _context.Users on bp.AuthorId equals user.Id into userGroup
-						from u in userGroup.DefaultIfEmpty()
-						group new { blogType, bp, u } by new
-						{
-							blogType.Id,
-							blogType.Title,
-							blogType.Description
-						} into g
-						select new
-						{
-							g.Key.Id,
-							g.Key.Title,
-							g.Key.Description,
-							BlogPosts = g.Select(x => new
-							{
-								x.bp.Id,
-								x.bp.Title,
-								x.bp.Content,
-								x.bp.PostedOn,
-								x.bp.AuthorId,
-								UserName = x.u.UserName,
-								Comments = x.bp.BlogPostComments.Select(comment => new
-								{
-									comment.Id,
-									comment.Content,
-									comment.CreatedAt,
-									comment.UserId,
-									UserName = comment.User.UserName
-								}).ToList()
-							}).Where(bp => bp.Id != 0).ToList()
-						};
-
-			var totalCount = await query.CountAsync();
-			var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
-
-			var results = await query.Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value).ToListAsync();
-
-			return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
-		}
-
-
-		// GET: api/Blogs
-		[HttpGet]
-        public async Task<ActionResult<IEnumerable<Blog>>> GetBlogs()
+        // GET: api/Blogs
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<object>>> GetBlogs(int? page = 1, int? pageSize = 10)
         {
-          if (_context.Blogs == null)
-          {
-              return NotFound();
-          }
-            return await _context.Blogs.ToListAsync();
-        }
-         // GET: api/Blogs/GetBlogName/5
-        [HttpGet("GetBlogName/{blogId}")]
-        public async Task<ActionResult<string>> GetBlogName(int blogId)
-        {
-            var blog = await _context.Blogs
-                                     .Where(b => b.Id == blogId)
-                                     .Select(b => b.Title)
-                                     .FirstOrDefaultAsync();
-
-            if (blog == null)
+            if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
             {
-                return NotFound();
+                return BadRequest("Invalid page or pageSize value.");
             }
 
-            return blog;
+            var query = from blog in _context.Blogs
+                        select new
+                        {
+                            blog,
+                            blog.Id,
+                            blog.Title,
+                            blog.Description,
+                            Posts = (from post in _context.BlogPosts
+                                     where post.BlogId == blog.Id
+                                     select new
+                                     {
+                                         post.Id,
+                                         post.Title,
+                                         post.Content,
+                                         post.PostedOn,
+                                         Author = (from user in _context.Users
+                                                   where user.Id == post.AuthorId
+                                                   select new
+                                                   {
+                                                       user.Id,
+                                                       user.UserName
+                                                   }).FirstOrDefault(),
+                                         Comments = (from comment in _context.BlogPostComments
+                                                     where comment.BlogPostId == post.Id
+                                                     select new
+                                                     {
+                                                         comment.Id,
+                                                         comment.Content,
+
+
+                                                         comment.CreatedAt,
+                                                         User = (from user in _context.Users
+                                                                 where user.Id == comment.UserId
+                                                                 select new
+                                                                 {
+                                                                     user.Id,
+                                                                     user.UserName
+                                                                 }).FirstOrDefault()
+                                                     }).ToList()
+                                     }).ToList()
+                        };
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
+
+            var results = await query
+                .Skip((page.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value)
+                .ToListAsync();
+
+            return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
         }
 
         // GET: api/Blogs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Blog>> GetBlog(int id)
+        public async Task<ActionResult<object>> GetBlog(int id)
         {
-          if (_context.Blogs == null)
-          {
-              return NotFound();
-          }
-            var blog = await _context.Blogs.FindAsync(id);
+            if (_context.Blogs == null)
+            {
+                return NotFound();
+            }
+            var blog = await _context.Blogs
+                .Include(b => b.BlogPosts)
+                .ThenInclude(bp => bp.BlogPostComments)
+                .ThenInclude(c => c.User)
+                .Include(b => b.BlogPosts)
+                .ThenInclude(bp => bp.Author)
+                .Where(b => b.Id == id)
+                .Select(b => new
+                {
+                    b.Id,
+                    b.Title,
+                    b.Description,
+                    Posts = b.BlogPosts.Select(bp => new
+                    {
+                        bp.Id,
+                        bp.Title,
+                        bp.Content,
+                        bp.PostedOn,
+                        Author = new
+                        {
+                            bp.Author.Id,
+                            bp.Author.UserName
+                        },
+                        Comments = bp.BlogPostComments.Select(c => new
+                        {
+                            c.Id,
+                            c.Content,
+                            c.CreatedAt,
+                            User = new
+                            {
+                                c.User.Id,
+                                c.User.UserName
+                            }
+                        }).ToList()
+                    }).ToList()
+                }).FirstOrDefaultAsync();
 
             if (blog == null)
             {
@@ -119,7 +137,6 @@ namespace EcomerceApp.Controllers
         }
 
         // PUT: api/Blogs/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBlog(int id, Blog blog)
         {
@@ -150,18 +167,25 @@ namespace EcomerceApp.Controllers
         }
 
         // POST: api/Blogs
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Blog>> PostBlog(Blog blog)
+        public async Task<ActionResult<Blog>> CreateBlog(Blog blog)
         {
-          if (_context.Blogs == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Blogs'  is null.");
-          }
-            _context.Blogs.Add(blog);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return CreatedAtAction("GetBlog", new { id = blog.Id }, blog);
+            try
+            {
+                _context.Blogs.Add(blog);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+            return CreatedAtAction(nameof(GetBlog), new { id = blog.Id }, blog);
         }
 
         // DELETE: api/Blogs/5
@@ -183,6 +207,7 @@ namespace EcomerceApp.Controllers
 
             return NoContent();
         }
+
 
         private bool BlogExists(int id)
         {

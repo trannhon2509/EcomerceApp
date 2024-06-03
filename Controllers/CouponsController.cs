@@ -23,23 +23,32 @@ namespace EcomerceApp.Controllers
 
         // GET: api/Coupons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Coupon>>> GetCoupons()
+        public async Task<ActionResult<IEnumerable<Coupon>>> GetCoupons(int? page = 1, int? pageSize = 10)
         {
-          if (_context.Coupons == null)
-          {
-              return NotFound();
-          }
-            return await _context.Coupons.ToListAsync();
+            if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
+            {
+                return BadRequest("Invalid page or pageSize value.");
+            }
+
+            var totalCount = await _context.Coupons.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
+
+            var results = await _context.Coupons
+                .Skip((page.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value)
+                .ToListAsync();
+
+            return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
         }
 
         // GET: api/Coupons/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Coupon>> GetCoupon(int id)
         {
-          if (_context.Coupons == null)
-          {
-              return NotFound();
-          }
+            if (_context.Coupons == null)
+            {
+                return NotFound();
+            }
             var coupon = await _context.Coupons.FindAsync(id);
 
             if (coupon == null)
@@ -51,7 +60,6 @@ namespace EcomerceApp.Controllers
         }
 
         // PUT: api/Coupons/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCoupon(int id, Coupon coupon)
         {
@@ -82,18 +90,25 @@ namespace EcomerceApp.Controllers
         }
 
         // POST: api/Coupons
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Coupon>> PostCoupon(Coupon coupon)
+        public async Task<ActionResult<Coupon>> CreateCoupon(Coupon coupon)
         {
-          if (_context.Coupons == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Coupons'  is null.");
-          }
-            _context.Coupons.Add(coupon);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return CreatedAtAction("GetCoupon", new { id = coupon.Id }, coupon);
+            try
+            {
+                _context.Coupons.Add(coupon);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+            return CreatedAtAction(nameof(GetCoupon), new { id = coupon.Id }, coupon);
         }
 
         // DELETE: api/Coupons/5
@@ -111,6 +126,22 @@ namespace EcomerceApp.Controllers
             }
 
             _context.Coupons.Remove(coupon);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // PATCH: api/Coupons/5/status
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateCouponStatus(int id, [FromBody] bool status)
+        {
+            var coupon = await _context.Coupons.FindAsync(id);
+            if (coupon == null)
+            {
+                return NotFound();
+            }
+
+            coupon.Status = status;
             await _context.SaveChangesAsync();
 
             return NoContent();

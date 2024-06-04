@@ -294,11 +294,12 @@ class Product extends Component {
                   <div className="menu-list-row">
                     <div className="row g-xxl-5 bydefault_show" id="menu-dish">
                                         {products.map((product) => (
+                                            console.log(product),
                                             <ProductCard
                                                 key={product.id}
                                                 name={product.name}
                                                 price={product.price}
-                                                imageUrl={product.imageUrl}
+                                                imageUrl={product.images[0].imageUrl}
                                                 productId={product.id}
                                             />
                       ))}

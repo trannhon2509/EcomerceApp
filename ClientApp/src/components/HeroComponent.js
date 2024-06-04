@@ -1,11 +1,11 @@
-import React from 'react';
+﻿import React from 'react';
 import '../assets/css/HeroComponent.css';
 import { Link } from 'react-router-dom';
 import { useTypewriter, Cursor } from 'react-simple-typewriter'; // Ensure this is the correct import for your typewriter hook
 
 const HeroComponent = () => {
     const [text] = useTypewriter({
-        words: ['protect', 'cherish', 'conserve'],
+        words: ['RevibeCO'],
         loop: {},
         deleteSpeed: 200,
         typeSpeed: 100,
@@ -27,13 +27,11 @@ const HeroComponent = () => {
                         <div className="col-lg-6">
                             <div className="banner-text">
                                 <h1 className="h1-title">
-                                    Let's { }
+                                    Wellcome to <br/>
                                     <span className='text-success'>{text}<Cursor /></span>
                                     {'\n'}
-                                    Enviroment.
                                 </h1>
-                                <p>This is Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam eius
-                                    vel tempore consectetur nesciunt? Nam eius tenetur recusandae optio aperiam.</p>
+                                <p>Chào mừng bạn đến với ReVibe Co, nơi bạn sẽ tìm thấy những sản phẩm nến thơm và phụ kiện quà tặng tinh tế nhất. ReVibe Co tự hào mang đến cho bạn một bộ sưu tập nến thơm đa dạng, được làm từ các nguyên liệu tự nhiên và an toàn. Mỗi sản phẩm của chúng tôi không chỉ mang lại hương thơm dễ chịu mà còn góp phần trang trí không gian sống của bạn trở nên ấm áp và sang trọng.</p>
                                 <div className="banner-btn mt-4">
                                     <Link to={''} className="sec-btn fw-bold">Check our Menu</Link>
                                 </div>

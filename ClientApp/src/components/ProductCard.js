@@ -2,31 +2,22 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import RoutePath from "../routes/RoutePath";
-import { ProductContext } from "../context/ProductContext";
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 
+import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
 const ProductCard = ({ name, price, imageUrl, productId, maxQuantity }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const { setProduct } = useContext(ProductContext);
 
   const handleAddToCart = async () => {
     try {
-      console.log("Item added to cart", productId);
       await axios.post(`api/shop/${productId}`);
-
+      toast.success( name +' added to cart successfully!');
       // Optionally, you can show a success message or update UI to reflect the item being added to the cart.
     } catch (error) {
       console.error("Error adding item to cart:", error);
+      toast.error('Failed to add item to cart!');
       // Handle error appropriately, such as displaying an error message.
-    }
-  };
-
-  const fetchProductData = async () => {
-      try {
-      const response = await axios.get(`api/Products/${productId}`);
-          setProduct(response.data);
-    } catch (error) {
-      console.error("Error fetching product data:", error);
     }
   };
 
@@ -36,6 +27,7 @@ const ProductCard = ({ name, price, imageUrl, productId, maxQuantity }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+          <ToastContainer /> {/* Add ToastContainer here */}
       <div
         className="card"
         style={{ position: "relative", minHeight: "373px" }}
@@ -59,8 +51,7 @@ const ProductCard = ({ name, price, imageUrl, productId, maxQuantity }) => {
               style={{ position: "absolute", top: "10px", right: "10px" }}
             >
               <Link
-                              to={`${RoutePath.PRODUCTINFO}/${productId}`}
-                              onClick={fetchProductData}
+                to={`${RoutePath.PRODUCTINFO.replace(":productId", productId)}`}
                 className="text-decoration-none mr-2"
               >
                 <i className="bi bi-info-circle"></i>

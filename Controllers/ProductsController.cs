@@ -110,36 +110,9 @@ namespace EcomerceApp.Controllers
                 return NotFound();
             }
 
-            var productDetail = new
-            {
-                product.Id,
-                product.Name,
-                product.Description,
-                product.Price,
-                product.Quantity,
-                product.Information,
-                product.Status,
-                ProductCategoryName = product.ProductCategory?.Name,
-                Images = product.ProductImages.Select(img => new
-                {
-                    img.Id,
-                    img.ImageUrl
-                }),
-                Comments = product.ProductComments.Select(comment => new
-                {
-                    comment.Id,
-                    comment.Content,
-                    comment.CreatedAt,
-                    User = new
-                    {
-                        comment.User.Id,
-                        comment.User.UserName,
-                        comment.User.imgUrl
-                    }
-                })
-            };
+            
 
-            return Ok(productDetail);
+            return Ok(product);
         }
 
 

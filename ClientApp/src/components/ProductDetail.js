@@ -1,52 +1,69 @@
-// src/components/ProductDetail.js
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/ProductDetail.css';
-import { ProductContext } from '../context/ProductContext';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 
-const ProductDetail = ({ match }) => {
-    const { product, setProduct } = useContext(ProductContext);
-    const { productId } = match.params;
+import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
+
+const ProductDetail = () => {
+    const { productId } = useParams();
+    const [product, setProduct] = useState(null);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchProductData = async () => {
+        const fetchProduct = async () => {
             try {
-                const response = await axios.get(`api/Products/${productId}`);
+                const response = await axios.get(`/api/products/${productId}`);
                 setProduct(response.data);
+                setLoading(false);
             } catch (error) {
-                console.error('Error fetching product data:', error);
+                console.error('Error fetching product:', error);
+                setError(error);
+                setLoading(false);
             }
         };
+        fetchProduct();
+    }, [productId]);
 
-        fetchProductData();
-    }, [productId, setProduct]);
-
-    if (!product) {
+    if (loading) {
         return <div>Loading...</div>;
     }
 
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
+    const addToCart = async (productId) => {
+        try {
+            const response = await axios.post(`https://localhost:44412/api/shop/${productId}`);
+            console.log('Added to cart:', response.data);
+            toast.success(product.name+' added to cart successfully!');
+            // Handle success, maybe show a toast or update the UI
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            toast.error('Failed to add item to cart!');
+            // Handle error, maybe show an error message to the user
+        }
+    }
     return (
         <div className="container">
+               <ToastContainer /> {/* Add ToastContainer here */}
             <div className="product-content product-wrap clearfix product-detail p-sm-0 border-0">
                 <div className="row">
                     <div className="col-md-6 col-sm-12 col-xs-12">
                         <div className="product-image">
                             <div id="myCarousel-2" className="carousel slide">
                                 <ol className="carousel-indicators">
-                                    {product.productImages.map((_, index) => (
-                                        <li
-                                            key={index}
-                                            data-target="#myCarousel-2"
-                                            data-slide-to={index}
-                                            className={index === 0 ? 'active' : ''}
-                                        ></li>
+                                    {product.productImages.map((image, index) => (
+                                        <li key={index} data-target="#myCarousel-2" data-slide-to={index} className={index === 0 ? 'active' : ''}></li>
                                     ))}
                                 </ol>
                                 <div className="carousel-inner">
                                     {product.productImages.map((image, index) => (
                                         <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
-                                            <img src={image} className="img-responsive" alt={`Product Image ${index}`} />
+                                            <img src={image.imageUrl} className="img-responsive" alt="" />
                                         </div>
                                     ))}
                                 </div>
@@ -64,103 +81,75 @@ const ProductDetail = ({ match }) => {
                     <div className="col-md-6 col-md-offset-1 col-sm-12 col-xs-12">
                         <h2 className="name">{product.name}</h2>
                         <div style={{ fontSize: '8px' }}>
-                            {[...Array(5)].map((_, index) => (
-                                <i key={index} className={`fa fa-star fa-2x ${index < product.rating ? 'text-warning' : 'text-muted'}`}></i>
-                            ))}
+                            <i className="fa fa-star fa-2x text-warning"></i>
+                            <i className="fa fa-star fa-2x text-warning"></i>
+                            <i className="fa fa-star fa-2x text-warning"></i>
+                            <i className="fa fa-star fa-2x text-warning"></i>
+                            <i className="fa fa-star fa-2x text-muted"></i>
                             <span className="fa fa-2x">
-                                <h5>({product.votes}) Votes</h5>
+                                <h5>(109) Votes</h5>
                             </span>
                         </div>
                         <hr />
                         <div>
-                            <h3 className="price-container">${product.price.toFixed(2)}</h3>
+                            <h3 className="price-container">
+                                ${product.price}
+                            </h3>
                         </div>
                         <hr />
                         <div className="description description-tabs" style={{ minHeight: '430px' }}>
                             <ul id="myTab" className="nav nav-pills">
                                 <li className="nav-item">
-                                    <a href="#more-information" data-toggle="tab" className="nav-link active">
-                                        Product Description
-                                    </a>
+                                    <a href="#more-information" data-toggle="tab" className="nav-link active">Product Description</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="#specifications" data-toggle="tab" className="nav-link">
-                                        Specifications
-                                    </a>
+                                    <a href="#specifications" data-toggle="tab" className="nav-link">Specifications</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="#reviews" data-toggle="tab" className="nav-link">
-                                        Reviews
-                                    </a>
+                                    <a href="#reviews" data-toggle="tab" className="nav-link">Reviews</a>
                                 </li>
                             </ul>
                             <div id="myTabContent" className="tab-content">
-                                <div className="tab-pane fade show active" id="more-information" style={{ maxHeight: '219px', overflowY: 'auto' }}>
+                                <div className="tab-pane fade show active" id="more-information" style={{ maxHeight: '219px', overflowY: 'auto', scrollbarWidth: 'none', '-ms-overflow-style': 'none'  }}>
                                     <br />
                                     <strong>Description Title</strong>
-                                    <p>{product.description}</p>
+                                    <p>
+                                        {product.description}
+                                    </p>
                                 </div>
-                                <div className="tab-pane fade" id="specifications" style={{ maxHeight: '219px', overflowY: 'auto' }}>
+                                <div className="tab-pane fade" id="specifications" style={{ maxHeight: '419px', overflowY: 'auto', '-ms-overflow-style': 'none'  }}>
                                     <br />
                                     <dl className="row">
-                                        {product.information &&
-                                            product.information.split('\n').map((info, index) => (
-                                                <React.Fragment key={index}>
-                                                    <dt className="col-sm-3">{info.split(':')[0]}</dt>
-                                                    <dd className="col-sm-9">{info.split(':')[1]}</dd>
-                                                </React.Fragment>
-                                            ))}
+                                        <p className="col-sm-9">{product.information}</p>
                                     </dl>
                                 </div>
-                                <div className="tab-pane fade" id="reviews">
+                                <div className="tab-pane fade" id="reviews" style={{ maxHeight: '219px', overflowY: 'auto', scrollbarWidth: 'none', '-ms-overflow-style': 'none'  }}>
                                     <br />
                                     <form method="post" className="well padding-bottom-10" onSubmit={(e) => e.preventDefault()}>
-                                        <textarea rows={2} className="form-control" placeholder="Write a review"></textarea>
+                                        <textarea rows="2" className="form-control" placeholder="Write a review"></textarea>
                                         <div className="margin-top-10">
-                                            <button type="submit" className="btn btn-sm btn-primary pull-right">
-                                                Submit Review
-                                            </button>
-                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add Location">
-                                                <i className="fa fa-location-arrow"></i>
-                                            </a>
-                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add Voice">
-                                                <i className="fa fa-microphone"></i>
-                                            </a>
-                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add Photo">
-                                                <i className="fa fa-camera"></i>
-                                            </a>
-                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add File">
-                                                <i className="fa fa-file"></i>
-                                            </a>
+                                            <button className="btn btn-sm btn-primary pull-right" type="submit">Submit Review</button>
+                                            <a className="btn btn-link btn-icon-left" href="#reviews"><i className="fa fa-arrow-left"></i> Back</a>
                                         </div>
                                     </form>
-                                    <div className="chat-body no-padding profile-message" style={{ maxHeight: '219px', overflowY: 'auto' }}>
-                                        <ul>
-                                            {product.productComments.map((comment, index) => (
-                                                <li key={index} className="message">
-                                                    <img src={comment.user.imgUrl} className="online" alt="" />
-                                                    <span className="message-text">
-                                                        {comment.user.userName}
-                                                        <span className="badge">Purchase Verified</span>
-                                                        <span className="pull-right" style={{ fontSize: '8px' }}>
-                                                            {[...Array(5)].map((_, starIndex) => (
-                                                                <i key={starIndex} className={`fa fa-star fa-2x ${starIndex < comment.rating ? 'text-primary' : 'text-muted'}`}></i>
-                                                            ))}
-                                                        </span>
-                                                    </span>
-                                                    <br />
-                                                    <span>{comment.content}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                                    <hr />
+                                    {product.productComments.map((comment, index) => (
+                                        <div key={index} className="review">
+                                            <strong>User</strong> <span className="text-muted">{comment.createdAt}</span>
+                                            <div className="review-text">
+                                                {comment.content}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
-                        <hr />
                         <div className="row">
-                            <div className="col-sm-12 col-md-6 col-lg-6">
-                                <a href="#" className="btn btn-success btn-lg">Add to cart (${product.price.toFixed(2)})</a>
+                            <div className="col">
+                                <button className="btn btn-secondary btn-block" type="button" onClick={() => addToCart(productId)}>Add to cart</button>
+                            </div>
+                            <div className="col">
+                                <button className="btn btn-primary btn-block" type="button">Buy now</button>
                             </div>
                         </div>
                     </div>
@@ -168,6 +157,6 @@ const ProductDetail = ({ match }) => {
             </div>
         </div>
     );
-};
+}
 
 export default ProductDetail;

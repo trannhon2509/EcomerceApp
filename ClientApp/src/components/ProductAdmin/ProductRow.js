@@ -1,11 +1,11 @@
 ﻿import React, { useState } from 'react';
 
-const ProductRow = ({ product, onDelete, onRestore, loadingDelete }) => {
+const ProductRow = ({ product, onDelete, onEdit, loadingDelete }) => {
     const { id, name, description, price, productCategoryName, comments, images } = product;
-    const [showImageList, setShowImageList] = useState(false); // Thêm trạng thái
+    const [showImageList, setShowImageList] = useState(false);
 
     const toggleImageList = () => {
-        setShowImageList(prevState => !prevState); // Hàm xử lý sự kiện để thay đổi trạng thái
+        setShowImageList(prevState => !prevState);
     };
 
     return (
@@ -23,21 +23,23 @@ const ProductRow = ({ product, onDelete, onRestore, loadingDelete }) => {
             </td>
             <td>
                 <div className="image-gallery">
-                    {showImageList ? ( // Logic render để hiển thị danh sách ảnh hoặc chỉ hiển thị một ảnh đầu tiên
+                    {showImageList ? (
                         <ul>
                             {images.map(image => (
-                                <li key={image.id}><img src={image.imageUrl} alt={name} style={{ width: '100px' }} /></li>
+                                <li key={image.id}>
+                                    <img src={image.imageUrl} alt={name} style={{ width: '100px' }} />
+                                </li>
                             ))}
                         </ul>
                     ) : (
                         <img
-                            src={images[0].imageUrl} // Chỉ hiển thị một ảnh đầu tiên
+                            src={images[0].imageUrl}
                             alt={name}
                             style={{ width: '100px' }}
                         />
                     )}
                 </div>
-                {images.length > 1 && ( // Nếu có nhiều hơn một ảnh, hiển thị nút chuyển đổi
+                {images.length > 1 && (
                     <button onClick={toggleImageList}>
                         {showImageList ? 'Hide Images' : 'Show Images'}
                     </button>
@@ -52,10 +54,10 @@ const ProductRow = ({ product, onDelete, onRestore, loadingDelete }) => {
                     Delete
                 </button>
                 <button
-                    onClick={() => onRestore(id)}
-                    className="btn btn-success"
+                    onClick={() => onEdit(product)}
+                    className="btn btn-primary"
                 >
-                    Restore
+                    Edit
                 </button>
             </td>
         </tr>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import '../assets/css/Product.css'
-import ProductCard from '../components/ProductCard'
+import ProductCard from '../components/ProductClient/ProductCard'
 import Card from '../components/Card';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../redux/actions/productActions';

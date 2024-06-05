@@ -2,8 +2,8 @@ import ApiAuthorzationRoutes from '../components/api-authorization/ApiAuthorizat
 import { Counter } from "../components/Counter";
 import { FetchData } from "../components/FetchData";
 import { Home } from "../components/Home";
-import UserComponent from '../components/UserComponent';
-import ProductComponent from '../components/ProductComponent';
+import UserComponent from '../components/UserAdmin/UserComponent';
+import ProductComponent from '../components/ProductAdmin/ProductComponent';
 import CategoriesComponent from '../components/CategoriesComponent';
 import BlogPostComponent from '../components/BlogPostComponent';
 import OrderComponent from '../components/OrderComponent';

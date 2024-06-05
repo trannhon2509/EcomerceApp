@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ProductDetail from '../components/ProductDetail'
+import ProductDetail from '../components/ProductClient/ProductDetail'
 
 export default class ProductInfo extends Component {
   render() {

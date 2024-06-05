@@ -15,7 +15,7 @@ const RoutePath = {
     BlogPage: '/blogpage',
     FAQPage:  'FAQPage',
     CONTACTPage: '/contactpage',
-    PRODUCTINFO: '/productinfo',
+    PRODUCTINFO: "/product/:productId",
     CARDPRODUCT: '/cardproduct',
     FAVORITEPRODUCT: '/favoriteproduct',
     CHECKOUT: '/checkout',

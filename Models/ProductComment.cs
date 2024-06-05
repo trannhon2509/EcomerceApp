@@ -1,4 +1,6 @@
-﻿namespace EcomerceApp.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EcomerceApp.Models
 {
     public class ProductComment
     {
@@ -9,9 +11,11 @@
         public int ProductId { get; set; } // Khóa ngoại đến bảng Product
 
         // Quan hệ n-1 với User
+         [JsonIgnore]
         public ApplicationUser User { get; set; }
 
         // Quan hệ n-1 với Product
+                [JsonIgnore]
         public Product Product { get; set; }
     }
 }

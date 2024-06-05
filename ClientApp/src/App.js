@@ -5,14 +5,13 @@ import AuthorizeRoute from "./components/api-authorization/AuthorizeRoute";
 import "./custom.css";
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import { ProductProvider } from "./context/ProductContext";
 
 export default class App extends Component {
   static displayName = App.name;
 
   render() {
     return (
-      <ProductProvider>
+      
         <Provider store={store}>
           <Routes>
             {AppRoutes.map((route, index) => {
@@ -34,7 +33,7 @@ export default class App extends Component {
             })}
           </Routes>
         </Provider>
-      </ProductProvider>
+      
     );
   }
 }

@@ -26,7 +26,6 @@ class GridProduct extends Component {
         <div className="container">
           <div className="row product">
             {products.map(product => (
-              console.log(product),
               <ProductCard
                 key={product.id}
                 name={product.name}

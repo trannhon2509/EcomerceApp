@@ -4,22 +4,59 @@ import ProductCard from '../components/Product/ProductCard'
 import Card from '../components/Card';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../redux/actions/productActions';
+import ReactPaginate from 'react-paginate';
+import axios from 'axios';
 class Product extends Component {
 
-    componentDidMount() {
-        this.props.fetchProducts(1, 6); // Fetch first page with 6 products
+  state = {
+    currentPage: 1,
+    totalPages: 1,
+    pageSize: 6, // Set the page size
+    products: [],
+    loading: true,
+    error: null
+};
+
+componentDidMount() {
+    this.fetchData(1);
+}
+
+fetchData = async (page) => {
+    const { pageSize } = this.state;
+    try {
+        const response = await axios.get(`api/products?page=${page}&pageSize=${pageSize}`);
+        const { results, totalPages } = response.data;
+        this.setState({
+            products: results,
+            totalPages,
+            loading: false,
+            error: null
+        });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        this.setState({
+            loading: false,
+            error: 'Failed to fetch products'
+        });
+    }
+};
+
+handlePageChange = (selectedPage) => {
+    const { selected } = selectedPage;
+    const newPage = selected + 1;
+    this.setState({ currentPage: newPage });
+    this.fetchData(newPage);
+};
+  render() {
+    const { loading, error, products, totalPages, currentPage } = this.state;
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
-  render() {
-      const { loading, error, products } = this.props;
-
-      if (loading) {
-          return <div>Loading...</div>;
-      }
-
-      if (error) {
-          return <div>Error: {error}</div>;
-      }
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
       <div className='py-5'>
@@ -305,26 +342,29 @@ class Product extends Component {
                       ))}
                     </div>
                     <div className='mt-5'>
-                      {/* <Pagging startPage={1} endPage={3} itemsPerPage={4} /> */}
+                    <ReactPaginate
+                            pageCount={totalPages}
+                            pageRangeDisplayed={3}
+                            marginPagesDisplayed={1}
+                            onPageChange={this.handlePageChange}
+                            containerClassName={'pagination'}
+                            activeClassName={'active'}
+                            subContainerClassName={'pages pagination'}
+                            pageClassName="page-item"
+                            pageLinkClassName="page-link"
+                            previousClassName="page-item"
+                            previousLinkClassName="page-link"
+                            nextClassName="page-item"
+                            nextLinkClassName="page-link"
+                            breakLinkClassName="page-link"
+                        />
                     </div>
                   </div>
                 </div>
 
 
               </div>
-              <div className="row">
-                <div className="col-sm-12">
-                  <ul className="pagination pull-right">
-                    <li className="disabled"><a href="#">«</a></li>
-                    <li className="active"><a href="#">1 <span className="sr-only">(current)</span></a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">»</a></li>
-                  </ul>
-                </div>
-              </div>
+             
             </div>
           </div>
         </div>

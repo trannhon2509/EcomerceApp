@@ -3,8 +3,8 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import authService from '../api-authorization/AuthorizeService';
 import ProductRow from './ProductRow';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'; // Import Modal components from reactstrap
-import EditProductForm from './EditProductForm';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import EditProductModal from './EditProductModal'; // Import EditProductModal
 
 class ProductComponent extends Component {
     constructor(props) {
@@ -168,19 +168,17 @@ class ProductComponent extends Component {
                     breakLinkClassName="page-link"
                 />
 
-                <Modal isOpen={showAddModal} toggle={() => this.setState({ showAddModal: false })}>
-                    <ModalHeader toggle={() => this.setState({ showAddModal: false })}>Add Product</ModalHeader>
-                    <ModalBody>
-                        <EditProductForm onSave={this.addProduct} onCancel={() => this.setState({ showAddModal: false })} />
-                    </ModalBody>
-                </Modal>
-
                 <Modal isOpen={showEditModal} toggle={() => this.setState({ showEditModal: false })}>
                     <ModalHeader toggle={() => this.setState({ showEditModal: false })}>Edit Product</ModalHeader>
                     <ModalBody>
-                        {editingProduct && (
-                            <EditProductForm product={editingProduct} onSave={this.updateProduct} onCancel={() => this.setState({ showEditModal: false })} />
-                        )}
+                        <EditProductModal
+                            isOpen={showEditModal}
+                            toggle={() => this.setState({ showEditModal: false })}
+                            product={editingProduct}
+                            categories={categories}  // Pass categories as a prop
+                            onSave={this.updateProduct}
+                            onCancel={() => this.setState({ showEditModal: false })}
+                        />
                     </ModalBody>
                 </Modal>
             </div>

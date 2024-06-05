@@ -44,16 +44,16 @@ function Footer() {
                   <div className="social-icon">
                     <ul>
                       <li>
-                        <Link to={'https://www.facebook.com/profile.php?id=61555610512113&sk=about'} target='https://www.facebook.com/profile.php?id=61555610512113&sk=about'>
+                        <Link to={'https://www.facebook.com/ReVibe.Co.VN'} target='https://www.facebook.com/ReVibe.Co.VN'>
                         <i class="bi bi-facebook"></i>
                         </Link>
                       </li>
                       <li>
-                        <Link to={''}>
+                        <Link to={'https://www.instagram.com/revibe_co_vn/'}>
                         <i class="bi bi-instagram"></i>
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link to={''}>
                         <i class="bi bi-tiktok"></i>
                         </Link>
@@ -62,7 +62,7 @@ function Footer() {
                         <Link to={''}>
                         <i class="bi bi-youtube"></i>
                         </Link>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 </div>
@@ -104,7 +104,7 @@ function Footer() {
           <div className="row">
             <div className="col-lg-12 text-center">
               <div className="copyright-text">
-                <p>Copyright © 2021 <span className="name">TechieCoder.</span>All Rights Reserved.
+                <p> Renew - Vibrant - Comfort 💕 <span className="name">RevibeCo.</span> for you.
                 </p>
               </div>
             </div>

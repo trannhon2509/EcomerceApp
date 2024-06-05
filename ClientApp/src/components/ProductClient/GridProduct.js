@@ -30,7 +30,7 @@ class GridProduct extends Component {
                 key={product.id}
                 name={product.name}
                 price={product.price}
-                    imageUrl={product.imageUrl}
+                    imageUrl={product.images[0].imageUrl}
                     productId ={product.id}
               />
             ))}

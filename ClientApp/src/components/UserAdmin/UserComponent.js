@@ -1,8 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
-import { fetchUsers, deleteUser, restoreUser } from '../redux/actions/userActions';
-import authService from './api-authorization/AuthorizeService';
+import { fetchUsers, deleteUser, restoreUser } from '../../redux/actions/userActions';
+import authService from '../api-authorization/AuthorizeService';
 import UserRow from './UserRow';
 
 class UserComponent extends Component {

@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import { Home } from '../components/Home'
 import '../assets/css/HomePage.css'
 import HeroComponent from '../components/HeroComponent'
-import Panel from '../components/Panel'
 import Acrording from '../components/Acrording'
 import WhyChoose from '../components/WhyChoose'
-import GridProduct from '../components/GridProduct'
+import GridProduct from '../components/ProductClient/GridProduct'
 export default class HomePage extends Component {
   render() {
     return (

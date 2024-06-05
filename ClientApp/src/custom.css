@@ -5,8 +5,7 @@ font-family: 'Poppins', sans-serif; */
 body {
     font-family: 'Poppins', sans-serif;
     text-rendering: optimizeLegibility !important;
-    background: white;
-   
+    background: #FFFBF9;
 }
 
 .body-fixed {

@@ -73,7 +73,7 @@ namespace EcomerceApp.Controllers
 
 
         // GET: api/Products/5
-        [HttpGet("{id}")]
+        /*[HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             if (_context.Products == null)
@@ -88,7 +88,60 @@ namespace EcomerceApp.Controllers
             }
 
             return product;
+        }*/
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+            if (_context.Products == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Products
+                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductComments)
+                    .ThenInclude(pc => pc.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var productDetail = new
+            {
+                product.Id,
+                product.Name,
+                product.Description,
+                product.Price,
+                product.Quantity,
+                product.Information,
+                product.Status,
+                ProductCategoryName = product.ProductCategory?.Name,
+                Images = product.ProductImages.Select(img => new
+                {
+                    img.Id,
+                    img.ImageUrl
+                }),
+                Comments = product.ProductComments.Select(comment => new
+                {
+                    comment.Id,
+                    comment.Content,
+                    comment.CreatedAt,
+                    User = new
+                    {
+                        comment.User.Id,
+                        comment.User.UserName,
+                        comment.User.imgUrl
+                    }
+                })
+            };
+
+            return Ok(productDetail);
         }
+
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

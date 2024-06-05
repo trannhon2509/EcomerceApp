@@ -1,8 +1,31 @@
-import React from 'react';
+// src/components/ProductDetail.js
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/ProductDetail.css';
+import { ProductContext } from '../context/ProductContext';
 
-const ProductDetail = () => {
+const ProductDetail = ({ match }) => {
+    const { product, setProduct } = useContext(ProductContext);
+    const { productId } = match.params;
+
+    useEffect(() => {
+        const fetchProductData = async () => {
+            try {
+                const response = await axios.get(`api/Products/${productId}`);
+                setProduct(response.data);
+            } catch (error) {
+                console.error('Error fetching product data:', error);
+            }
+        };
+
+        fetchProductData();
+    }, [productId, setProduct]);
+
+    if (!product) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="container">
             <div className="product-content product-wrap clearfix product-detail p-sm-0 border-0">
@@ -11,20 +34,21 @@ const ProductDetail = () => {
                         <div className="product-image">
                             <div id="myCarousel-2" className="carousel slide">
                                 <ol className="carousel-indicators">
-                                    <li data-target="#myCarousel-2" data-slide-to="0" className=""></li>
-                                    <li data-target="#myCarousel-2" data-slide-to="1" className="active"></li>
-                                    <li data-target="#myCarousel-2" data-slide-to="2" className=""></li>
+                                    {product.productImages.map((_, index) => (
+                                        <li
+                                            key={index}
+                                            data-target="#myCarousel-2"
+                                            data-slide-to={index}
+                                            className={index === 0 ? 'active' : ''}
+                                        ></li>
+                                    ))}
                                 </ol>
                                 <div className="carousel-inner">
-                                    <div className="carousel-item active">
-                                        <img src="https://www.bootdey.com/image/700x400/FFB6C1/000000" className="img-responsive" alt="" />
-                                    </div>
-                                    <div className="carousel-item">
-                                        <img src="https://www.bootdey.com/image/700x400/87CEFA/000000" className="img-responsive" alt="" />
-                                    </div>
-                                    <div className="carousel-item">
-                                        <img src="https://www.bootdey.com/image/700x400/B0C4DE/000000" className="img-responsive" alt="" />
-                                    </div>
+                                    {product.productImages.map((image, index) => (
+                                        <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                                            <img src={image} className="img-responsive" alt={`Product Image ${index}`} />
+                                        </div>
+                                    ))}
                                 </div>
                                 <a className="carousel-control-prev" href="#myCarousel-2" role="button" data-slide="prev">
                                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -38,61 +62,54 @@ const ProductDetail = () => {
                         </div>
                     </div>
                     <div className="col-md-6 col-md-offset-1 col-sm-12 col-xs-12">
-                        <h2 className="name">
-                            Product Name Title Here
-                        </h2>
+                        <h2 className="name">{product.name}</h2>
                         <div style={{ fontSize: '8px' }}>
-                            <i className="fa fa-star fa-2x text-warning"></i>
-                            <i className="fa fa-star fa-2x text-warning"></i>
-                            <i className="fa fa-star fa-2x text-warning"></i>
-                            <i className="fa fa-star fa-2x text-warning"></i>
-                            <i className="fa fa-star fa-2x text-muted"></i>
+                            {[...Array(5)].map((_, index) => (
+                                <i key={index} className={`fa fa-star fa-2x ${index < product.rating ? 'text-warning' : 'text-muted'}`}></i>
+                            ))}
                             <span className="fa fa-2x">
-                                <h5>(109) Votes</h5>
+                                <h5>({product.votes}) Votes</h5>
                             </span>
                         </div>
                         <hr />
                         <div>
-                            <h3 className="price-container">
-                                $129.54
-                            </h3>
+                            <h3 className="price-container">${product.price.toFixed(2)}</h3>
                         </div>
                         <hr />
                         <div className="description description-tabs" style={{ minHeight: '430px' }}>
                             <ul id="myTab" className="nav nav-pills">
                                 <li className="nav-item">
-                                    <a href="#more-information" data-toggle="tab" className="nav-link active">Product Description</a>
+                                    <a href="#more-information" data-toggle="tab" className="nav-link active">
+                                        Product Description
+                                    </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="#specifications" data-toggle="tab" className="nav-link">Specifications</a>
+                                    <a href="#specifications" data-toggle="tab" className="nav-link">
+                                        Specifications
+                                    </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="#reviews" data-toggle="tab" className="nav-link">Reviews</a>
+                                    <a href="#reviews" data-toggle="tab" className="nav-link">
+                                        Reviews
+                                    </a>
                                 </li>
                             </ul>
                             <div id="myTabContent" className="tab-content">
-                                <div className="tab-pane fade show active" id="more-information" style={{ maxHeight: '219px', overflowY: 'auto', scrollbarWidth: 'none', '-ms-overflow-style': 'none'  }}>
+                                <div className="tab-pane fade show active" id="more-information" style={{ maxHeight: '219px', overflowY: 'auto' }}>
                                     <br />
                                     <strong>Description Title</strong>
-                                    <p>
-                                        Integer egestas, orci id condimentum eleifend, nibh nisi pulvinar eros, vitae ornare
-                                        massa neque ut orci. Nam aliquet lectus sed odio eleifend, at iaculis dolor egestas.
-                                        Nunc elementum pellentesque augue sodales porta. Etiam aliquet rutrum turpis, feugiat sodales ipsum consectetur nec.
-                                    </p>
+                                    <p>{product.description}</p>
                                 </div>
-                                <div className="tab-pane fade" id="specifications" style={{ maxHeight: '219px', overflowY: 'auto', scrollbarWidth: 'none', '-ms-overflow-style': 'none'  }}>
+                                <div className="tab-pane fade" id="specifications" style={{ maxHeight: '219px', overflowY: 'auto' }}>
                                     <br />
                                     <dl className="row">
-                                        <dt className="col-sm-3">Gravina</dt>
-                                        <dd className="col-sm-9">Etiam porta sem malesuada magna mollis euismod.</dd>
-                                        <dd className="col-sm-9">Donec id elit non mi porta gravida at eget metus.</dd>
-                                        <dd className="col-sm-9">Eget lacinia odio sem nec elit.</dd>
-                                        <br />
-                                        <dt className="col-sm-3">Test lists</dt>
-                                        <dd className="col-sm-9">A description list is perfect for defining terms.</dd>
-                                        <br />
-                                        <dt className="col-sm-3">Altra porta</dt>
-                                        <dd className="col-sm-9">Vestibulum id ligula porta felis euismod semper</dd>
+                                        {product.information &&
+                                            product.information.split('\n').map((info, index) => (
+                                                <React.Fragment key={index}>
+                                                    <dt className="col-sm-3">{info.split(':')[0]}</dt>
+                                                    <dd className="col-sm-9">{info.split(':')[1]}</dd>
+                                                </React.Fragment>
+                                            ))}
                                     </dl>
                                 </div>
                                 <div className="tab-pane fade" id="reviews">
@@ -103,164 +120,38 @@ const ProductDetail = () => {
                                             <button type="submit" className="btn btn-sm btn-primary pull-right">
                                                 Submit Review
                                             </button>
-                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add Location"><i className="fa fa-location-arrow"></i></a>
-                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add Voice"><i className="fa fa-microphone"></i></a>
-                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add Photo"><i className="fa fa-camera"></i></a>
-                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add File"><i className="fa fa-file"></i></a>
+                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add Location">
+                                                <i className="fa fa-location-arrow"></i>
+                                            </a>
+                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add Voice">
+                                                <i className="fa fa-microphone"></i>
+                                            </a>
+                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add Photo">
+                                                <i className="fa fa-camera"></i>
+                                            </a>
+                                            <a href="#" className="btn btn-link profile-link-btn" rel="tooltip" data-placement="bottom" title="Add File">
+                                                <i className="fa fa-file"></i>
+                                            </a>
                                         </div>
                                     </form>
-                                    <div className="chat-body no-padding profile-message" style={{ maxHeight: '219px', overflowY: 'auto', scrollbarWidth: 'none', '-ms-overflow-style': 'none'  }}>
+                                    <div className="chat-body no-padding profile-message" style={{ maxHeight: '219px', overflowY: 'auto' }}>
                                         <ul>
-                                            <li className="message">
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" className="online" alt="" />
-                                                <span className="message-text">
-                                                    Alisha Molly
-                                                    <span className="badge">Purchase Verified</span>
-                                                    <span className="pull-right" style={{fontSize: '8px'}}>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-muted"></i>
+                                            {product.productComments.map((comment, index) => (
+                                                <li key={index} className="message">
+                                                    <img src={comment.user.imgUrl} className="online" alt="" />
+                                                    <span className="message-text">
+                                                        {comment.user.userName}
+                                                        <span className="badge">Purchase Verified</span>
+                                                        <span className="pull-right" style={{ fontSize: '8px' }}>
+                                                            {[...Array(5)].map((_, starIndex) => (
+                                                                <i key={starIndex} className={`fa fa-star fa-2x ${starIndex < comment.rating ? 'text-primary' : 'text-muted'}`}></i>
+                                                            ))}
+                                                        </span>
                                                     </span>
-
-                                                </span>
-                                                <br />
-                                                <span>
-                                                    Can't divide were divide fish forth fish to. Was can't form the, living
-                                                    life grass darkness very image let unto fowl isn't in blessed fill life
-                                                    yielding above all moved
-                                                </span>
-
-                                            </li>
-                                            <li className="message">
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" className="online" alt="" />
-                                                <span className="message-text">
-                                                    Alisha Molly
-                                                    <span className="badge">Purchase Verified</span>
-                                                    <span className="pull-right" style={{fontSize: '8px'}}>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-muted"></i>
-                                                    </span>
-
-                                                </span>
-                                                <br />
-                                                <span>
-                                                    Can't divide were divide fish forth fish to. Was can't form the, living
-                                                    life grass darkness very image let unto fowl isn't in blessed fill life
-                                                    yielding above all moved
-                                                </span>
-
-                                            </li>
-                                            <li className="message">
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" className="online" alt="" />
-                                                <span className="message-text">
-                                                    Alisha Molly
-                                                    <span className="badge">Purchase Verified</span>
-                                                    <span className="pull-right" style={{fontSize: '8px'}}>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-muted"></i>
-                                                    </span>
-
-                                                </span>
-                                                <br />
-                                                <span>
-                                                    Can't divide were divide fish forth fish to. Was can't form the, living
-                                                    life grass darkness very image let unto fowl isn't in blessed fill life
-                                                    yielding above all moved
-                                                </span>
-
-                                            </li> <li className="message">
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" className="online" alt="" />
-                                                <span className="message-text">
-                                                    Alisha Molly
-                                                    <span className="badge">Purchase Verified</span>
-                                                    <span className="pull-right" style={{fontSize: '8px'}}>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-muted"></i>
-                                                    </span>
-
-                                                </span>
-                                                <br />
-                                                <span>
-                                                    Can't divide were divide fish forth fish to. Was can't form the, living
-                                                    life grass darkness very image let unto fowl isn't in blessed fill life
-                                                    yielding above all moved
-                                                </span>
-
-                                            </li> <li className="message">
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" className="online" alt="" />
-                                                <span className="message-text">
-                                                    Alisha Molly
-                                                    <span className="badge">Purchase Verified</span>
-                                                    <span className="pull-right" style={{fontSize: '8px'}}>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-muted"></i>
-                                                    </span>
-
-                                                </span>
-                                                <br />
-                                                <span>
-                                                    Can't divide were divide fish forth fish to. Was can't form the, living
-                                                    life grass darkness very image let unto fowl isn't in blessed fill life
-                                                    yielding above all moved
-                                                </span>
-
-                                            </li> <li className="message">
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" className="online" alt="" />
-                                                <span className="message-text">
-                                                    Alisha Molly
-                                                    <span className="badge">Purchase Verified</span>
-                                                    <span className="pull-right" style={{fontSize: '8px'}}>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-muted"></i>
-                                                    </span>
-
-                                                </span>
-                                                <br />
-                                                <span>
-                                                    Can't divide were divide fish forth fish to. Was can't form the, living
-                                                    life grass darkness very image let unto fowl isn't in blessed fill life
-                                                    yielding above all moved
-                                                </span>
-
-                                            </li> <li className="message">
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" className="online" alt="" />
-                                                <span className="message-text">
-                                                    Alisha Molly
-                                                    <span className="badge">Purchase Verified</span>
-                                                    <span className="pull-right" style={{fontSize: '8px'}}>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-primary"></i>
-                                                        <i className="fa fa-star fa-2x text-muted"></i>
-                                                    </span>
-
-                                                </span>
-                                                <br />
-                                                <span>
-                                                    Can't divide were divide fish forth fish to. Was can't form the, living
-                                                    life grass darkness very image let unto fowl isn't in blessed fill life
-                                                    yielding above all moved
-                                                </span>
-
-                                            </li>
+                                                    <br />
+                                                    <span>{comment.content}</span>
+                                                </li>
+                                            ))}
                                         </ul>
                                     </div>
                                 </div>
@@ -269,7 +160,7 @@ const ProductDetail = () => {
                         <hr />
                         <div className="row">
                             <div className="col-sm-12 col-md-6 col-lg-6">
-                                <a href="#" className="btn btn-success btn-lg">Add to cart ($129.54)</a>
+                                <a href="#" className="btn btn-success btn-lg">Add to cart (${product.price.toFixed(2)})</a>
                             </div>
                         </div>
                     </div>
@@ -277,6 +168,6 @@ const ProductDetail = () => {
             </div>
         </div>
     );
-}
+};
 
 export default ProductDetail;

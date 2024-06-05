@@ -5,7 +5,7 @@ import { useTypewriter, Cursor } from 'react-simple-typewriter'; // Ensure this 
 
 const HeroComponent = () => {
     const [text] = useTypewriter({
-        words: ['RevibeCO'],
+        words: ['RevibeCo.'],
         loop: {},
         deleteSpeed: 200,
         typeSpeed: 100,
@@ -27,8 +27,10 @@ const HeroComponent = () => {
                         <div className="col-lg-6">
                             <div className="banner-text">
                                 <h1 className="h1-title">
-                                    Wellcome to <br/>
-                                    <span className='text-success'>{text}<Cursor /></span>
+                                    Welcome to <br />
+                                    <span className='' style={{
+                                        color: "#9D6330"
+                                    }} >{text}<Cursor  /></span>
                                     {'\n'}
                                 </h1>
                                 <p>Chào mừng bạn đến với ReVibe Co, nơi bạn sẽ tìm thấy những sản phẩm nến thơm và phụ kiện quà tặng tinh tế nhất. ReVibe Co tự hào mang đến cho bạn một bộ sưu tập nến thơm đa dạng, được làm từ các nguyên liệu tự nhiên và an toàn. Mỗi sản phẩm của chúng tôi không chỉ mang lại hương thơm dễ chịu mà còn góp phần trang trí không gian sống của bạn trở nên ấm áp và sang trọng.</p>

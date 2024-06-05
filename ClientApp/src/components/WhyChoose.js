@@ -22,7 +22,7 @@ export default class WhyChoose extends Component {
                             </div>
                             <div className="text-center text-sm-right mb-2-9">
                                 <div className="mb-4">
-                                    <img src="/why/1.gif" alt="..." className="rounded-circle" width={84} />
+                                    <img src="/why/AnToanThanThien.gif" alt="..." className="rounded-circle" width={84} />
                                 </div>
                                 <h4 className="sub-info">An Toàn Và Thân Thiện Với Môi Trường</h4>
                                 <p className="display-30 mb-0">ReVibe Co ưu tiên sử dụng các nguyên liệu tự nhiên, an toàn cho sức khỏe và thân thiện với môi trường. Nến thơm của ReVibe Co không chứa hóa chất độc hại, các sản phẩm đóng gói làm bằng giấy góp phần bảo vệ hành tinh xanh.</p>
@@ -54,7 +54,7 @@ export default class WhyChoose extends Component {
                             </div>
                             <div className="text-center text-sm-left mb-2-9">
                                 <div className="mb-4">
-                                    <img src="/why/4.gif" alt="..." className="rounded-circle" width={84} />
+                                    <img src="/why/dichvutantam.gif" alt="..." className="rounded-circle" width={84} />
                                 </div>
                                 <h4 className="sub-info">Dịch Vụ Khách Hàng Tận Tâm</h4>
                                 <p className="display-30 mb-0">Đội ngũ nhân viên của ReVibe Co luôn sẵn sàng hỗ trợ và giải đáp mọi thắc mắc của khách hàng. ReVibe Co đặt khách hàng lên hàng đầu và nỗ lực mang đến trải nghiệm mua sắm tuyệt vời nhất.</p>

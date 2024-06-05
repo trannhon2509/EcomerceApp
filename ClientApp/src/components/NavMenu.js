@@ -54,9 +54,12 @@ export class NavMenu extends Component {
                         <div className="col-lg-2">
                             <div className="d-flex align-items-center">
                                 <Link to={'/'}>
-                                    <img src="/logo.png" width={100} alt="Logo" />
+                                    <img src="/logo.png" style={{
+                                        width: "300px",
+                                        maxWidth: "100%"
+                                    }} alt="Logo" />
                                 </Link>
-                                <h2 className='' style={{ color: "#9D6330" }}>RevibeCO</h2>
+                                <h2 className='' style={{ color: "#9D6330", textWrap: "nowrap" }}>RevibeCo.</h2>
                             </div>
                         </div>
                         <div className="col-lg-10">

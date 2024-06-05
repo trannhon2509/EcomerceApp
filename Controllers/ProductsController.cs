@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using EcomerceApp.Data;
 using EcomerceApp.Models;
 using System.Net.NetworkInformation;
+using EcomerceApp.DTOs;
 
 namespace EcomerceApp.Controllers
 {
@@ -145,7 +146,7 @@ namespace EcomerceApp.Controllers
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        /*[HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, Product product)
         {
             if (id != product.Id)
@@ -172,7 +173,73 @@ namespace EcomerceApp.Controllers
             }
 
             return NoContent();
+        }*/
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutProduct(int id, [FromBody] ProductUpdateDto dto)
+        {
+            if (id != dto.Id)
+            {
+                return BadRequest();
+            }
+
+            var existingProduct = await _context.Products
+                .Include(p => p.ProductImages)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (existingProduct == null)
+            {
+                return NotFound();
+            }
+
+            // Cập nhật các thuộc tính của sản phẩm từ DTO
+            existingProduct.Name = dto.ProductName;
+            existingProduct.Description = dto.Description;
+            existingProduct.Price = dto.Price;
+            existingProduct.Quantity = dto.Quantity;
+            existingProduct.Information = dto.Information;
+            existingProduct.Status = dto.Status;
+
+            // Cập nhật danh mục sản phẩm nếu có
+            if (!string.IsNullOrEmpty(dto.ProductCategoryName))
+            {
+                var category = await _context.ProductCategories.FirstOrDefaultAsync(pc => pc.Name == dto.ProductCategoryName);
+                if (category != null)
+                {
+                    existingProduct.ProductCategoryId = category.Id;
+                }
+                // Nếu danh mục không tồn tại, chỉ bỏ qua việc cập nhật
+            }
+
+            // Xóa hình ảnh hiện tại của sản phẩm
+            _context.ProductImages.RemoveRange(existingProduct.ProductImages);
+
+            // Thêm hình ảnh mới cho sản phẩm
+            foreach (var imageUrl in dto.Images)
+            {
+                existingProduct.ProductImages.Add(new ProductImage { ImageUrl = imageUrl });
+            }
+
+            // Cập nhật sản phẩm trong cơ sở dữ liệu
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
+
 
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

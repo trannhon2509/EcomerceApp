@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import RoutePath from "../routes/RoutePath";
-import { ProductContext } from "../context/ProductContext";
+import RoutePath from "../../routes/RoutePath";
+import { ProductContext } from "../../context/ProductContext";
 
 const ProductCard = ({ name, price, imageUrl, productId, maxQuantity }) => {
   const [isHovered, setIsHovered] = useState(false);

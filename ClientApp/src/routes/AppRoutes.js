@@ -3,7 +3,7 @@ import { Counter } from "../components/Counter";
 import { FetchData } from "../components/FetchData";
 import { Home } from "../components/Home";
 import UserComponent from '../components/UserComponent';
-import ProductComponent from '../components/ProductComponent';
+import ProductComponent from '../components/Product/ProductComponent';
 import CategoriesComponent from '../components/CategoriesComponent';
 import BlogPostComponent from '../components/BlogPostComponent';
 import OrderComponent from '../components/OrderComponent';

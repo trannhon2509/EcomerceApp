@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../redux/actions/productActions';
-import ProductCard from './ProductCard';
+import ProductCard from './Product/ProductCard';
 
 class GridProduct extends Component {
   componentDidMount() {

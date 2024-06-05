@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../assets/css/ProductDetail.css';
-import { ProductContext } from '../context/ProductContext';
+import '../../assets/css/ProductDetail.css';
+import { ProductContext } from '../../context/ProductContext';
 
 const ProductDetail = ({ match }) => {
     const { product, setProduct } = useContext(ProductContext);

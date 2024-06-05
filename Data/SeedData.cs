@@ -17,23 +17,60 @@ namespace EcomerceApp.Data
                 context.AddRange(
                     new ProductCategory
                     {
-
+                        Name = "Sáp thơm hoa trà nước hoa",
+                        Products = new List<Product>{
+                            new Product{
+                                Name = "Gardenia",
+                                Description = "Lavender Candle",
+                                Price = 30000,
+                                Quantity = GenerateRandomQuantity(random),
+                                ProductImages = new List<ProductImage>{
+                                    new ProductImage{
+                                        ImageUrl = "https://imgur.com/9kK4JLF"
+                                    },
+                                    new ProductImage{
+                                        ImageUrl = "https://imgur.com/mh8t0K2"
+                                    },
+                                    new ProductImage{
+                                        ImageUrl = "https://imgur.com/BOVg2DY"
+                                    }
+                                }
+                            },
+                            new Product{
+                                Name = "Rose Candle",
+                                Description = "Rose Candle",
+                                Price = 10,
+                                Quantity = 100,
+                                ProductImages = new List<ProductImage>{
+                                    new ProductImage{
+                                        ImageUrl = "https://via.placeholder.com/150"
+                                    },
+                                    new ProductImage{
+                                        ImageUrl = "https://via.placeholder.com/150"
+                                    },
+                                    new ProductImage{
+                                        ImageUrl = "https://via.placeholder.com/150"
+                                    }
+                                }
+                            },
+                            
+                        }
                     },
                     new ProductCategory
                     {
-
+                        Name = "Handmade Soap"
                     },
                     new ProductCategory
                     {
-
+                        Name = "Scrunchies"
                     },
                     new ProductCategory
                     {
-
+                        Name = "Hairclip"
                     },
                     new ProductCategory
                     {
-
+                        Name = "Bandana"
                     }
                 );
                 try
@@ -46,60 +83,60 @@ namespace EcomerceApp.Data
                 }
             }
 
-            if (!context.Products.Any())
-            {
-                // Lấy danh sách danh mục từ cơ sở dữ liệu
-                List<ProductCategory> categories = context.ProductCategories.ToList();
+            // if (!context.Products.Any())
+            // {
+            //     // Lấy danh sách danh mục từ cơ sở dữ liệu
+            //     List<ProductCategory> categories = context.ProductCategories.ToList();
 
-                // Thêm các sản phẩm với danh mục và thông tin ngẫu nhiên
-                const int numberOfProducts = 50; // Số lượng sản phẩm muốn tạo
-                for (int i = 0; i < numberOfProducts; i++)
-                {
-                    string productName = "Product " + i;
-                    int randomCategoryId = random.Next(0, categories.Count); // Chọn ngẫu nhiên một danh mục
-                    var category = categories[randomCategoryId];
+            //     // Thêm các sản phẩm với danh mục và thông tin ngẫu nhiên
+            //     const int numberOfProducts = 50; // Số lượng sản phẩm muốn tạo
+            //     for (int i = 0; i < numberOfProducts; i++)
+            //     {
+            //         string productName = "Product " + i;
+            //         int randomCategoryId = random.Next(0, categories.Count); // Chọn ngẫu nhiên một danh mục
+            //         var category = categories[randomCategoryId];
 
-                    // Tạo giá và số lượng ngẫu nhiên
-                    decimal randomPrice = GenerateRandomPrice(random);
-                    int randomQuantity = GenerateRandomQuantity(random);
+            //         // Tạo giá và số lượng ngẫu nhiên
+            //         decimal randomPrice = GenerateRandomPrice(random);
+            //         int randomQuantity = GenerateRandomQuantity(random);
 
-                    context.Products.AddRange(new Product
-                    {
-                        Name = productName,
-                        Description = "Description for " + productName,
-                        Price = randomPrice,
-                        Quantity = randomQuantity,
-                        ProductImages = new List<ProductImage> // Thêm hình ảnh cho sản phẩm
-                        {
-                            new ProductImage
-                            {
-                                ImageUrl = "https://via.placeholder.com/150"
-                            },
-                            new ProductImage
-                            {
-                                ImageUrl = "https://via.placeholder.com/150"
-                            },
-                            new ProductImage
-                            {
-                                ImageUrl = "https://via.placeholder.com/150"
-                            }
-                        },
-                        Status = true, // Mặc định sản phẩm là hoạt động
-                        ProductCategoryId = category.Id, // Gán ID của danh mục đã chọn
-                        Information = GenerateRandomString(random, 1000)
-                    });
+            //         context.Products.AddRange(new Product
+            //         {
+            //             Name = productName,
+            //             Description = "Description for " + productName,
+            //             Price = randomPrice,
+            //             Quantity = randomQuantity,
+            //             ProductImages = new List<ProductImage> // Thêm hình ảnh cho sản phẩm
+            //             {
+            //                 new ProductImage
+            //                 {
+            //                     ImageUrl = "https://via.placeholder.com/150"
+            //                 },
+            //                 new ProductImage
+            //                 {
+            //                     ImageUrl = "https://via.placeholder.com/150"
+            //                 },
+            //                 new ProductImage
+            //                 {
+            //                     ImageUrl = "https://via.placeholder.com/150"
+            //                 }
+            //             },
+            //             Status = true, // Mặc định sản phẩm là hoạt động
+            //             ProductCategoryId = category.Id, // Gán ID của danh mục đã chọn
+            //             Information = GenerateRandomString(random, 1000)
+            //         });
                     
-                }
+            //     }
 
-                try
-                {
-                    context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Product------------"+ex.Message);
-                }
-            }
+            //     try
+            //     {
+            //         context.SaveChanges();
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         Console.WriteLine("Product------------"+ex.Message);
+            //     }
+            // }
 
             if (!context.Roles.Any())
             {

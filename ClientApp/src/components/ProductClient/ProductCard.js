@@ -36,7 +36,9 @@ class ProductCard extends Component {
             toast.error('Failed to add item to cart!');
         }
     };
-
+    formatPrice = (price) => {
+        return price.toLocaleString('en-US');
+    };
     render() {
         const { name, price, imageUrl, productId } = this.props;
         const { isHovered, isLiked } = this.state;
@@ -98,7 +100,7 @@ class ProductCard extends Component {
                         ) : (
                             <>
                                 <h5 className="text-center">{name}</h5>
-                                <p className="text-center">Price: {price}</p>
+                                <p className="text-center">Price: {this.formatPrice(price)}</p>
                             </>
                         )}
                     </div>

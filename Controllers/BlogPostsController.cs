@@ -30,38 +30,11 @@ namespace EcomerceApp.Controllers
                 return BadRequest("Invalid page or pageSize value.");
             }
 
-            var query = from post in _context.BlogPosts
-                        select new
-                        {
-                            post.Id,
-                            post.Title,
-                            post.Content,
-                            post.PostedOn,
-                            Author = (from user in _context.Users
-                                      where user.Id == post.AuthorId
-                                      select new
-                                      {
-                                          user.Id,
-                                          user.UserName
-                                      }).FirstOrDefault(),
-                            Comments = (from comment in _context.BlogPostComments
-                                        where comment.BlogPostId == post.Id
-                                        select new
-                                        {
-                                            comment.Id,
-                                            comment.Content,
-                                            comment.CreatedAt,
-                                            User = (from user in _context.Users
-                                                    where user.Id == comment.UserId
-                                                    select new
-                                                    {
-                                                        user.Id,
-                                                        user.UserName
-                                                    }).FirstOrDefault()
-                                        }).ToList()
-                        };
+            var query = _context.BlogPosts
+    .Include(post => post.BlogPostComments).AsSingleQuery()
+    .Include(img => img.BlogPostImages).AsSingleQuery();
 
-            var totalCount = await query.CountAsync();
+            var totalCount = query.Count();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
 
             var results = await query
@@ -72,6 +45,7 @@ namespace EcomerceApp.Controllers
             return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
         }
 
+
         // GET: api/BlogPosts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> GetBlogPost(int id)
@@ -81,33 +55,10 @@ namespace EcomerceApp.Controllers
                 return NotFound();
             }
             var post = await _context.BlogPosts
-                .Include(bp => bp.BlogPostComments)
-                .ThenInclude(c => c.User)
-                .Include(bp => bp.Author)
+                .Include(bp => bp.BlogPostComments).
+                Include(img => img.BlogPostImages)
                 .Where(bp => bp.Id == id)
-                .Select(bp => new
-                {
-                    bp.Id,
-                    bp.Title,
-                    bp.Content,
-                    bp.PostedOn,
-                    Author = new
-                    {
-                        bp.Author.Id,
-                        bp.Author.UserName
-                    },
-                    Comments = bp.BlogPostComments.Select(c => new
-                    {
-                        c.Id,
-                        c.Content,
-                        c.CreatedAt,
-                        User = new
-                        {
-                            c.User.Id,
-                            c.User.UserName
-                        }
-                    }).ToList()
-                }).FirstOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
             if (post == null)
             {

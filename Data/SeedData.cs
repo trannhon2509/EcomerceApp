@@ -11,7 +11,6 @@ namespace EcomerceApp.Data
         {
             System.Random random = new System.Random();
 
-            // Kiểm tra xem bảng ProductCategory đã có dữ liệu chưa
             if (!context.ProductCategories.Any())
             {
                 context.AddRange(
@@ -38,7 +37,7 @@ namespace EcomerceApp.Data
                                     new ProductImage{
                                         ImageUrl = "https://i.imgur.com/BOVg2DY.jpg"
                                     },
-                                    
+
                                 }
                             },
                             new Product{
@@ -324,7 +323,7 @@ namespace EcomerceApp.Data
                                     new ProductImage{
                                         ImageUrl = "https://i.imgur.com/ZTisVNI.jpg"
                                     }
-                                    
+
                                 }
                             },
                              new Product{
@@ -443,68 +442,12 @@ namespace EcomerceApp.Data
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Category---------"+ex.Message);
+                    Console.WriteLine("Category---------" + ex.Message);
                 }
             }
-
-            // if (!context.Products.Any())
-            // {
-            //     // Lấy danh sách danh mục từ cơ sở dữ liệu
-            //     List<ProductCategory> categories = context.ProductCategories.ToList();
-
-            //     // Thêm các sản phẩm với danh mục và thông tin ngẫu nhiên
-            //     const int numberOfProducts = 50; // Số lượng sản phẩm muốn tạo
-            //     for (int i = 0; i < numberOfProducts; i++)
-            //     {
-            //         string productName = "Product " + i;
-            //         int randomCategoryId = random.Next(0, categories.Count); // Chọn ngẫu nhiên một danh mục
-            //         var category = categories[randomCategoryId];
-
-            //         // Tạo giá và số lượng ngẫu nhiên
-            //         decimal randomPrice = GenerateRandomPrice(random);
-            //         int randomQuantity = GenerateRandomQuantity(random);
-
-            //         context.Products.AddRange(new Product
-            //         {
-            //             Name = productName,
-            //             Description = "Description for " + productName,
-            //             Price = randomPrice,
-            //             Quantity = randomQuantity,
-            //             ProductImages = new List<ProductImage> // Thêm hình ảnh cho sản phẩm
-            //             {
-            //                 new ProductImage
-            //                 {
-            //                     ImageUrl = "https://via.placeholder.com/150"
-            //                 },
-            //                 new ProductImage
-            //                 {
-            //                     ImageUrl = "https://via.placeholder.com/150"
-            //                 },
-            //                 new ProductImage
-            //                 {
-            //                     ImageUrl = "https://via.placeholder.com/150"
-            //                 }
-            //             },
-            //             Status = true, // Mặc định sản phẩm là hoạt động
-            //             ProductCategoryId = category.Id, // Gán ID của danh mục đã chọn
-            //             Information = GenerateRandomString(random, 1000)
-            //         });
-                    
-            //     }
-
-            //     try
-            //     {
-            //         context.SaveChanges();
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         Console.WriteLine("Product------------"+ex.Message);
-            //     }
-            // }
-
             if (!context.Roles.Any())
             {
-                 string[] roles = {"Admin", "User", "Blogger"};
+                string[] roles = { "Admin", "User", "Blogger" };
                 foreach (var role in roles)
                 {
                     context.Roles.Add(new IdentityRole
@@ -513,7 +456,7 @@ namespace EcomerceApp.Data
                         NormalizedName = role.ToUpper(),
                         ConcurrencyStamp = Guid.NewGuid().ToString()
                     });
-                    
+
                 }
                 try
                 {
@@ -521,10 +464,9 @@ namespace EcomerceApp.Data
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Role----------"+ex.Message);
+                    Console.WriteLine("Role----------" + ex.Message);
                 }
             }
-
             if (!context.Users.Any())
             {
                 const int numberOfUsers = 100; // Số lượng người dùng muốn tạo
@@ -552,32 +494,31 @@ namespace EcomerceApp.Data
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("User-----------"+ex.Message);
+                    Console.WriteLine("User-----------" + ex.Message);
                 }
             }
-
             if (!context.ProductComments.Any())
             {
-                const int numberOfComments = 100; // Số lượng bình luận muốn tạo
+                const int numberOfComments = 800;
                 for (int i = 0; i < numberOfComments; i++)
                 {
-                    int randomProductId = random.Next(1, context.Products.Count()); // Chọn ngẫu nhiên một sản phẩm
+                    int randomProductId = random.Next(1, context.Products.Count());
                     var listUser = context.Users.ToList();
                     var listId = new List<string>();
-                   
+
                     foreach (var user in listUser)
                     {
                         listId.Add(user.Id);
                     }
-                    string randomUserId = listId[random.Next(0, listId.Count)]; // Chọn ngẫu nhiên một người dùng
+                    string randomUserId = listId[random.Next(0, listId.Count)];
                     context.ProductComments.Add(new ProductComment
                     {
                         Content = "Comment " + i,
                         ProductId = randomProductId,
                         UserId = randomUserId,
-                        CreatedAt = RandomDateTime(2023,2024)
+                        CreatedAt = RandomDateTime(2023, 2024)
                     });
-                    
+
                 }
                 try
                 {
@@ -588,8 +529,6 @@ namespace EcomerceApp.Data
                     Console.WriteLine("ProductCommnets-----------" + ex.Message);
                 }
             }
-
-
             if (!context.Coupons.Any())
             {
                 const int numberOfCoupons = 100; // Số lượng mã giảm giá muốn tạo
@@ -597,10 +536,10 @@ namespace EcomerceApp.Data
                 {
                     context.Coupons.Add(new Coupon
                     {
-                        Code = GenerateRandomString(random,8),
+                        Code = GenerateRandomString(random, 8),
                         DiscountAmount = random.Next(1, 100), // Giảm giá từ 1 đến 100%
-                        ExpiryDate = RandomDateTime(2023,2024),
-                        Status = ((random.Next(1,2) == 1 ) ? true : false)
+                        ExpiryDate = RandomDateTime(2023, 2024),
+                        Status = ((random.Next(1, 2) == 1) ? true : false)
                     });
                 }
                 try
@@ -612,10 +551,9 @@ namespace EcomerceApp.Data
                     Console.WriteLine("Coupon-----------" + ex.Message);
                 }
             }
-
             if (!context.Orders.Any())
             {
-                const int numberOfOrders = 100; // Số lượng đơn hàng muốn tạo
+                const int numberOfOrders = 200; // Số lượng đơn hàng muốn tạo
                 var userList = context.Users.Select(user => user.Id).ToList();
                 var couponCount = context.Coupons.Count();
 
@@ -649,12 +587,11 @@ namespace EcomerceApp.Data
                     Console.WriteLine("Orders-----------" + ex.Message);
                 }
             }
-
             if (!context.OrderDetails.Any())
             {
                 if (context.Orders.Any() && context.Products.Any())
                 {
-                    const int numberOfOrderDetails = 500; // Số lượng chi tiết đơn hàng muốn tạo
+                    const int numberOfOrderDetails = 800; // Số lượng chi tiết đơn hàng muốn tạo
                     var orderIds = context.Orders.Select(order => order.Id).ToList();
                     var productIds = context.Products.Select(product => product.Id).ToList();
 
@@ -688,10 +625,6 @@ namespace EcomerceApp.Data
                     Console.WriteLine("Không có đơn hàng hoặc sản phẩm trong cơ sở dữ liệu.");
                 }
             }
-
-
-           
-
             if (!context.UserRoles.Any())
             {
                 var userList = context.Users.ToList();
@@ -727,43 +660,110 @@ namespace EcomerceApp.Data
                 }
             }
 
-
-            if (!context.Blogs.Any())
-            {
-                const int numberOfBlogs = 5; // Số lượng bài viết muốn tạo
-                for (int i = 0; i < numberOfBlogs; i++)
-                {
-                    string blogTitle = "Blog " + i;
-                    string blogContent = "Content for " + blogTitle;
-                    string randomUserId = context.Users.Select(u => u.Id).ToList()[random.Next(context.Users.Count())]; // Chọn ngẫu nhiên một người dùng
-
-                    context.Blogs.Add(new Blog
-                    {
-                        Title = blogTitle,
-                        Description = GenerateRandomString(random, 100),
-                    });
-                }
-                context.SaveChanges();
-            }
             if (!context.BlogPosts.Any())
             {
-                const int numberOfBlogPosts = 50; // Số lượng bài viết muốn tạo
-                for (int i = 0; i < numberOfBlogPosts; i++)
-                {
-                    string postTitle = "Post " + i;
-                    string postContent = "Content for " + postTitle;
-                    int randomBlogId = context.Blogs.Select(b => b.Id).ToList()[random.Next(context.Blogs.Count())]; // Chọn ngẫu nhiên một blog
-                    string randomUserId = context.Users.Select(u => u.Id).ToList()[random.Next(context.Users.Count())]; // Chọn ngẫu nhiên một người dùng
-
-                    context.BlogPosts.Add(new BlogPost
+                context.AddRange(
+                    new BlogPost
                     {
-                        Title = postTitle,
-                        Content = postContent,
-                        BlogId = randomBlogId,
+                        Title = "Hương Thơm và Sự Thư Giãn: Khám Phá Văn Phòng và Nhà Của Bạn",
+                        Content = "Tiếp cận một ngôi nhà hay không gian làm việc thoải mái và ấm áp không chỉ là việc sắp xếp đồ đạc mà còn là việc tạo không khí thích hợp. Trong số những phụ kiện tạo không gian ấy, nến thơm và sáp thơm không chỉ làm cho căn phòng bạn thơm phức mà còn giúp tạo ra một cảm giác thư giãn và yên bình. Hãy cùng khám phá những sản phẩm này và cách chúng có thể làm cho cuộc sống của bạn trở nên tươi mới hơn.\r\n* Nến thơm: Nến thơm không chỉ là nguồn ánh sáng mềm mại mà còn làm cho không gian trở nên ấm áp hơn với hương thơm dễ chịu. Các loại nến thơm có thể được làm từ các thành phần tự nhiên như sáp ong, dầu thơm tự nhiên như hoa hồng, cam bergamot, hoa lavender, hay các loại hương gỗ như sồi và hổ phách. Dù bạn muốn tạo ra một không gian thư giãn sau một ngày làm việc căng thẳng hoặc muốn tạo một không gian lãng mạn cho bữa tối cuối tuần, có một loại nến thơm phù hợp với mọi tình huống.\r\n* Sáp thơm treo: Sáp thơm treo là một lựa chọn khác thú vị cho những người không muốn sử dụng nến. Chúng được làm từ các loại sáp và tinh dầu thơm, được đặt trong các hình dạng nhỏ gọn và treo lên trong không gian. Khi sáp tiếp xúc với không khí, hương thơm tỏa ra một cách dịu dàng và lâu dài. Sự tiện lợi của sáp thơm treo là bạn có thể dễ dàng di chuyển chúng và treo chúng ở bất kỳ nơi nào trong nhà mà bạn muốn.\r\nKhông chỉ mang lại hương thơm dễ chịu, các sản phẩm nến thơm và sáp thơm còn có thể giúp giảm căng thẳng và lo lắng, tạo cảm giác thư giãn và tăng cường tinh thần. Với sự đa dạng về hương thơm và chức năng, chúng là một phần không thể thiếu để tạo ra một không gian sống và làm việc lý tưởng.\r\n\r\n",
                         PostedOn = RandomDateTime(2023, 2024),
-                        AuthorId = randomUserId
-                    });
-                }
+                        BlogPostImages = new List<BlogPostImage>
+                        {
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/T7GfrC4.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/IIvcCbc.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/3YTBXjR.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/F1ViadK.jpg"
+                            }
+                        }
+                    },
+                    new BlogPost
+                    {
+                        Title = "Tạo Phong Cách với Scrunchies, Bandana và Kẹp Tóc﻿!",
+                        Content = "Chào mừng đến với \"Tạo Phong Cách với Scrunchies, Bandana và Kẹp Tóc!\"\r\nBạn đã bao giờ muốn thêm một chút cái gì đó đặc biệt vào phong cách hàng ngày của mình mà không cần quá nhiều công đoạn? Hãy để chúng tôi giới thiệu cho bạn ba sản phẩm nhỏ nhưng đầy phong cách: scrunchies, bandana và kẹp tóc.\r\nScrunchies - Sự Quay Trở Lại của Phong Cách Retro: Được biết đến từ những năm 80 và 90, scrunchies đang trở lại mạnh mẽ trong thế giới thời trang. Khác với những chiếc dây thừng thông thường, scrunchies có thể làm cho bất kỳ búi tóc nào trở nên dễ thương và phong cách hơn. Bạn có thể chọn từ một loạt các chất liệu và màu sắc, từ những mảnh vải mềm mại đến những kiểu da cá tính.\r\nBandana - Sự Đa Dạng và Tiện Lợi: Từ việc đeo trên đầu, sử dụng như một phụ kiện cho túi xách, hoặc thậm chí làm cổ áo, bandana là một mảnh vải linh hoạt có thể tạo ra nhiều phong cách khác nhau. Với các mẫu in độc đáo và màu sắc tươi sáng, bạn có thể biến bất kỳ bộ trang phục nào trở nên thú vị và nổi bật.\r\nKẹp Tóc - Sự Linh Hoạt và Thuận Tiện: Từ những chiếc kẹp đơn giản đến những thiết kế phức tạp hơn, kẹp tóc là một phụ kiện không thể thiếu trong hộp đồ trang điểm của mỗi cô gái. Chúng có thể được sử dụng để tạo kiểu tóc hoặc giữ tóc gọn gàng trong khi làm việc. Với một loạt các kiểu dáng và chất liệu, bạn có thể chọn lựa kẹp tóc phù hợp với bất kỳ phong cách nào.\r\nVới scrunchies, bandana và kẹp tóc, bạn có thể thêm một chút cá tính và sự sáng tạo vào phong cách cá nhân của mình mỗi ngày mà không cần quá nhiều cố gắng. Hãy thử và tạo ra những tổ hợp độc đáo của riêng bạn và khám phá thế giới vô tận của thời trang!\r\n",
+                        PostedOn = RandomDateTime(2023, 2024),
+                        BlogPostImages = new List<BlogPostImage>
+                        {
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/StdaEkP.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/C0afSJG.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/3YTBXjR.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/F1ViadK.jpg"
+                            }
+                        }
+                    },
+                    new BlogPost
+                    {
+                        Title = "Hương Thơm: Sự Tinh Tế Trong Cuộc Sống Hàng Ngày",
+                        Content = "Hương thơm, dù nhỏ bé, lại là một phần không thể thiếu trong cuộc sống hàng ngày của chúng ta. Từ mùi của cà phê sáng sớm đến hương thơm dịu dàng của hoa quả tươi mới, những hương vị này không chỉ làm cho không gian của chúng ta trở nên thú vị hơn mà còn gợi lại những ký ức đáng nhớ.\r\n*Hương Thơm Trong Gia Đình\r\nTrong gia đình, hương thơm thường được tạo ra từ những món ăn được chuẩn bị hàng ngày. Mùi thơm của bữa sáng nồng nàn từ bánh mì nướng, hương thơm của một nồi canh đầy ấm áp vào buổi tối, hoặc cảm giác dễ chịu từ một ly trà thảo mộc vào buổi tối. Những hương thơm này không chỉ làm cho căn bếp trở nên sống động mà còn kích thích vị giác và mang lại cảm giác bình yên trong gia đình.\r\n*Hương Thơm Trong Làm Việc\r\nTrên nơi làm việc, hương thơm có thể đóng vai trò quan trọng trong việc tạo ra một môi trường làm việc tích cực. Một mùi hương nhẹ nhàng từ cây cỏ hoặc hoa nhài có thể giúp giảm căng thẳng và tăng cường tinh thần cho nhân viên. Ngoài ra, các sản phẩm làm thơm không khí như nến thơm hoặc máy phát hương cũng được sử dụng phổ biến để tạo ra một không gian làm việc thoải mái và tràn ngập hương thơm dễ chịu.\r\n*Hương Thơm Trong Thư Giãn\r\nCuối cùng, hương thơm cũng là một phần quan trọng trong việc thư giãn và tận hưởng cuộc sống. Một bình hoa hồng tươi thắm trong phòng khách, một cây nến lavender phát ra hương thơm dịu dàng trong phòng ngủ, hay một bộ sưu tập tinh dầu thảo mộc để tạo ra không gian spa tại nhà. Những hương thơm này giúp ta tạo ra những khoảnh khắc thư giãn và tận hưởng cuộc sống đúng nghĩa.\r\nTóm lại, hương thơm là một phần không thể thiếu trong cuộc sống hàng ngày của chúng ta, không chỉ làm cho không gian trở nên thú vị hơn mà còn tạo ra những trải nghiệm đầy ý nghĩa và đáng nhớ. Hãy để những hương thơm này dẫn dắt chúng ta qua mỗi ngày và tạo ra những kỷ niệm đẹp trong cuộc sống.\r\n",
+                        PostedOn = RandomDateTime(2023, 2024),
+                        BlogPostImages = new List<BlogPostImage>
+                        {
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/StdaEkP.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/C0afSJG.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/3YTBXjR.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/F1ViadK.jpg"
+                            }
+                        }
+                    },
+                     new BlogPost
+                     {
+                         Title = "Ý Nghĩa của Những Món Quà Nhỏ Bé: Sự Chăm Sóc và Ý Thức Tình Yêu",
+                         Content = "Trong cuộc sống, không phải lúc nào những món quà đắt tiền mới là những món quà có ý nghĩa nhất. Thỉnh thoảng, những món quà nhỏ bé, dù đơn giản nhưng chứa đựng những tình cảm sâu sắc và ý thức tình yêu không thể nào đong đếm được. Dưới đây là một số ý nghĩa mà những món quà nhỏ có thể mang lại:\r\n1. Biểu Tượng của Sự Chăm Sóc:\r\nNhững món quà nhỏ như scrunchies, bandana hoặc kẹp tóc có thể là biểu tượng của sự chăm sóc và quan tâm tới người nhận. Dù chúng không có giá trị vật chất lớn, nhưng việc chọn lựa và tặng những món quà như vậy cho người khác thể hiện sự quan tâm và ý thức về sở thích và nhu cầu của họ.\r\n2. Tạo Ra Những Kỷ Niệm Đáng Nhớ:\r\nNhững món quà nhỏ có thể kết hợp với những sự kiện đặc biệt, như ngày kỷ niệm, sinh nhật hoặc những dịp đặc biệt khác. Mặc dù chúng có thể không đắt tiền, nhưng sẽ trở thành những kỷ niệm đáng nhớ và mang lại niềm vui mỗi khi người nhận nhìn thấy hoặc sử dụng chúng.\r\n3. Thể Hiện Sự Quan Tâm và Sự Ý Thức Về Người Nhận:\r\nNhững món quà nhỏ thường đòi hỏi người tặng phải dành thời gian và tâm huyết để lựa chọn và chuẩn bị. Việc này thể hiện sự quan tâm và sự ý thức về người nhận, khiến họ cảm thấy được đánh giá và quý trọng.\r\n4. Mang Lại Sự Sống Động và Hạnh Phúc Hàng Ngày:\r\nNhững món quà nhỏ như scrunchies, bandana hoặc kẹp tóc có thể mang lại sự sống động và hạnh phúc hàng ngày. Mỗi khi người nhận nhìn thấy hoặc sử dụng chúng, họ có thể nhớ đến người tặng và cảm nhận được tình cảm ấm áp mà món quà mang lại.\r\nTrên tất cả, những món quà nhỏ như scrunchies, bandana và kẹp tóc không chỉ là các món đồ thông thường, mà còn là biểu tượng của sự chăm sóc, ý thức và tình yêu. Hãy nhớ rằng, giá trị của một món quà không phụ thuộc vào giá trị vật chất, mà phụ thuộc vào tình cảm và ý nghĩa mà nó chứa đựng.\r\n",
+                         PostedOn = RandomDateTime(2023, 2024),
+                         BlogPostImages = new List<BlogPostImage>
+                        {
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/StdaEkP.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/C0afSJG.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/3YTBXjR.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/F1ViadK.jpg"
+                            }
+                        }
+                     }
+                );
                 try
                 {
                     context.SaveChanges();
@@ -783,7 +783,7 @@ namespace EcomerceApp.Data
 
                     context.BlogPostComments.Add(new BlogPostComment
                     {
-                        Content = "Comment " + i + GenerateRandomString(random,200),
+                        Content = "Comment " + i + GenerateRandomString(random, 200),
                         BlogPostId = randomBlogPostId,
                         UserId = randomUserId,
                         CreatedAt = RandomDateTime(2023, 2024)
@@ -841,6 +841,24 @@ namespace EcomerceApp.Data
 
             int randomIndex = random.Next(0, array.Length);
             return array[randomIndex];
+        }
+        private static List<BlogPostComment> GenerateRandomComments(ApplicationDbContext context)
+        {
+            Random random = new Random();
+            int commentCount = random.Next(1, 11); // Generate a random number between 1 and 10
+            List<string> userIds = context.Users.Select(u => u.Id).ToList();
+            List<BlogPostComment> comments = new List<BlogPostComment>();
+            for (int i = 0; i < commentCount; i++)
+            {
+                comments.Add(new BlogPostComment
+                {
+                    Content = $"Bình luận {i + 1}",
+                    UserId = userIds[random.Next(userIds.Count)],
+                    CreatedAt = RandomDateTime(2023, 2024)
+                });
+            }
+
+            return comments;
         }
     }
 }

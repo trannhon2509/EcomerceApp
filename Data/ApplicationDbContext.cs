@@ -19,13 +19,14 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<OrderDetail> OrderDetails { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<Coupon> Coupons { get; set; }
-    public DbSet<Blog> Blogs { get; set; }
     public DbSet<BlogPost> BlogPosts { get; set; }
     public DbSet<ProductComment> ProductComments { get; set; }
     public DbSet<BlogPostComment> BlogPostComments { get; set; }
     public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<BlogPostImage> BlogPostImages { get; set; }
 
 
+   
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -77,23 +78,9 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .WithMany(pc => pc.Products)
             .HasForeignKey(p => p.ProductCategoryId);
 
-        // Thiết lập quan hệ n-1 giữa BlogPost và Blog
-        builder.Entity<BlogPost>()
-            .HasOne(bp => bp.Blog)
-            .WithMany(b => b.BlogPosts)
-            .HasForeignKey(bp => bp.BlogId);
+    
 
-        // Thiết lập quan hệ n-1 giữa BlogPost và ApplicationUser
-        builder.Entity<BlogPost>()
-              .HasOne(bp => bp.Author)
-              .WithMany(u => u.BlogPosts)
-              .HasForeignKey(bp => bp.AuthorId);
-        // Giữ cho các bài đăng blog tồn tại ngay cả khi tác giả bị xóa
-        builder.Entity<BlogPost>()
-        .HasOne(bp => bp.Author)
-        .WithMany(u => u.BlogPosts)
-        .HasForeignKey(bp => bp.AuthorId)
-        .OnDelete(DeleteBehavior.NoAction);
+      
 
         // Thiết lập quan hệ n-1 giữa ProductComment và User
         builder.Entity<ProductComment>()
@@ -117,5 +104,11 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .HasOne(bpc => bpc.BlogPost)
             .WithMany(bp => bp.BlogPostComments)
             .HasForeignKey(bpc => bpc.BlogPostId);
+
+        // Configure one-to-many relationship between BlogPost and BlogPostImage
+        builder.Entity<BlogPost>()
+            .HasMany(bp => bp.BlogPostImages)
+            .WithOne(bpi => bpi.BlogPost)
+            .HasForeignKey(bpi => bpi.BlogPostId);
     }
 }

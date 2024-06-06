@@ -1,4 +1,6 @@
-﻿namespace EcomerceApp.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EcomerceApp.Models
 {
     public class BlogPostComment
     {
@@ -12,6 +14,7 @@
         public ApplicationUser User { get; set; }
 
         // Quan hệ n-1 với BlogPost
+        [JsonIgnore]
         public BlogPost BlogPost { get; set; }
     }
 }

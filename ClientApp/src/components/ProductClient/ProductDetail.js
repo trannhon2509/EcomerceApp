@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../assets/css/ProductDetail.css';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
-
 import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
 
 const ProductDetail = () => {

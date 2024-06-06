@@ -1,4 +1,6 @@
-﻿namespace EcomerceApp.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EcomerceApp.Models
 {
     public class BlogPost
     {
@@ -6,15 +8,7 @@
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime PostedOn { get; set; }
-        public int BlogId { get; set; } // Khóa ngoại đến bảng Blog
-        public string AuthorId { get; set; } // Khóa ngoại đến bảng ApplicationUser
-
-        // Quan hệ n-1 với Blog
-        public Blog Blog { get; set; }
-
-        // Quan hệ 1-n với BlogPostComment
-        public ICollection<BlogPostComment> BlogPostComments { get; set; }
-
-        public ApplicationUser Author { get; set; }
+        public ICollection<BlogPostComment>? BlogPostComments { get; set; }
+        public ICollection<BlogPostImage>? BlogPostImages { get; set; }
     }
 }

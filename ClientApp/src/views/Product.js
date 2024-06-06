@@ -241,18 +241,18 @@ handlePageChange = (selectedPage) => {
                   <div className="row">
                     <div className="col-xs-4">
                       <label htmlFor="shop-filter-price_from" className="sr-only" />
-                      <input id="shop-filter-price_from" type="number" min={0} className="form-control" placeholder="From" disabled />
+                      <input id="shop-filter-price_from" type="number" min={0} className="form-control" placeholder="From"  />
                     </div>
-                    <div className="col-xs-4">
+                    <div className="col-xs-4 my-2">
                       <label htmlFor="shop-filter-price_to" className="sr-only" />
-                      <input id="shop-filter-price_to" type="number" min={0} className="form-control" placeholder="To" disabled />
+                      <input id="shop-filter-price_to" type="number" min={0} className="form-control" placeholder="To"  />
                     </div>
                     <div className="col-xs-4">
-                      <button type="submit" className="btn btn-block btn-default" disabled>Go</button>
+                      <button type="submit" className="btn w-100 btn-success my-2" >Go</button>
                     </div>
                   </div>
                 </div>
-                <h3 className="headline">
+                {/* <h3 className="headline">
                   <span>Brand</span>
                 </h3>
                 <div className="checkbox">
@@ -320,7 +320,7 @@ handlePageChange = (selectedPage) => {
                 <div className="shop-filter__color">
                   <input type="text" id="shop-filter-color_5" defaultValue data-input-color="white" />
                   <label htmlFor="shop-filter-color_5" style={{ backgroundColor: 'white' }} />
-                </div>
+                </div> */}
               </form>
             </div>
             <div className="col-sm-9 col-md-9 mt-5 mt-md-0 mt-sm-5">

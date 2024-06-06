@@ -45,7 +45,7 @@ namespace EcomerceApp.Controllers
                     ProductId = product.Id,
                     Name = product.Name,
                     Price = product.Price,
-                    ImageUrl = product.ProductImages, 
+                    ImageUrl = product.ProductImages,
                     Quantity = 1
                 });
             }
@@ -110,6 +110,32 @@ namespace EcomerceApp.Controllers
                 return NotFound("Product not found in the cart.");
             }
         }
+        [HttpGet("search")]
+        public IActionResult SearchProducts(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                // Nếu không có từ khóa tìm kiếm, trả về BadRequest
+                return BadRequest("Search term is required.");
+            }
+
+            // Lọc danh sách sản phẩm dựa trên từ khóa tìm kiếm
+            var products = _context.Products.Where(p => p.Name.Contains(searchTerm)).ToList();
+
+            return Ok(products);
+        }
+        [HttpGet("filter")]
+        public IActionResult FilterProducts(decimal minPrice, decimal maxPrice)
+        {
+            // Lọc danh sách sản phẩm dựa trên giá tối thiểu và tối đa
+            var products = _context.Products
+                .Where(p => p.Price >= minPrice && p.Price <= maxPrice)
+                .ToList();
+
+            return Ok(products);
+        }
+
+
 
     }
 

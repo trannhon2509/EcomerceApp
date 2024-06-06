@@ -59,7 +59,7 @@ export default class Blog extends Component {
                 <div className="widget-body">
                   <div className="media align-items-center">
                     <div className="avatar">
-                      <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Author" />
+                      <img src="/logo.png" alt="Author" />
                     </div>
                     <div className="media-body">
                       <h6>RevibeCo. chào bạn!<br /> </h6>
@@ -74,21 +74,21 @@ export default class Blog extends Component {
                 </div>
                 <div className="widget-body">
                   <LatestPostItem
-                    title="Prevent 75% of visitors from google analytics"
-                    author="Rachel Roth"
-                    date="26 FEB 2020"
+                    title="Hương Thơm và Sự Thư Giãn: Khám Phá Văn Phòng và Nhà Của Bạn"
+                    author="RevibeCo"
+                    date="26 FEB 2024"
                     imageUrl="https://www.bootdey.com/image/400x200/E6E6FA/000000"
                   />
                   <LatestPostItem
-                    title="Prevent 75% of visitors from google analytics"
-                    author="Rachel Roth"
-                    date="26 FEB 2020"
+                    title="Tạo Phong Cách với Scrunchies, Bandana và Kẹp Tóc!"
+                    author="RevibeCo"
+                    date="24 FEB 2024"
                     imageUrl="https://www.bootdey.com/image/400x200/E6E6FA/000000"
                   />
                   <LatestPostItem
-                    title="Prevent 75% of visitors from google analytics"
-                    author="Rachel Roth"
-                    date="26 FEB 2020"
+                    title="Hương Thơm: Sự Tinh Tế Trong Cuộc Sống Hàng Ngày"
+                    author="RevibeCo"
+                    date="22 FEB 2024"
                     imageUrl="https://www.bootdey.com/image/400x200/E6E6FA/000000"
                   />
                 </div>
@@ -99,21 +99,21 @@ export default class Blog extends Component {
                 </div>
                 <div className="widget-body">
                   <LatestPostItem
-                    title="Prevent 75% of visitors from google analytics"
-                    author="Rachel Roth"
-                    date="26 FEB 2020"
+                    title="Ý Nghĩa của Những Món Quà Nhỏ Bé: Sự Chăm Sóc và Ý Thức Tình Yêu"
+                    author="RevibeCo"
+                    date="20 FEB 2024"
                     imageUrl="https://www.bootdey.com/image/400x200/E6E6FA/000000"
                   />
                   <LatestPostItem
-                    title="Prevent 75% of visitors from google analytics"
-                    author="Rachel Roth"
-                    date="26 FEB 2020"
+                    title="Sức Mạnh Của Những Phụ Kiện Nhỏ: Kẹp Tóc, Bandana, Scrunchies Và Ảnh Hưởng Đến Vẻ Ngoài Của Bạn"
+                    author="RevibeCo"
+                    date="18 FEB 2024"
                     imageUrl="https://www.bootdey.com/image/400x200/E6E6FA/000000"
                   />
                   <LatestPostItem
-                    title="Prevent 75% of visitors from google analytics"
-                    author="Rachel Roth"
-                    date="26 FEB 2020"
+                    title="Tại Sao Nến Thơm Là Món Quà Hoàn Hảo Để Tặng Người Yêu"
+                    author="RevibeCo"
+                    date="16 FEB 2024"
                     imageUrl="https://www.bootdey.com/image/400x200/E6E6FA/000000"
                   />
                 </div>

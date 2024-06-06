@@ -19,9 +19,8 @@ export default class AskQuestion extends Component {
             </div>
             <div className="col-lg-6">
               <div className="heading-section mb-5 mt-5 mt-lg-0">
-                <h2 className="mb-3">Frequently Asks Questions</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
-                  there live the blind texts.</p>
+                <h2 className="mb-3">Các câu hỏi thường gặp</h2>
+                <p>Bạn có thể tham khảo những câu hỏi thường gặp của khách hàng tại đây hoặc gửi email riêng cho chúng tôi để nhận sự trợ giúp</p>
               </div>
               <div id="accordion" className="myaccordion w-100" aria-multiselectable="true">
                 <div className="card">
@@ -89,11 +88,11 @@ export default class AskQuestion extends Component {
                     <div className="card-body py-3 px-0">
                       <ol>
                         <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
-                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
-                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
-                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
-                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
-                        <li> Phối khăn bandana với áo khoác da và quần denim.  </li>
+                        <li> Thắt khăn bandana vào túi quần cùng sơ mi và quần tây. </li>
+                        <li> Buộc khăn bandana ở cổ cùng áo nỉ và quần cargo.  </li>
+                        <li> Kết hợp khăn bandana âu phục thời thượng.  </li>
+                        <li> Quấn khăn bandana quanh cổ tay cùng áo thun, quần dài.  </li>
+                        <li> Buộc bandana vào quai cầm túi xách.  </li>
                       </ol>
                     </div>
                   </div>

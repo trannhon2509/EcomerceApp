@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcomerceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240606071606_deleteBlog")]
-    partial class deleteBlog
+    [Migration("20240606152350_Ver2")]
+    partial class Ver2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -343,6 +343,9 @@ namespace EcomerceApp.Migrations
 
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");

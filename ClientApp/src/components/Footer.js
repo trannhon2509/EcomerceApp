@@ -39,8 +39,13 @@ function Footer() {
                       <img src="/logo.png" width={100} alt='' />
                     </a>
                   </div>
-                  <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia, tenetur.
+                  <p>
+                Contact Us<br/>
+                Hotline: 0399918513<br/>
+                Email: revibeco2002@gmail.com<br/>
+                Address: Hòa Hải, Ngũ Hành Sơn, Đà Nẵng.<br/>
                   </p>
+
                   <div className="social-icon">
                     <ul>
                       <li>

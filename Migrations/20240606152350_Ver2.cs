@@ -6,25 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EcomerceApp.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateModel : Migration
+    public partial class Ver2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Blogs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Blogs", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Coupons",
                 columns: table => new
@@ -210,21 +196,14 @@ namespace EcomerceApp.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PostedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BlogId = table.Column<int>(type: "int", nullable: false),
-                    AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BlogPosts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BlogPosts_Blogs_BlogId",
-                        column: x => x.BlogId,
-                        principalTable: "Blogs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BlogPosts_Users_AuthorId",
-                        column: x => x.AuthorId,
+                        name: "FK_BlogPosts_Users_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "Users",
                         principalColumn: "Id");
                 });
@@ -420,6 +399,26 @@ namespace EcomerceApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BlogPostImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BlogPostId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlogPostImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BlogPostImages_BlogPosts_BlogPostId",
+                        column: x => x.BlogPostId,
+                        principalTable: "BlogPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderDetails",
                 columns: table => new
                 {
@@ -458,14 +457,14 @@ namespace EcomerceApp.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogPosts_AuthorId",
-                table: "BlogPosts",
-                column: "AuthorId");
+                name: "IX_BlogPostImages_BlogPostId",
+                table: "BlogPostImages",
+                column: "BlogPostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogPosts_BlogId",
+                name: "IX_BlogPosts_ApplicationUserId",
                 table: "BlogPosts",
-                column: "BlogId");
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -590,6 +589,9 @@ namespace EcomerceApp.Migrations
                 name: "BlogPostComments");
 
             migrationBuilder.DropTable(
+                name: "BlogPostImages");
+
+            migrationBuilder.DropTable(
                 name: "DeviceCodes");
 
             migrationBuilder.DropTable(
@@ -633,9 +635,6 @@ namespace EcomerceApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Roles");
-
-            migrationBuilder.DropTable(
-                name: "Blogs");
 
             migrationBuilder.DropTable(
                 name: "Coupons");

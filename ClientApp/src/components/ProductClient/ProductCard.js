@@ -1,11 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import RoutePath from "../../routes/RoutePath";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CartContext } from '../../context/CartContext';
 
 class ProductCard extends Component {
+    static contextType = CartContext;
     constructor(props) {
         super(props);
         this.state = {
@@ -26,16 +28,12 @@ class ProductCard extends Component {
         this.setState((prevState) => ({ isLiked: !prevState.isLiked }));
     };
 
-    handleAddToCart = async () => {
+    handleAddToCart = () => {
         const { productId, name } = this.props;
-        try {
-            await axios.post(`api/shop/${productId}`);
-            toast.success(`${name} added to cart successfully!`);
-        } catch (error) {
-            console.error("Error adding item to cart:", error);
-            toast.error('Failed to add item to cart!');
-        }
+        const { addToCart } = this.context;
+        addToCart(productId, name);
     };
+    
     formatPrice = (price) => {
         return price.toLocaleString('en-US');
     };

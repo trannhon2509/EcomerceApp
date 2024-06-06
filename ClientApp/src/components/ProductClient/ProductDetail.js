@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext  } from 'react';
 import { useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../assets/css/ProductDetail.css';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
+import { CartContext } from '../../context/CartContext';
 
 const ProductDetail = () => {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { addToCart } = useContext(CartContext);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -34,18 +36,7 @@ const ProductDetail = () => {
     if (error) {
         return <div>Error: {error.message}</div>;
     }
-    const addToCart = async (productId) => {
-        try {
-            const response = await axios.post(`https://localhost:44412/api/shop/${productId}`);
-            console.log('Added to cart:', response.data);
-            toast.success(product.name+' added to cart successfully!');
-            // Handle success, maybe show a toast or update the UI
-        } catch (error) {
-            console.error('Error adding to cart:', error);
-            toast.error('Failed to add item to cart!');
-            // Handle error, maybe show an error message to the user
-        }
-    }
+
     return (
         <div className="container">
                <ToastContainer /> {/* Add ToastContainer here */}
@@ -145,7 +136,7 @@ const ProductDetail = () => {
                         </div>
                         <div className="row">
                             <div className="col">
-                                <button className="btn btn-secondary btn-block" type="button" onClick={() => addToCart(productId)}>Add to cart</button>
+                                <button className="btn btn-secondary btn-block" type="button" onClick={() => addToCart(productId, product.name)}>Add to cart</button>
                             </div>
                             <div className="col">
                                 <button className="btn btn-primary btn-block" type="button">Buy now</button>

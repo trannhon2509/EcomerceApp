@@ -70,14 +70,7 @@ namespace EcomerceApp.Controllers
             var productToRemove = cartItems.FirstOrDefault(p => p.ProductId == productId);
             if (productToRemove != null)
             {
-                if (productToRemove.Quantity > 1)
-                {
-                    productToRemove.Quantity--;
-                }
-                else
-                {
-                    cartItems.Remove(productToRemove);
-                }
+                cartItems.Remove(productToRemove);
 
                 HttpContext.Session.SetObjectAsJson(CartSessionKey, cartItems);
                 return Ok(cartItems);
@@ -87,6 +80,7 @@ namespace EcomerceApp.Controllers
                 return NotFound("Product not found in the cart.");
             }
         }
+
 
         [HttpPut("{productId}")]
         public IActionResult UpdateCartItemQuantity(int productId, int quantity)

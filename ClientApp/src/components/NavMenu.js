@@ -3,19 +3,22 @@ import { Link } from 'react-router-dom';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
 import RoutePath from '../routes/RoutePath';
+import { CartContext } from '../context/CartContext';
 
 export class NavMenu extends Component {
+    static contextType = CartContext;
     constructor(props) {
         super(props);
 
         this.state = {
             isScrolled: false,
-            isMenuOpen: false // New state to track whether the menu is open
+            isMenuOpen: false,
         };
     }
 
     componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
+        this.context.fetchCartItems();
     }
 
     componentWillUnmount() {
@@ -38,6 +41,7 @@ export class NavMenu extends Component {
 
     render() {
         const { isScrolled, isMenuOpen } = this.state;
+        const { cartItemCount } = this.context;
         const headerClassName = isScrolled ? 'site-header sticky_head' : 'site-header';
 
         const menuItems = [
@@ -83,7 +87,7 @@ export class NavMenu extends Component {
                                     </form>
                                     <Link to={RoutePath.CARDPRODUCT} className="header-btn header-cart">
                                         <i className="bi bi-bag-check-fill text-success"></i>
-                                        <span className="cart-number text-success">3</span>
+                                        <span className="cart-number text-success">{cartItemCount}</span>
                                     </Link>
                                     <Link to={'/'} className="header-btn">
                                         <i className="bi bi-chat-dots-fill text-success"></i>

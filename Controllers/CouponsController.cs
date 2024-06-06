@@ -30,10 +30,11 @@ namespace EcomerceApp.Controllers
                 return BadRequest("Invalid page or pageSize value.");
             }
 
-            var totalCount = await _context.Coupons.CountAsync();
+            var totalCount = await _context.Coupons.Where(c => !c.IsDeleted).CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
 
             var results = await _context.Coupons
+                .Where(c => !c.IsDeleted)
                 .Skip((page.Value - 1) * pageSize.Value)
                 .Take(pageSize.Value)
                 .ToListAsync();
@@ -115,17 +116,13 @@ namespace EcomerceApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCoupon(int id)
         {
-            if (_context.Coupons == null)
-            {
-                return NotFound();
-            }
             var coupon = await _context.Coupons.FindAsync(id);
             if (coupon == null)
             {
                 return NotFound();
             }
 
-            _context.Coupons.Remove(coupon);
+            coupon.IsDeleted = true; // Đánh dấu mã giảm giá là đã bị xoá
             await _context.SaveChangesAsync();
 
             return NoContent();

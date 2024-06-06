@@ -52,8 +52,6 @@ function BlogDetail() {
                         />
                       </div>
                     ))}
-
-
                   </div>
                   <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
                     <span className="carousel-control-prev-icon" aria-hidden="true" />
@@ -67,7 +65,6 @@ function BlogDetail() {
 
               </div>
               <div className="article-title">
-                {/* <h6><a href="#">Lifestyle</a></h6> */}
                 <h2>{blog.title}</h2>
                 <div className="media">
                   <div className="avatar">

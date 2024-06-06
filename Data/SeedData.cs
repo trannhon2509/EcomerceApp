@@ -476,7 +476,7 @@ namespace EcomerceApp.Data
                     string email = "user" + i + "@example.com";
                     string password = "123456";
 
-                    context.Users.Add(new ApplicationUser
+                    _ = context.Users.Add(new ApplicationUser
                     {
                         UserName = userName,
                         Email = email,
@@ -484,8 +484,8 @@ namespace EcomerceApp.Data
                         NormalizedEmail = email.ToUpper(),
                         NormalizedUserName = userName.ToUpper(),
                         SecurityStamp = Guid.NewGuid().ToString("D"),
-                        PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, password),
-                        imgUrl = "https://i1.sndcdn.com/artworks-000065334969-gmnp3t-t500x500.jpg", // URL hình ảnh đại diện của người dùng
+                        PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null!, password),
+                        imgUrl = "https://i1.sndcdn.com/artworks-000065334969-gmnp3t-t500x500.jpg",
                     });
                 }
                 try

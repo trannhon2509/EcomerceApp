@@ -21,9 +21,13 @@ namespace EcomerceApp.Controllers
             _context = context;
         }
 
-        // GET: api/BlogPosts
+         // GET: api/BlogPosts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> GetBlogPosts(int? page = 1, int? pageSize = 10)
+        public async Task<ActionResult<IEnumerable<object>>> GetBlogPosts(
+            int? page = 1, 
+            int? pageSize = 10, 
+            string orderBy = "Id", 
+            bool descending = false)
         {
             if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
             {
@@ -31,10 +35,25 @@ namespace EcomerceApp.Controllers
             }
 
             var query = _context.BlogPosts
-    .Include(post => post.BlogPostComments).AsSingleQuery()
-    .Include(img => img.BlogPostImages).AsSingleQuery();
+                .Include(post => post.BlogPostComments)
+                .Include(img => img.BlogPostImages)
+                .AsQueryable();
 
-            var totalCount = query.Count();
+            // Apply sorting
+            switch (orderBy.ToLower())
+            {
+                case "title":
+                    query = descending ? query.OrderByDescending(bp => bp.Title) : query.OrderBy(bp => bp.Title);
+                    break;
+                case "creationdate":
+                    query = descending ? query.OrderByDescending(bp => bp.PostedOn) : query.OrderBy(bp => bp.PostedOn);
+                    break;
+                default:
+                    query = descending ? query.OrderByDescending(bp => bp.Id) : query.OrderBy(bp => bp.Id);
+                    break;
+            }
+
+            var totalCount = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
 
             var results = await query

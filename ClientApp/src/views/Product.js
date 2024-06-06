@@ -11,51 +11,64 @@ class Product extends Component {
   state = {
     currentPage: 1,
     totalPages: 1,
-    pageSize: 6, // Set the page size
+    pageSize: 6,
     products: [],
     loading: true,
     error: null
-};
+  };
 
-componentDidMount() {
-    this.fetchData(1);
-}
-
-fetchData = async (page) => {
-    const { pageSize } = this.state;
-    try {
-        const response = await axios.get(`api/products?page=${page}&pageSize=${pageSize}`);
-        const { results, totalPages } = response.data;
-        this.setState({
-            products: results,
-            totalPages,
-            loading: false,
-            error: null
-        });
-    } catch (error) {
-        console.error('Error fetching products:', error);
-        this.setState({
-            loading: false,
-            error: 'Failed to fetch products'
-        });
+  componentDidMount() {
+    const savedCurrentPage = localStorage.getItem('currentPage_product');
+    if (savedCurrentPage) {
+      this.setState({ currentPage: parseInt(savedCurrentPage) }, () => {
+        this.fetchData();
+      });
+    } else {
+      this.fetchData(); // Nếu không có savedCurrentPage, fetchData sẽ được gọi với trang mặc định là 1
     }
-};
+  }
 
-handlePageChange = (selectedPage) => {
-    const { selected } = selectedPage;
-    const newPage = selected + 1;
-    this.setState({ currentPage: newPage });
-    this.fetchData(newPage);
-};
+
+  fetchData = async () => {
+    const { currentPage, pageSize } = this.state;
+    try {
+      const response = await axios.get(`api/products?page=${currentPage}&pageSize=${pageSize}`);
+      const { results, totalPages } = response.data;
+      localStorage.setItem('products', JSON.stringify(results));
+      localStorage.setItem('totalPages', totalPages);
+      this.setState({
+        products: results,
+        totalPages,
+        loading: false,
+        error: null
+      });
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      this.setState({
+        loading: false,
+        error: 'Failed to fetch products'
+      });
+    }
+  };
+
+  handlePageChange = (selectedPage) => {
+    const newPage = selectedPage.selected + 1;
+    localStorage.setItem('currentPage_product', String(newPage)); // Cập nhật localStorage trước
+    this.setState({ currentPage: newPage }, () => {
+      this.fetchData(); // Sau đó gọi fetchData
+    });
+  };
+
+
   render() {
     const { loading, error, products, totalPages, currentPage } = this.state;
 
     if (loading) {
-        return <div>Loading...</div>;
+      return <div>Loading...</div>;
     }
 
     if (error) {
-        return <div>Error: {error}</div>;
+      return <div>Error: {error}</div>;
     }
 
     return (
@@ -241,11 +254,11 @@ handlePageChange = (selectedPage) => {
                   <div className="row">
                     <div className="col-xs-4">
                       <label htmlFor="shop-filter-price_from" className="sr-only" />
-                      <input id="shop-filter-price_from" type="number" min={0} className="form-control" placeholder="From"  />
+                      <input id="shop-filter-price_from" type="number" min={0} className="form-control" placeholder="From" />
                     </div>
                     <div className="col-xs-4 my-2">
                       <label htmlFor="shop-filter-price_to" className="sr-only" />
-                      <input id="shop-filter-price_to" type="number" min={0} className="form-control" placeholder="To"  />
+                      <input id="shop-filter-price_to" type="number" min={0} className="form-control" placeholder="To" />
                     </div>
                     <div className="col-xs-4">
                       <button type="submit" className="btn w-100 btn-success my-2" >Go</button>
@@ -330,41 +343,42 @@ handlePageChange = (selectedPage) => {
                 <div className='container'>
                   <div className="menu-list-row">
                     <div className="row g-xxl-5 bydefault_show" id="menu-dish">
-                                        {products.map((product) => (
-                                            console.log(product),
-                                            <ProductCard
-                                                key={product.id}
-                                                name={product.name}
-                                                price={product.price}
-                                                imageUrl={product.images[0].imageUrl}
-                                                productId={product.id}
-                                            />
+                      {products.map((product) => (
+                        console.log(product),
+                        <ProductCard
+                          key={product.id}
+                          name={product.name}
+                          price={product.price}
+                          imageUrl={product.images[0].imageUrl}
+                          productId={product.id}
+                        />
                       ))}
                     </div>
                     <div className='mt-5'>
-                    <ReactPaginate
-                            pageCount={totalPages}
-                            pageRangeDisplayed={3}
-                            marginPagesDisplayed={1}
-                            onPageChange={this.handlePageChange}
-                            containerClassName={'pagination'}
-                            activeClassName={'active'}
-                            subContainerClassName={'pages pagination'}
-                            pageClassName="page-item"
-                            pageLinkClassName="page-link"
-                            previousClassName="page-item"
-                            previousLinkClassName="page-link"
-                            nextClassName="page-item"
-                            nextLinkClassName="page-link"
-                            breakLinkClassName="page-link"
-                        />
+                      <ReactPaginate
+                        pageCount={totalPages}
+                        pageRangeDisplayed={3}
+                        marginPagesDisplayed={1}
+                        onPageChange={this.handlePageChange}
+                        forcePage={currentPage - 1} // Chú ý đến đây
+                        containerClassName={'pagination'}
+                        activeClassName={'active'}
+                        subContainerClassName={'pages pagination'}
+                        pageClassName="page-item"
+                        pageLinkClassName="page-link"
+                        previousClassName="page-item"
+                        previousLinkClassName="page-link"
+                        nextClassName="page-item"
+                        nextLinkClassName="page-link"
+                        breakLinkClassName="page-link"
+                      />
                     </div>
                   </div>
                 </div>
 
 
               </div>
-             
+
             </div>
           </div>
         </div>
@@ -375,9 +389,9 @@ handlePageChange = (selectedPage) => {
 }
 
 const mapStateToProps = state => ({
-    loading: state.products.loading,
-    error: state.products.error,
-    products: state.products.products
+  loading: state.products.loading,
+  error: state.products.error,
+  products: state.products.products
 });
 
 export default connect(mapStateToProps, { fetchProducts })(Product);

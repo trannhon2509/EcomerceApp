@@ -81,8 +81,11 @@ namespace EcomerceApp
 
             builder.Services.AddLogging(loggingBuilder =>
             {
-                loggingBuilder.AddConsole();
-                loggingBuilder.AddDebug();
+                if (loggingBuilder != null)
+                {
+                    loggingBuilder.AddConsole();
+                    loggingBuilder.AddDebug();
+                }
             });
 
             // Add session and CORS services

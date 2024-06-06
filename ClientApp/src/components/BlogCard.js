@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import RoutePath from '../routes/RoutePath';
 import '../assets/css/BlogCard.css'; // Import file for styling
 
-function BlogCard({ id, date, title, content, image }) {
+const BlogCard = React.memo(({ id, date, title, content, image }) => {
     const truncatedTitle = truncateContent(title, 2); // Giới hạn số dòng của title là 2
     const truncatedContent = truncateContent(content, 3); // Giới hạn số dòng của content là 3
 
@@ -22,7 +22,7 @@ function BlogCard({ id, date, title, content, image }) {
             </Link>
         </div>
     );
-}
+});
 
 function truncateContent(text, lineLimit) {
     const lines = text.split('\n');

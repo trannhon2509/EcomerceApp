@@ -23,7 +23,11 @@ namespace EcomerceApp.Controllers
 
         // GET: api/OrderDetails
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> GetOrderDetails(int? page = 1, int? pageSize = 10)
+        public async Task<ActionResult<IEnumerable<object>>> GetOrderDetails(
+            int? page = 1, 
+            int? pageSize = 10, 
+            string orderBy = "Id", 
+            bool descending = false)
         {
             if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
             {
@@ -59,6 +63,26 @@ namespace EcomerceApp.Controllers
                                            product.Price
                                        }).FirstOrDefault()
                         };
+
+            // Apply sorting
+            switch (orderBy.ToLower())
+            {
+                case "quantity":
+                    query = descending ? query.OrderByDescending(d => d.Quantity) : query.OrderBy(d => d.Quantity);
+                    break;
+                case "unitprice":
+                    query = descending ? query.OrderByDescending(d => d.UnitPrice) : query.OrderBy(d => d.UnitPrice);
+                    break;
+                case "orderdate":
+                    query = descending ? query.OrderByDescending(d => d.Order.OrderDate) : query.OrderBy(d => d.Order.OrderDate);
+                    break;
+                case "productname":
+                    query = descending ? query.OrderByDescending(d => d.Product.Name) : query.OrderBy(d => d.Product.Name);
+                    break;
+                default:
+                    query = descending ? query.OrderByDescending(d => d.Id) : query.OrderBy(d => d.Id);
+                    break;
+            }
 
             var totalCount = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
@@ -155,8 +179,7 @@ namespace EcomerceApp.Controllers
             try
             {
                 _context.OrderDetails.Add(detail);
-                await _context
-                .SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

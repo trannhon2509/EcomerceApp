@@ -23,8 +23,13 @@ namespace EcomerceApp.Controllers
             _context = context;
         }
 
+        
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> GetProducts(int? page = 1, int? pageSize = 10)
+        public async Task<ActionResult<IEnumerable<object>>> GetProducts(
+            int? page = 1, 
+            int? pageSize = 10, 
+            string orderBy = "Id", 
+            bool descending = false)
         {
             if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
             {
@@ -60,6 +65,26 @@ namespace EcomerceApp.Controllers
                                           image.ImageUrl
                                       }).Distinct().ToList()
                         };
+
+            // Apply sorting
+            switch (orderBy.ToLower())
+            {
+                case "name":
+                    query = descending ? query.OrderByDescending(p => p.Name) : query.OrderBy(p => p.Name);
+                    break;
+                case "description":
+                    query = descending ? query.OrderByDescending(p => p.Description) : query.OrderBy(p => p.Description);
+                    break;
+                case "price":
+                    query = descending ? query.OrderByDescending(p => p.Price) : query.OrderBy(p => p.Price);
+                    break;
+                case "productcategoryname":
+                    query = descending ? query.OrderByDescending(p => p.ProductCategoryName) : query.OrderBy(p => p.ProductCategoryName);
+                    break;
+                default:
+                    query = descending ? query.OrderByDescending(p => p.Id) : query.OrderBy(p => p.Id);
+                    break;
+            }
 
             var totalCount = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
@@ -103,7 +128,7 @@ namespace EcomerceApp.Controllers
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductComments)
-                    .ThenInclude(pc => pc.User)
+                  /*  .ThenInclude(pc => pc.User)*/
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)

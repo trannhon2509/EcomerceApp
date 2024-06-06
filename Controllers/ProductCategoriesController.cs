@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -43,13 +44,13 @@ namespace EcomerceApp.Controllers
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
 
             var results = await query
+                .OrderBy(c => c.Id) // Thêm OrderBy để đảm bảo thứ tự
                 .Skip((page.Value - 1) * pageSize.Value)
                 .Take(pageSize.Value)
                 .ToListAsync();
 
             return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
         }
-
 
         // GET: api/ProductCategories/5
         [HttpGet("{id}")]
@@ -70,7 +71,6 @@ namespace EcomerceApp.Controllers
         }
 
         // PUT: api/ProductCategories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductCategory(int id, ProductCategory productCategory)
         {
@@ -109,10 +109,7 @@ namespace EcomerceApp.Controllers
             return NoContent();
         }
 
-
-
         // POST: api/ProductCategories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ProductCategory>> PostProductCategory()
         {
@@ -139,7 +136,6 @@ namespace EcomerceApp.Controllers
 
             return CreatedAtAction("GetProductCategory", new { id = productCategory.Id }, productCategory);
         }
-
 
         // DELETE: api/ProductCategories/5
         [HttpDelete("{id}")]

@@ -22,18 +22,39 @@ namespace EcomerceApp.Controllers
         }
 
         // GET: api/Coupons
+        // GET: api/Coupons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Coupon>>> GetCoupons(int? page = 1, int? pageSize = 10)
+        public async Task<ActionResult<IEnumerable<Coupon>>> GetCoupons(
+            int? page = 1,
+            int? pageSize = 10,
+            string orderBy = "Id",
+            bool descending = false)
         {
             if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
             {
                 return BadRequest("Invalid page or pageSize value.");
             }
 
-            var totalCount = await _context.Coupons.CountAsync();
+            var query = _context.Coupons.AsQueryable();
+
+            // Apply sorting
+            switch (orderBy.ToLower())
+            {
+                case "code":
+                    query = descending ? query.OrderByDescending(c => c.Code) : query.OrderBy(c => c.Code);
+                    break;
+                case "status":
+                    query = descending ? query.OrderByDescending(c => c.Status) : query.OrderBy(c => c.Status);
+                    break;
+                default:
+                    query = descending ? query.OrderByDescending(c => c.Id) : query.OrderBy(c => c.Id);
+                    break;
+            }
+
+            var totalCount = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
 
-            var results = await _context.Coupons
+            var results = await query
                 .Skip((page.Value - 1) * pageSize.Value)
                 .Take(pageSize.Value)
                 .ToListAsync();
@@ -145,6 +166,29 @@ namespace EcomerceApp.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+        // GET: api/Coupons/search
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Coupon>>> SearchCoupons(string code)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                // If the code is null or empty, return BadRequest
+                return BadRequest("Code is required.");
+            }
+
+            // Filter the list of coupons based on the code
+            var coupons = await _context.Coupons.FirstOrDefaultAsync(c => code == c.Code);
+                
+
+            // Check if any coupons are found
+            if (coupons == null)
+            {
+                // If no coupons are found, return NotFound
+                return NotFound("No coupons found matching the code.");
+            }
+
+            return Ok(coupons);
         }
 
         private bool CouponExists(int id)

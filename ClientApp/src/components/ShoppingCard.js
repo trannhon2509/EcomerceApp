@@ -11,6 +11,7 @@ const ShoppingCard = () => {
             try {
                 const response = await axios.get('api/shop');
                 setCartItems(response.data);
+                console.log(response.data)
             } catch (error) {
                 console.error('Error fetching cart items:', error);
             }
@@ -106,8 +107,8 @@ const ShoppingCard = () => {
                                 <tbody>
                                     {cartItems.map(item => (
                                         <tr key={item.productId}>
-                                            <td className="hidden-xs">
-                                                <img src={item.imageUrl} alt={item.name} title width={47} height={47} />
+                                            <td className="hidden-xs d-flex justify-content-center align-items-center">
+                                                <img src={item.imageUrl[0].imageUrl} alt={item.name} title width={50} />
                                             </td>
                                             <td>{item.name}</td>
                                             <td>${item.price.toFixed(2)}</td>

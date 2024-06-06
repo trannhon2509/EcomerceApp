@@ -25,7 +25,12 @@ namespace EcomerceApp.Controllers
         [HttpPost("{productId}")]
         public async Task<IActionResult> AddToCart(int productId)
         {
-            var product = await _context.Products.FindAsync(productId);
+            var product = await _context.Products
+                .Include(p => p.ProductImages)
+                  /*  .ThenInclude(pc => pc.User)*/
+                .FirstOrDefaultAsync(p => p.Id == productId);
+
+            
             if (product == null)
             {
                 return NotFound("Product not found.");
@@ -115,15 +120,23 @@ namespace EcomerceApp.Controllers
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
-                // Nếu không có từ khóa tìm kiếm, trả về BadRequest
+                // If the search term is null or empty, return BadRequest
                 return BadRequest("Search term is required.");
             }
 
-            // Lọc danh sách sản phẩm dựa trên từ khóa tìm kiếm
+            // Filter the list of products based on the search term
             var products = _context.Products.Where(p => p.Name.Contains(searchTerm)).ToList();
+
+            // Check if any products are found
+            if (products == null || products.Count == 0)
+            {
+                // If no products are found, return NotFound
+                return NotFound("No products found matching the search term.");
+            }
 
             return Ok(products);
         }
+
         [HttpGet("filter")]
         public IActionResult FilterProducts(decimal minPrice, decimal maxPrice)
         {

@@ -70,19 +70,19 @@ const ShoppingCard = () => {
             <div className="row bootstrap snippets">
                 <div className="col-lg-12 col-md-12 col-sm-12">
                     <div className="col-lg-12 col-sm-12 text-center mb-3">
-                        <h2 className="title">SHOPPING CART</h2>
+                        <h2 className="title">ĐƠN HÀNG</h2>
                     </div>
                     <div className="col-lg-12 col-sm-12 hero-feature">
                         <div className="table-responsive">
                             <table className="table table-bordered tbl-cart">
                                 <thead>
                                     <tr>
-                                        <th className="hidden-xs">Image</th>
-                                        <th>Product Name</th>
-                                        <th>Unit price</th>
-                                        <th>Quantity</th>
-                                        <th className="text-center">Price</th>
-                                        <th>Action</th>
+                                        <th className="hidden-xs">Ảnh</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th className="text-center">Tổng</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -92,7 +92,7 @@ const ShoppingCard = () => {
                                                 <img src={item.imageUrl[0].imageUrl} alt={item.name} title width={50} />
                                             </td>
                                             <td>{item.name}</td>
-                                            <td>${item.price.toFixed(2)}</td>
+                                            <td>{item.price.toFixed(0)} VNĐ</td>
                                             <td>
                                                 <div className="input-group">
                                                     <span className="input-group-btn">
@@ -122,7 +122,7 @@ const ShoppingCard = () => {
                                                     </span>
                                                 </div>
                                             </td>
-                                            <td>${(item.quantity * item.price).toFixed(2)}</td>
+                                            <td>{(item.quantity * item.price).toFixed(0)} VNĐ</td>
                                             <td className="text-center">
                                                 <button className='btn btn-success' onClick={() => removeFromCart(item.productId)}>
                                                     <i className="bi bi-trash3-fill"></i>
@@ -132,7 +132,7 @@ const ShoppingCard = () => {
                                     ))}
                                     <tr>
                                         <td colSpan={6} align="right">
-                                            Total: ${localCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}
+                                            Total: {localCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(0)} VNĐ
                                         </td>
                                     </tr>
                                 </tbody>
@@ -140,11 +140,11 @@ const ShoppingCard = () => {
                         </div>
                         <div className="btn-group btns-cart">
                             <Link to={RoutePath.ProductPage} className="btn btn-primary">
-                                <i className="fa fa-arrow-circle-left" /> Continue Shopping
+                                <i className="fa fa-arrow-circle-left" /> Tiếp tục mua hàng
                             </Link>
                             {/* <button type="button" className="btn btn-primary">Update Cart</button> */}
                             <Link to={RoutePath.CHECKOUT} className="btn btn-primary">
-                                Checkout <i className="fa fa-arrow-circle-right" />
+                                Thanh toán <i className="fa fa-arrow-circle-right" />
                             </Link>
                         </div>
                     </div>

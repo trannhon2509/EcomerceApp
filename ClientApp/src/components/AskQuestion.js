@@ -3,7 +3,7 @@ import '../assets/css/AskQuestion.css'
 export default class AskQuestion extends Component {
   render() {
     return (
-      <section className="ftco-section bg-light ftco-faqs">
+      <section className="ftco-section ftco-faqs">
         <div className="container">
           <div className="row">
             <div className="col-lg-6 order-md-last">

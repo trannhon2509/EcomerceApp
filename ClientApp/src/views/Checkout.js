@@ -72,41 +72,41 @@ function Checkout() {
                   </div>
                   <div className="feed-item-list">
                     <div>
-                      <h5 className="font-size-16 mb-1">Billing Info</h5>
-                      <p className="text-muted text-truncate mb-4">Sed ut perspiciatis unde omnis iste</p>
+                      <h5 className="font-size-16 mb-1">Thông tin đơn hàng</h5>
+                      <p className="text-muted text-truncate mb-4">Điền thông tin khách hàng</p>
                       <div className="mb-3">
                         <form>
                           <div>
                             <div className="row">
                               <div className="col-lg-4">
                                 <div className="mb-3">
-                                  <label className="form-label" htmlFor="billing-name">Name</label>
-                                  <input type="text" className="form-control" id="billing-name" placeholder="Enter name" />
+                                  <label className="form-label" htmlFor="billing-name">Tên</label>
+                                  <input type="text" className="form-control" id="billing-name" placeholder="Nhập tên của bạn" />
                                 </div>
                               </div>
                               <div className="col-lg-4">
                                 <div className="mb-3">
-                                  <label className="form-label" htmlFor="billing-email-address">Email Address</label>
-                                  <input type="email" className="form-control" id="billing-email-address" placeholder="Enter email" />
+                                  <label className="form-label" htmlFor="billing-email-address">Email</label>
+                                  <input type="email" className="form-control" id="billing-email-address" placeholder="Nhập mail" />
                                 </div>
                               </div>
                               <div className="col-lg-4">
                                 <div className="mb-3">
-                                  <label className="form-label" htmlFor="billing-phone">Phone</label>
-                                  <input type="text" className="form-control" id="billing-phone" placeholder="Enter Phone no." />
+                                  <label className="form-label" htmlFor="billing-phone">Số điện thoại</label>
+                                  <input type="text" className="form-control" id="billing-phone" placeholder="Nhập số điện thoại" />
                                 </div>
                               </div>
                             </div>
                             <div className="mb-3">
-                              <label className="form-label" htmlFor="billing-address">Address</label>
-                              <textarea className="form-control" id="billing-address" rows={3} placeholder="Enter full address" defaultValue={""} />
+                              <label className="form-label" htmlFor="billing-address">Địa chỉ</label>
+                              <textarea className="form-control" id="billing-address" rows={3} placeholder="Nhập địa chỉ ..." defaultValue={""} />
                             </div>
                             <div className="row">
                               <div className="col-lg-4">
                                 <div className="mb-4 mb-lg-0">
-                                  <label className="form-label">Country</label>
+                                  <label className="form-label">Tỉnh/Thành phố</label>
                                   <select className="form-control form-select" title="Country">
-                                    <option value={0}>Select Country</option>
+                                    <option value={0}>Chọn tỉnh/thành phố</option>
                                     <option value="AF">Afghanistan</option>
                                     <option value="AL">Albania</option>
                                     <option value="DZ">Algeria</option>
@@ -119,15 +119,15 @@ function Checkout() {
                               </div>
                               <div className="col-lg-4">
                                 <div className="mb-4 mb-lg-0">
-                                  <label className="form-label" htmlFor="billing-city">City</label>
-                                  <input type="text" className="form-control" id="billing-city" placeholder="Enter City" />
+                                  <label className="form-label" htmlFor="billing-city">Huyện/Quận</label>
+                                  <input type="text" className="form-control" id="billing-city" placeholder="Nhập tên huyện" />
                                 </div>
                               </div>
                               <div className="col-lg-4">
                                 <div className="mb-0">
-                                  <label className="form-label" htmlFor="zip-code">Zip / Postal
+                                  <label className="form-label" htmlFor="zip-code">Xã/Thị trấn
                                     code</label>
-                                  <input type="text" className="form-control" id="zip-code" placeholder="Enter Postal code" />
+                                  <input type="text" className="form-control" id="zip-code" placeholder="Nhập tên xã/thị trấn" />
                                 </div>
                               </div>
                             </div>
@@ -145,8 +145,8 @@ function Checkout() {
                   </div>
                   <div className="feed-item-list">
                     <div>
-                      <h5 className="font-size-16 mb-1">Shipping Info</h5>
-                      <p className="text-muted text-truncate mb-4">Neque porro quisquam est</p>
+                      <h5 className="font-size-16 mb-1">Thông tin vận chuyển</h5>
+                      <p className="text-muted text-truncate mb-4">Chọn địa chỉ của bạn</p>
                       <div className="mb-3">
                         <div className="row">
                           <div className="col-lg-4 col-sm-6">
@@ -204,11 +204,11 @@ function Checkout() {
                   </div>
                   <div className="feed-item-list">
                     <div>
-                      <h5 className="font-size-16 mb-1">Payment Info</h5>
-                      <p className="text-muted text-truncate mb-4">Duis arcu tortor, suscipit eget</p>
+                      <h5 className="font-size-16 mb-1">Thông tin thanh toán</h5>
+                      <p className="text-muted text-truncate mb-4">Chọn phương thức thanh toán</p>
                     </div>
                     <div>
-                      <h5 className="font-size-14 mb-3">Payment method :</h5>
+                      <h5 className="font-size-14 mb-3">Phương thức thanh toán:</h5>
                       <div className="row">
                         <div className="col-lg-3 col-sm-6">
                           <div data-bs-toggle="collapse">
@@ -216,29 +216,19 @@ function Checkout() {
                               <input type="radio" name="pay-method" id="pay-methodoption1" className="card-radio-input" />
                               <span className="card-radio py-3 text-center text-truncate">
                                 <i className="bx bx-credit-card d-block h2 mb-3" />
-                                Credit / Debit Card
+                                Thẻ tín dụng
                               </span>
                             </label>
                           </div>
                         </div>
-                        <div className="col-lg-3 col-sm-6">
-                          <div>
-                            <label className="card-radio-label">
-                              <input type="radio" name="pay-method" id="pay-methodoption2" className="card-radio-input" />
-                              <span className="card-radio py-3 text-center text-truncate">
-                                <i className="bx bxl-paypal d-block h2 mb-3" />
-                                Paypal
-                              </span>
-                            </label>
-                          </div>
-                        </div>
+                       
                         <div className="col-lg-3 col-sm-6">
                           <div>
                             <label className="card-radio-label">
                               <input type="radio" name="pay-method" id="pay-methodoption3" className="card-radio-input" defaultChecked />
                               <span className="card-radio py-3 text-center text-truncate">
                                 <i className="bx bx-money d-block h2 mb-3" />
-                                <span>Cash on Delivery</span>
+                                <span>Momo</span>
                               </span>
                             </label>
                           </div>
@@ -253,13 +243,13 @@ function Checkout() {
           <div className="row my-4">
             <div className="col">
             <Link to={RoutePath.ProductPage}>
-                <i className="mdi mdi-arrow-left me-1" /> Continue Shopping 
+                <i className="mdi mdi-arrow-left me-1" /> Tiếp tục mua sắm
             </Link>
             </div>
             <div className="col">
               <div className="text-end mt-2 mt-sm-0">
                 <a href="#" className="btn btn-success">
-                  <i className="mdi mdi-cart-outline me-1" /> Procced </a>
+                  <i className="mdi mdi-cart-outline me-1" /> Tiến hành thanh toán </a>
               </div>
             </div>
           </div>
@@ -267,16 +257,16 @@ function Checkout() {
         <div className="col-xl-4">
           <div className="card checkout-order-summary bg-light">
             <div className="card-body">
-              <div className="p-3 bg-light mb-3">
+              {/* <div className="p-3 bg-light mb-3">
                 <h5 className="font-size-16 mb-0">Order Summary <span className="float-end ms-2">#MN0124</span></h5>
-              </div>
+              </div> */}
               <div className="table-responsive">
                 <table className="table table-centered mb-0 table-nowrap">
                   <thead>
                     <tr>
-                      <th className="border-top-0" style={{ width: 110 }} scope="col">Product</th>
-                      <th className="border-top-0" scope="col">Product Desc</th>
-                      <th className="border-top-0" scope="col">Price</th>
+                      <th className="border-top-0" style={{ width: 110 }} scope="col">Sản phẩm</th>
+                      <th className="border-top-0" scope="col">Thông tin</th>
+                      <th className="border-top-0" scope="col">Giá</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -293,9 +283,9 @@ function Checkout() {
                               <i className="bx bxs-star text-warning" />
                               <i className="bx bxs-star-half text-warning" />
                             </p>
-                            <p className="text-muted mb-0 mt-1">$ {item.price} x {item.quantity}</p>
+                            <p className="text-muted mb-0 mt-1">{item.price} {"VNĐ"} x {item.quantity}</p>
                           </td>
-                          <td>$ {(item.quantity * item.price).toFixed(2)}</td>
+                          <td> {(item.quantity * item.price).toFixed(0)} VNĐ</td>
                         </tr>
                       )
 
@@ -303,15 +293,15 @@ function Checkout() {
 
                     <tr>
                       <td colSpan={2}>
-                        <h5 className="font-size-14 m-0">Sub Total :</h5>
+                        <h5 className="font-size-14 m-0">Thành tiền :</h5>
                       </td>
                       <td>
-                        {calculateTotal()}
+                        {calculateTotal()} VNĐ
                       </td>
                     </tr>
                     <tr>
                       <td colSpan={2}>
-                        <h5 className="font-size-14 m-0">Discount :</h5>
+                        <h5 className="font-size-14 m-0">Giảm giá :</h5>
                       </td>
                       <td>
                         {discount == 0 ? "0 %" : `${discount.discountAmount} %`}
@@ -319,34 +309,27 @@ function Checkout() {
                     </tr>
                     <tr>
                       <td colSpan={2}>
-                        <h5 className="font-size-14 m-0">Shipping Charge :</h5>
+                        <h5 className="font-size-14 m-0">Phí vận chuyển :</h5>
                       </td>
                       <td>
-                        $ 25
+                        20,000 VNĐ
                       </td>
                     </tr>
-                    <tr>
-                      <td colSpan={2}>
-                        <h5 className="font-size-14 m-0">Estimated Tax :</h5>
-                      </td>
-                      <td>
-                        $ 18.20
-                      </td>
-                    </tr>
+                  
                     <tr className="bg-light">
                       <td colSpan={2}>
-                        <h5 className="font-size-14 m-0">Total:</h5>
+                        <h5 className="font-size-14 m-0">Tổng:</h5>
                       </td>
                       <td>
-                        {calculateTotalAfterDiscount()}
+                        {calculateTotalAfterDiscount()} VNĐ
                       </td>
                     </tr>
                   </tbody>
                 </table>
                 <div className="my-3">
                   <div className="d-flex justify-content-between">
-                    <input type="text" className="form-input " id="coupon-code" placeholder="Enter coupon code" value={couponCode} onChange={(e) => setCouponCode(e.target.value)} />
-                    <button className="sec-btn-custom mx-1" type="button" onClick={applyCoupon}>Apply</button>
+                    <input type="text" className="form-input " id="coupon-code" placeholder="Nhập mã giảm giá" value={couponCode} onChange={(e) => setCouponCode(e.target.value)} />
+                    <button className="sec-btn-custom mx-1 text-nowrap" type="button" onClick={applyCoupon}>Áp dụng</button>
                   </div>
                 </div>
               </div>

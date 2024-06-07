@@ -5,7 +5,7 @@ function Contact() {
   return (
     <div>
        <div className="container">
-                <div className="row clearfix">
+                {/* <div className="row clearfix">
                     <div className="col-lg-12">
                         <div className="card chat-app">
                             <div id="plist" className="people-list">
@@ -117,7 +117,7 @@ function Contact() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
             <AskQuestion />
     </div>

@@ -123,7 +123,7 @@ const CategoriesComponent = () => {
     return (
         <div>
             <h2>Categories</h2>
-            <Button color="primary" onClick={handleShowModal}>Add Category</Button>
+            <Button color="success" className='my-2' onClick={handleShowModal}>Add Category</Button>
             <Modal isOpen={showModal} toggle={handleCloseModal}>
                 <ModalHeader toggle={handleCloseModal}>{editCategoryId ? 'Edit Category' : 'Add New Category'}</ModalHeader>
                 <ModalBody>
@@ -149,9 +149,9 @@ const CategoriesComponent = () => {
                     {categories.map(category => (
                         <tr key={category.id}>
                             <td>{category.name}</td>
-                            <td>
-                                <button onClick={() => handleEditCategory(category.id, category.name)}>Edit</button>
-                                <button onClick={() => handleDeleteCategory(category.id)}>Delete</button>
+                            <td className='d-flex gap-2'>
+                                <button className='btn btn-info' onClick={() => handleEditCategory(category.id, category.name)}>Edit</button>
+                                <button className='btn btn-danger' onClick={() => handleDeleteCategory(category.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

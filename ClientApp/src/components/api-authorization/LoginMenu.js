@@ -56,13 +56,13 @@ export class LoginMenu extends Component {
             <Fragment>
                 <div className="dropdown" style={{ width: '40px', marginRight: '15px' }}>
                     <button className="border-0 header-btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" onClick={this.toggleDropdown}>
-                        <i className="bi bi-person-circle text-success"></i>
+                        <i className="bi bi-person-circle " style={{color:'#9D6330'}}></i>
                     </button>
                     <ul className={`dropdown-menu dropdown-effect${dropdownOpen ? ' show' : ''}`} aria-labelledby="dropdownMenuButton1">
-                        <li><Link className="dropdown-item" tag={Link} to={profilePath}>Profile</Link></li>
-                        <li><Link className="dropdown-item" tag={Link} to={RoutePath.DASHBOARD}>Admin</Link></li>
-                        <li><Link className="dropdown-item" to={'/'}>Sign in</Link></li>
-                        <li><Link className="dropdown-item" tag={Link} to={logoutPath} state={logoutState}>Sign out ㅤ<i className="bi bi-box-arrow-right"></i></Link></li>
+                        <li><Link className="dropdown-item" tag={Link} to={profilePath} >Profile</Link></li>
+                        <li><Link className="dropdown-item" tag={Link} to={RoutePath.DASHBOARD} >Admin</Link></li>
+                        <li><Link className="dropdown-item" to={'/'} >Sign in</Link></li>
+                        <li><Link className="dropdown-item" tag={Link} to={logoutPath} state={logoutState} >Sign out ㅤ<i className="bi bi-box-arrow-right"></i></Link></li>
                     </ul>
                 </div>
             </Fragment>
@@ -73,10 +73,10 @@ export class LoginMenu extends Component {
         return (
             <div className='d-lg-flex d-md-flex list-unstyled'>
                 <NavItem>
-                    <NavLink tag={Link} className="text-dark fw-bold header-btn" to={registerPath}><i class="bi bi-r-circle-fill"></i></NavLink>
+                    <NavLink tag={Link} className="text-dark fw-bold header-btn" style={{color:'#9D6330'}} to={registerPath}><i class="bi bi-r-circle-fill" style={{color:'#9D6330'}}></i></NavLink>
                 </NavItem>
                 <NavItem>
-                    <NavLink tag={Link} className="text-dark fw-bold header-btn" to={loginPath}><i class="bi bi-box-arrow-right"></i></NavLink>
+                    <NavLink tag={Link} className="text-dark fw-bold header-btn" style={{color:'#9D6330'}} to={loginPath}><i class="bi bi-box-arrow-right" style={{color:'#9D6330'}}></i></NavLink>
                 </NavItem>
             </div>
         );

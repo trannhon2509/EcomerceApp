@@ -16,21 +16,17 @@ export default class Blog extends Component {
     };
   }
 
-  componentDidMount() {
-    this.fetchData(0); // Fetch data for the first page initially
-    // You might also want to fetch latestTags here
-   
-
-  }
-
   fetchData = (selectedPage) => {
     const apiUrl = `api/BlogPosts?page=${selectedPage + 1}&pageSize=4`; // Note: page number is 1-based
     axios.get(apiUrl)
       .then(response => {
-        console.log(response.data.results)
+        const { results, totalPages } = response.data;
+        localStorage.setItem('blogs_totalPages', totalPages);
+        localStorage.setItem('blogs_currentPage', selectedPage + 1);
+        localStorage.setItem('blogs', JSON.stringify(results));
         this.setState({
-          blogs: response.data.results,
-          pageCount: response.data.totalPages,
+          blogs: results,
+          pageCount: totalPages,
           currentPage: selectedPage
         });
       })
@@ -38,6 +34,23 @@ export default class Blog extends Component {
         console.error('Error fetching data:', error);
       });
   }
+
+  componentDidMount() {
+    const savedBlogs = JSON.parse(localStorage.getItem('blogs'));
+    const savedTotalPages = localStorage.getItem('blogs_totalPages');
+    const savedCurrentPage = localStorage.getItem('blogs_currentPage');
+    if (savedBlogs && savedTotalPages && savedCurrentPage) {
+      this.setState({
+        blogs: savedBlogs,
+        pageCount: parseInt(savedTotalPages),
+        currentPage: parseInt(savedCurrentPage) - 1,
+        loading: false
+      });
+    } else {
+      this.fetchData(0);
+    }
+  }
+
 
   handlePageClick = (selectedPage) => {
     this.fetchData(selectedPage.selected);
@@ -125,7 +138,7 @@ export default class Blog extends Component {
                 {blogs.map((blog, index) => (
                   <BlogCard
                     key={index}
-                    id={ blog.id}
+                    id={blog.id}
                     date={blog.postedOn}
                     content={blog.content}
                     title={blog.title}
@@ -152,6 +165,7 @@ export default class Blog extends Component {
                     nextClassName="page-item"
                     nextLinkClassName="page-link"
                     breakLinkClassName="page-link"
+                    forcePage={this.state.currentPage}
                   />
                 </div>
               </div>

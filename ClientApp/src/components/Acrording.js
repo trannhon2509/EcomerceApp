@@ -3,7 +3,7 @@ import '../assets/css/Acording.css'
 export default class Acrording extends Component {
     render() {
         return (
-            <div className="container">
+            <div className="container my-5">
                 <div className="row align-items-center">
                     <div className="col-md-6 mb-4 mb-lg-0">
                         <div className="mx-auto text-center">

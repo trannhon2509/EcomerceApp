@@ -135,12 +135,12 @@ const ProductDetail = () => {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col">
+                            <div className="col-md-6">
                                 <button className="btn btn-secondary btn-block" type="button" onClick={() => addToCart(productId, product.name)}>Add to cart</button>
                             </div>
-                            <div className="col">
+                            {/* <div className="col">
                                 <button className="btn btn-primary btn-block" type="button">Buy now</button>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

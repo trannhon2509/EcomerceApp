@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Duende.IdentityServer.EntityFramework.Options;
 using EcomerceApp.Models;
 using System.Reflection.Emit;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace EcomerceApp.Data;
 
@@ -25,19 +26,41 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<ProductImage> ProductImages { get; set; }
     public DbSet<BlogPostImage> BlogPostImages { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer("Server=localhost;Database=EcomerceApplication;Trusted_Connection=True;User ID=sa;Password=123;MultipleActiveResultSets=true;Encrypt=True;TrustServerCertificate=True;", options =>
+            options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 
-   
+        optionsBuilder.ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
         foreach (var entityType in builder.Model.GetEntityTypes())
         {
-            if (entityType.GetTableName().StartsWith("AspNet"))
+            var tableName = entityType.GetTableName();
+            if (tableName != null && tableName.StartsWith("AspNet"))
             {
-                entityType.SetTableName(entityType.GetTableName().Substring(6));
+                entityType.SetTableName(tableName.Substring(6));
             }
         }
+
+
+        builder.Entity<Coupon>()
+       .Property(c => c.DiscountAmount)
+       .HasColumnType("decimal(18,2)"); // Adjust precision and scale as needed
+
+        builder.Entity<OrderDetail>()
+        .Property(od => od.UnitPrice)
+        .HasColumnType("decimal(18,2)"); // Adjust precision and scale as needed
+
+        builder.Entity<Product>()
+        .Property(p => p.Price)
+        .HasColumnType("decimal(18,2)"); // Adjust precision and scale as needed
+
+
         // Thiết lập quan hệ 1-n giữa Order và OrderDetail
         builder.Entity<Order>()
             .HasMany(o => o.OrderDetails)
@@ -61,7 +84,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .HasOne(o => o.User)
             .WithMany(u => u.Orders)
             .HasForeignKey(o => o.UserId);
-       
+
         builder.Entity<Order>()
             .HasOne(o => o.Coupon)
             .WithMany() // Một coupon có thể được sử dụng cho nhiều đơn hàng
@@ -78,9 +101,9 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .WithMany(pc => pc.Products)
             .HasForeignKey(p => p.ProductCategoryId);
 
-    
 
-      
+
+
 
         // Thiết lập quan hệ n-1 giữa ProductComment và User
         builder.Entity<ProductComment>()

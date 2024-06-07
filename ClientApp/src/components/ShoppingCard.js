@@ -88,8 +88,8 @@ const ShoppingCard = () => {
                                 <tbody>
                                     {localCartItems.map(item => (
                                         <tr key={item.productId}>
-                                            <td className="hidden-xs">
-                                                <img src={item.imageUrl} alt={item.name} title width={47} height={47} />
+                                            <td className="hidden-xs d-flex justify-content-center align-items-center">
+                                                <img src={item.imageUrl[0].imageUrl} alt={item.name} title width={50} />
                                             </td>
                                             <td>{item.name}</td>
                                             <td>${item.price.toFixed(2)}</td>
@@ -142,7 +142,7 @@ const ShoppingCard = () => {
                             <Link to={RoutePath.ProductPage} className="btn btn-primary">
                                 <i className="fa fa-arrow-circle-left" /> Continue Shopping
                             </Link>
-                            <button type="button" className="btn btn-primary">Update Cart</button>
+                            {/* <button type="button" className="btn btn-primary">Update Cart</button> */}
                             <Link to={RoutePath.CHECKOUT} className="btn btn-primary">
                                 Checkout <i className="fa fa-arrow-circle-right" />
                             </Link>

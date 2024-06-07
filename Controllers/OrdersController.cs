@@ -26,7 +26,11 @@ namespace EcomerceApp.Controllers
 
         // GET: api/Orders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> GetOrders(int? page = 1, int? pageSize = 10)
+        public async Task<ActionResult<IEnumerable<object>>> GetOrders(
+            int? page = 1, 
+            int? pageSize = 10, 
+            string orderBy = "Id", 
+            bool descending = false)
         {
             if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
             {
@@ -63,6 +67,26 @@ namespace EcomerceApp.Controllers
                                                            }).FirstOrDefault()
                                             }).ToList()
                         };
+
+            // Apply sorting
+            switch (orderBy.ToLower())
+            {
+                case "orderdate":
+                    query = descending ? query.OrderByDescending(o => o.OrderDate) : query.OrderBy(o => o.OrderDate);
+                    break;
+                case "status":
+                    query = descending ? query.OrderByDescending(o => o.Status) : query.OrderBy(o => o.Status);
+                    break;
+                case "username":
+                    query = descending ? query.OrderByDescending(o => o.User.UserName) : query.OrderBy(o => o.User.UserName);
+                    break;
+                case "couponcode":
+                    query = descending ? query.OrderByDescending(o => o.Coupon.Code) : query.OrderBy(o => o.Coupon.Code);
+                    break;
+                default:
+                    query = descending ? query.OrderByDescending(o => o.Id) : query.OrderBy(o => o.Id);
+                    break;
+            }
 
             var totalCount = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
@@ -162,7 +186,6 @@ namespace EcomerceApp.Controllers
 
             var json = JsonSerializer.Serialize(orderDTO, options);
 
-
             try
             {
                 var order = new Order
@@ -170,8 +193,8 @@ namespace EcomerceApp.Controllers
                     UserId = orderDTO.UserId,
                     CouponId = orderDTO.CouponId,
                     note = orderDTO.Note,
-                    Status = orderDTO.Status ?? "Pending", // Nếu không được chỉ định, sẽ mặc định thành "Pending"
-                    OrderDate = DateTime.Now, // Bạn có thể điều chỉnh để lấy thời gian từ client nếu cần
+                    Status = orderDTO.Status ?? "Pending", // If not specified, default to "Pending"
+                    OrderDate = DateTime.Now, // You can adjust to get the time from the client if needed
                     OrderDetails = new List<OrderDetail>()
                 };
 
@@ -187,7 +210,7 @@ namespace EcomerceApp.Controllers
                     {
                         ProductId = orderDetailDTO.ProductId,
                         Quantity = orderDetailDTO.Quantity,
-                        UnitPrice = product.Price // Có thể cần lấy giá từ cơ sở dữ liệu thay vì từ client
+                        UnitPrice = product.Price // May need to fetch the price from the database instead of the client
                     };
 
                     order.OrderDetails.Add(orderDetail);
@@ -203,7 +226,6 @@ namespace EcomerceApp.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
 
         // DELETE: api/Orders/5
         [HttpDelete("{id}")]

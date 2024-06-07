@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../../redux/actions/productActions';
 import ProductCard from './ProductCard';
+import { Link } from 'react-router-dom';
+import RoutePath from '../../routes/RoutePath';
 
 class GridProduct extends Component {
   componentDidMount() {
@@ -22,7 +24,11 @@ class GridProduct extends Component {
 
     return (
       <div>
-        <h3 className="heading text-decoration-none text-center">Mua sắm</h3>
+        <Link to={RoutePath.ProductPage}>
+        <div className="d-flex justify-content-center">
+        <h3 className="heading text-decoration-none text-center my-3 sec-btn">Mua sắm</h3>
+        </div></Link>
+        
         <div className="container">
           <div className="row product">
             {products.map(product => (

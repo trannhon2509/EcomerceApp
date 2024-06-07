@@ -23,7 +23,11 @@ namespace EcomerceApp.Controllers
 
         // GET: api/BlogPostComments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> GetBlogPostComments(int? page = 1, int? pageSize = 10)
+        public async Task<ActionResult<IEnumerable<object>>> GetBlogPostComments(
+            int? page = 1, 
+            int? pageSize = 10, 
+            string orderBy = "CreatedAt", 
+            bool descending = false)
         {
             if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
             {
@@ -51,6 +55,19 @@ namespace EcomerceApp.Controllers
                                         user.UserName
                                     }).FirstOrDefault()
                         };
+
+            // Apply sorting
+            switch (orderBy.ToLower())
+            {
+                case "content":
+                    query = descending ? query.OrderByDescending(c => c.Content) : query.OrderBy(c => c.Content);
+                    break;
+                case "createdat":
+                    query = descending ? query.OrderByDescending(c => c.CreatedAt) : query.OrderBy(c => c.CreatedAt);
+                    break;
+                default:
+                    return BadRequest("Invalid orderBy value.");
+            }
 
             var totalCount = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);

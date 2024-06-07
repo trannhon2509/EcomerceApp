@@ -8,6 +8,7 @@
         public DateTime ExpiryDate { get; set; }
         // Các thuộc tính khác tùy thuộc vào yêu cầu cụ thể
         public bool Status { get; set; } // Trạng thái của mã giảm giá (hoạt động hay không hoạt động)
+        public bool IsDeleted { get; set; }
 
     }
 }

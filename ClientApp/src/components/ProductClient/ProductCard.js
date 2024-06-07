@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { Component, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import RoutePath from "../../routes/RoutePath";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CartContext } from '../../context/CartContext';
 
-const ProductCard = React.memo(({ name, price, imageUrl, productId }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
+class ProductCard extends Component {
+    static contextType = CartContext;
+    constructor(props) {
+        super(props);
+        this.state = {
+            isHovered: false,
+            isLiked: false
+        };
+    }
 
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -21,6 +28,10 @@ const ProductCard = React.memo(({ name, price, imageUrl, productId }) => {
         setIsLiked(prevIsLiked => !prevIsLiked);
     };
 
+    handleAddToCart = () => {
+        const { productId, name } = this.props;
+        const { addToCart } = this.context;
+        addToCart(productId, name);
     const handleAddToCart = async () => {
         try {
             await axios.post(`api/shop/${productId}`);

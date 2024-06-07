@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import RoutePath from '../routes/RoutePath';
+import { CartContext } from '../context/CartContext';
 
 const ShoppingCard = () => {
-    const [cartItems, setCartItems] = useState([]);
+    const { cartItems, fetchCartItems, removeFromCart } = useContext(CartContext);
+    const [localCartItems, setLocalCartItems] = useState([]);
 
     useEffect(() => {
         async function fetchCartItems() {
             try {
                 const response = await axios.get('api/shop');
+                setLocalCartItems(cartItems);
                 setCartItems(response.data);
                 console.log(response.data)
             } catch (error) {
@@ -18,7 +21,7 @@ const ShoppingCard = () => {
         }
 
         fetchCartItems();
-    }, []);
+    }, [cartItems]);
 
     const removeCard = async (id) => {
         try {
@@ -37,11 +40,12 @@ const ShoppingCard = () => {
             console.log('Updating quantity for item', productId, 'to', quantity);
             await axios.put(`api/shop/${productId}?quantity=${quantity}`);
             // Update the cart items with the new quantity
-            setCartItems(prevItems => 
-                prevItems.map(item => 
+            setLocalCartItems(prevItems =>
+                prevItems.map(item =>
                     item.productId === productId ? { ...item, quantity } : item
                 )
             );
+            fetchCartItems();
         } catch (error) {
             console.error('Error updating item quantity:', error);
             // Handle error appropriately, such as displaying an error message.
@@ -52,7 +56,7 @@ const ShoppingCard = () => {
         const newQuantity = parseInt(event.target.value, 10);
         if (newQuantity > 0) {
             // Update the cart item quantity in state immediately for responsive UI
-            setCartItems(prevItems =>
+            setLocalCartItems(prevItems =>
                 prevItems.map(item =>
                     item.productId === productId ? { ...item, quantity: newQuantity } : item
                 )
@@ -63,9 +67,9 @@ const ShoppingCard = () => {
     };
 
     const incrementQuantity = (productId) => {
-        const item = cartItems.find(item => item.productId === productId);
+        const item = localCartItems.find(item => item.productId === productId);
         const newQuantity = item.quantity + 1;
-        setCartItems(prevItems =>
+        setLocalCartItems(prevItems =>
             prevItems.map(item =>
                 item.productId === productId ? { ...item, quantity: newQuantity } : item
             )
@@ -74,9 +78,9 @@ const ShoppingCard = () => {
     };
 
     const decrementQuantity = (productId) => {
-        const item = cartItems.find(item => item.productId === productId);
+        const item = localCartItems.find(item => item.productId === productId);
         const newQuantity = Math.max(1, item.quantity - 1);
-        setCartItems(prevItems =>
+        setLocalCartItems(prevItems =>
             prevItems.map(item =>
                 item.productId === productId ? { ...item, quantity: newQuantity } : item
             )
@@ -105,7 +109,7 @@ const ShoppingCard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {cartItems.map(item => (
+                                    {localCartItems.map(item => (
                                         <tr key={item.productId}>
                                             <td className="hidden-xs d-flex justify-content-center align-items-center">
                                                 <img src={item.imageUrl[0].imageUrl} alt={item.name} title width={50} />
@@ -143,7 +147,7 @@ const ShoppingCard = () => {
                                             </td>
                                             <td>${(item.quantity * item.price).toFixed(2)}</td>
                                             <td className="text-center">
-                                                <button className='btn btn-success' onClick={() => removeCard(item.productId)}>
+                                                <button className='btn btn-success' onClick={() => removeFromCart(item.productId)}>
                                                     <i className="bi bi-trash3-fill"></i>
                                                 </button>
                                             </td>
@@ -151,7 +155,7 @@ const ShoppingCard = () => {
                                     ))}
                                     <tr>
                                         <td colSpan={6} align="right">
-                                            Total: ${cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}
+                                            Total: ${localCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}
                                         </td>
                                     </tr>
                                 </tbody>

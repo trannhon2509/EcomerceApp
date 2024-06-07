@@ -136,17 +136,13 @@ namespace EcomerceApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCoupon(int id)
         {
-            if (_context.Coupons == null)
-            {
-                return NotFound();
-            }
             var coupon = await _context.Coupons.FindAsync(id);
             if (coupon == null)
             {
                 return NotFound();
             }
 
-            _context.Coupons.Remove(coupon);
+            coupon.IsDeleted = true; // Đánh dấu mã giảm giá là đã bị xoá
             await _context.SaveChangesAsync();
 
             return NoContent();

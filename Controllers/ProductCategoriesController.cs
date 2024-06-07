@@ -76,13 +76,13 @@ namespace EcomerceApp.Controllers
         {
             if (id != productCategory.Id)
             {
-                return BadRequest();
+                return BadRequest(new { message = "Mismatched Category ID" });
             }
 
             var existingCategory = await _context.ProductCategories.FindAsync(id);
             if (existingCategory == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Category not found" });
             }
 
             // Update only the necessary properties
@@ -98,7 +98,7 @@ namespace EcomerceApp.Controllers
             {
                 if (!ProductCategoryExists(id))
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Category not found" });
                 }
                 else
                 {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcomerceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240530164131_UpdateComment")]
-    partial class UpdateComment
+    [Migration("20240606152350_Ver2")]
+    partial class Ver2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -244,27 +244,6 @@ namespace EcomerceApp.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("EcomerceApp.Models.Blog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Blogs");
-                });
-
             modelBuilder.Entity("EcomerceApp.Models.BlogPost", b =>
                 {
                     b.Property<int>("Id")
@@ -273,12 +252,8 @@ namespace EcomerceApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("BlogId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -293,9 +268,7 @@ namespace EcomerceApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("BlogId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("BlogPosts");
                 });
@@ -331,6 +304,28 @@ namespace EcomerceApp.Migrations
                     b.ToTable("BlogPostComments");
                 });
 
+            modelBuilder.Entity("EcomerceApp.Models.BlogPostImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BlogPostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogPostId");
+
+                    b.ToTable("BlogPostImages");
+                });
+
             modelBuilder.Entity("EcomerceApp.Models.Coupon", b =>
                 {
                     b.Property<int>("Id")
@@ -348,6 +343,9 @@ namespace EcomerceApp.Migrations
 
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -667,21 +665,9 @@ namespace EcomerceApp.Migrations
 
             modelBuilder.Entity("EcomerceApp.Models.BlogPost", b =>
                 {
-                    b.HasOne("EcomerceApp.Models.ApplicationUser", "Author")
+                    b.HasOne("EcomerceApp.Models.ApplicationUser", null)
                         .WithMany("BlogPosts")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("EcomerceApp.Models.Blog", "Blog")
-                        .WithMany("BlogPosts")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Blog");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("EcomerceApp.Models.BlogPostComment", b =>
@@ -701,6 +687,17 @@ namespace EcomerceApp.Migrations
                     b.Navigation("BlogPost");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EcomerceApp.Models.BlogPostImage", b =>
+                {
+                    b.HasOne("EcomerceApp.Models.BlogPost", "BlogPost")
+                        .WithMany("BlogPostImages")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlogPost");
                 });
 
             modelBuilder.Entity("EcomerceApp.Models.Order", b =>
@@ -843,14 +840,11 @@ namespace EcomerceApp.Migrations
                     b.Navigation("ProductComments");
                 });
 
-            modelBuilder.Entity("EcomerceApp.Models.Blog", b =>
-                {
-                    b.Navigation("BlogPosts");
-                });
-
             modelBuilder.Entity("EcomerceApp.Models.BlogPost", b =>
                 {
                     b.Navigation("BlogPostComments");
+
+                    b.Navigation("BlogPostImages");
                 });
 
             modelBuilder.Entity("EcomerceApp.Models.Order", b =>

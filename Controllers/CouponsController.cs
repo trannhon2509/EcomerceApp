@@ -51,10 +51,11 @@ namespace EcomerceApp.Controllers
                     break;
             }
 
-            var totalCount = await query.CountAsync();
+            var totalCount = await _context.Coupons.Where(c => !c.IsDeleted).CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize.Value);
 
             var results = await query
+                .Where(c => !c.IsDeleted)
                 .Skip((page.Value - 1) * pageSize.Value)
                 .Take(pageSize.Value)
                 .ToListAsync();

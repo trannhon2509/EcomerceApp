@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { Component, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import RoutePath from "../../routes/RoutePath";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CartContext } from '../../context/CartContext';
 
 const ProductCard = React.memo(({ name, price, imageUrl, productId }) => {
     const [isHovered, setIsHovered] = useState(false);

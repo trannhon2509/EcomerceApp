@@ -5,7 +5,7 @@ font-family: 'Poppins', sans-serif; */
 body {
     font-family: 'Poppins', sans-serif;
     text-rendering: optimizeLegibility !important;
-    background: #FFFBF9;
+    background-color: #FFFBF9;
 }
 
 .body-fixed {
@@ -515,7 +515,12 @@ ul {
 .main-banner {
     padding: 200px 0 300px;
     min-height: 100vh;
+    width: 100%;
     position: relative;
+    background-image: url('../public/PRODUCT/BannerHome.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 

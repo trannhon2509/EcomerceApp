@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import ReactPaginate from 'react-paginate';
+import authService from './api-authorization/AuthorizeService';
 
 const CategoriesComponent = () => {
     const [categories, setCategories] = useState([]);
@@ -11,41 +12,60 @@ const CategoriesComponent = () => {
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        fetchCategories();
-    }, [currentPage]); // Update data when currentPage changes
+        checkAdminRole();
+    }, [currentPage]);
+
+    useEffect(() => {
+        if (isAdmin) {
+            fetchCategories();
+        }
+    }, [isAdmin, currentPage]);
 
     const fetchCategories = async () => {
+        if (isAdmin) {
+            try {
+                const response = await axios.get('/api/ProductCategories', {
+                    params: {
+                        page: currentPage + 1,
+                        pageSize: 10
+                    }
+                });
+                setCategories(response.data.results);
+                setTotalPages(response.data.totalPages);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        } else {
+                window.location.href = '/Identity/Account/AccessDenied';
+            }
+        
+    };
+
+    const checkAdminRole = async () => {
         try {
-            const response = await axios.get('/api/ProductCategories', {
-                params: {
-                    page: currentPage + 1, // API page starts from 1
-                    pageSize: 10 // Change page size as needed
-                }
-            });
-            setCategories(response.data.results);
-            setTotalPages(response.data.totalPages);
+            const isAdmin = await authService.isinRole('Admin');
+            setIsAdmin(isAdmin);
+            if (!isAdmin) {
+                window.location.href = '/Identity/Account/AccessDenied';
+            }
         } catch (error) {
-            console.error('Error fetching categories:', error);
+            console.error('Error checking admin role:', error);
         }
     };
 
     const handleSaveCategory = async () => {
         try {
             if (editCategoryId) {
-                console.log('Updating category with ID:', editCategoryId);
-                console.log('Payload:', {
+                const payload = {
                     id: editCategoryId,
-                    name: editCategoryName, // Assuming the property name is 'name' in the backend model
-                    // Other properties of the category can be updated here
-                });
-                // Update existing category
-                await axios.put(`/api/ProductCategories/${editCategoryId}`, {
-                    id: editCategoryId,
-                    name: editCategoryName, // Assuming the property name is 'name' in the backend model
-                    // Other properties of the category can be updated here
-                });
+                    name: editCategoryName,
+                };
+                console.log('Payload:', payload);
+
+                await axios.put(`/api/ProductCategories/${editCategoryId}`, payload);
 
                 const updatedCategories = categories.map(category =>
                     category.id === editCategoryId ? { ...category, name: editCategoryName } : category
@@ -53,17 +73,15 @@ const CategoriesComponent = () => {
 
                 setCategories(updatedCategories);
             } else {
-                // Add new category
                 const response = await axios.post('/api/ProductCategories', {
                     name: newCategoryName,
-                    // Other properties of the category can be added here
                 });
                 setCategories([...categories, response.data]);
             }
             handleCloseModal();
         } catch (error) {
-            console.log(categories)
             console.error('Error saving category:', error);
+            console.log(error.response?.data);
         }
     };
 
@@ -89,13 +107,18 @@ const CategoriesComponent = () => {
         setShowModal(false);
     };
 
-    const handleShowModal = () => setShowModal(true);
+    const handleShowModal = () => {
+        if (isAdmin) {
+            setShowModal(true);
+        } else {
+            setShowModal(false);
+        }
+    }
 
     const handlePageClick = (data) => {
         const selectedPage = data.selected;
         setCurrentPage(selectedPage);
     };
-
 
     return (
         <div>

@@ -19,6 +19,6 @@
         public ApplicationUser User { get; set; }
 
         // Định nghĩa quan hệ n-1 với bảng Coupon
-        public Coupon Coupon { get; set; }
+        public Coupon? Coupon { get; set; }
     }
 }

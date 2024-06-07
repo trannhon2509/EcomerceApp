@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import '../assets/css/HeroComponent.css';
 import { Link } from 'react-router-dom';
-import { useTypewriter, Cursor } from 'react-simple-typewriter'; // Ensure this is the correct import for your typewriter hook
+import { useTypewriter, Cursor } from 'react-simple-typewriter';
 
 const HeroComponent = () => {
     const [text] = useTypewriter({
@@ -24,7 +24,7 @@ const HeroComponent = () => {
             <div className="sec-wp">
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-6">
+                        <div className="col-lg-12 text-center">
                             <div className="banner-text">
                                 <h1 className="h1-title">
                                     Welcome to <br />
@@ -33,17 +33,21 @@ const HeroComponent = () => {
                                     }} >{text}<Cursor  /></span>
                                     {'\n'}
                                 </h1>
-                                <p>Chào mừng bạn đến với ReVibe Co, nơi bạn sẽ tìm thấy những sản phẩm nến thơm và phụ kiện quà tặng tinh tế nhất. ReVibe Co tự hào mang đến cho bạn một bộ sưu tập nến thơm đa dạng, được làm từ các nguyên liệu tự nhiên và an toàn. Mỗi sản phẩm của chúng tôi không chỉ mang lại hương thơm dễ chịu mà còn góp phần trang trí không gian sống của bạn trở nên ấm áp và sang trọng.</p>
+                                <p><span className="cursor-span">
+                                        <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>Discover the Art of Fragrance</span>
+                                    </span><br />
+                                    Chào mừng bạn đến với ReVibe Co, nơi bạn sẽ tìm thấy những sản phẩm nến thơm và phụ kiện quà tặng tinh tế nhất.<br />
+                                Mỗi sản phẩm của chúng tôi không chỉ mang lại hương thơm dễ chịu mà còn góp phần trang trí không gian sống của bạn trở nên ấm áp và sang trọng.</p>
                                 <div className="banner-btn mt-4">
-                                    <Link to={''} className="sec-btn fw-bold">Check our Menu</Link>
+                                    <Link to={'https://localhost:44412/productpage'} className="sec-btn fw-bold">Check our Product</Link>
                                 </div>
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <div className="banner-img-wp">
+                            {/* <div className="banner-img-wp">
                                 <div className="banner-img" style={{ backgroundImage: 'url(/PRODUCT/HOMEPage/HomePage1.jpg)' }}>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="banner-img-text mt-4 m-auto">
                                 {/* <h5 className="h5-title">Lamp</h5>
                                 <p>this is Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> */}

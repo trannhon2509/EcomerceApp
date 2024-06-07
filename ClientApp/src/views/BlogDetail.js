@@ -125,7 +125,7 @@ function BlogDetail() {
               <div className="widget-body">
                 <div className="media align-items-center">
                   <div className="avatar">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar6.png" title alt />
+                    <img src="/logo.png" title alt />
                   </div>
                   <div className="media-body">
                     <h6>RevibeCo. chào bạn!<br /> </h6>
@@ -149,7 +149,7 @@ function BlogDetail() {
                 <div className="latest-post-aside media">
                   <div className="lpa-left media-body">
                     <div className="lpa-title">
-                      <h5><a href="#">Prevent 75% of visitors from google analytics</a></h5>
+                      <h5><a href="#">Nến Thơm Từ Nguyên Liệu Tự Nhiên: Sự Lựa Chọn Cho Sức Khỏe</a></h5>
                     </div>
                     <div className="lpa-meta">
                       <a className="name" href="#">
@@ -169,7 +169,7 @@ function BlogDetail() {
                 <div className="latest-post-aside media">
                   <div className="lpa-left media-body">
                     <div className="lpa-title">
-                      <h5><a href="#">Prevent 75% of visitors from google analytics</a></h5>
+                      <h5><a href="#">Câu Chuyện Khởi Nghiệp Của ReVibe Co.</a></h5>
                     </div>
                     <div className="lpa-meta">
                       <a className="name" href="#">
@@ -189,7 +189,7 @@ function BlogDetail() {
                 <div className="latest-post-aside media">
                   <div className="lpa-left media-body">
                     <div className="lpa-title">
-                      <h5><a href="#">Prevent 75% of visitors from google analytics</a></h5>
+                      <h5><a href="#">Từ Những Cảm Hứng Ban Đầu...</a></h5>
                     </div>
                     <div className="lpa-meta">
                       <a className="name" href="#">

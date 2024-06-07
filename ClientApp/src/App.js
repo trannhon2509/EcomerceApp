@@ -7,13 +7,16 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CartProvider } from './context/CartContext';
 
 export default class App extends Component {
     static displayName = App.name;
 
     render() {
         return (
+
             <Provider store={store}>
+                <CartProvider>
                 <ToastContainer
                     autoClose={2000}
                     hideProgressBar={false}
@@ -42,7 +45,8 @@ export default class App extends Component {
                         );
                         return <Route key={index} {...rest} element={RouteElement} />;
                     })}
-                </Routes>
+                    </Routes>
+                </CartProvider>
             </Provider>
         );
     }

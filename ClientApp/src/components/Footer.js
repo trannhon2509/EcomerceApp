@@ -40,10 +40,10 @@ function Footer() {
                     </a>
                   </div>
                   <p>
-                Contact Us<br/>
-                Hotline: 0399918513<br/>
+                Liên hệ<br/>
+                Số điện thoại: 0399918513<br/>
                 Email: revibeco2002@gmail.com<br/>
-                Address: Hòa Hải, Ngũ Hành Sơn, Đà Nẵng.<br/>
+                Địa chỉ: Hòa Hải, Ngũ Hành Sơn, Đà Nẵng.<br/>
                   </p>
 
                   <div className="social-icon">
@@ -54,7 +54,7 @@ function Footer() {
                         </Link>
                       </li>
                       <li>
-                        <Link to={'https://www.instagram.com/revibe_co_vn/'}>
+                        <Link to={'https://www.instagram.com/revibe_co_vn/'} target='https://www.instagram.com/revibe_co_vn/'>
                         <i class="bi bi-instagram"></i>
                         </Link>
                       </li>

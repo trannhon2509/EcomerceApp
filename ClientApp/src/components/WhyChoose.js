@@ -13,13 +13,13 @@ export default class WhyChoose extends Component {
                 <div className="row align-items-center">
                     <div className="col-sm-6 col-lg-4 mb-2-9 mb-sm-0">
                         <div className="pr-md-3">
-                            <div className="text-center text-sm-right mb-2-9">
+                            {/* <div className="text-center text-sm-right mb-2-9">
                                 <div className="mb-2">
                                     <img src="/why/1.gif" alt="..." className="rounded-circle" width={84} />
                                 </div>
                                 <h4 className="sub-info">Chất Lượng Cao Cấp</h4>
                                 <p className="display-30 mb-5">ReVibe Co cam kết sử dụng nguyên liệu chất lượng cao nhất để tạo ra những sản phẩm nến thơm và quà tặng tinh tế. Mỗi sản phẩm được kiểm tra kỹ lưỡng để đảm bảo sự hài lòng tối đa cho khách hàng.</p>
-                            </div>
+                            </div> */}
                             <div className="text-center text-sm-right mb-2-9">
                                 <div className="mb-2">
                                     <img src="/why/AnToanThanThien.gif" alt="..." className="rounded-circle" width={84} />
@@ -44,14 +44,14 @@ export default class WhyChoose extends Component {
                     </div>
                     <div className="col-sm-6 col-lg-4">
                         <div className="pl-md-3">
-                            <div className="text-center text-sm-left mb-2-9">
+                            {/* <div className="text-center text-sm-left mb-2-9">
                                 <div className="mb-2">
                                     <img src="/why/4.gif" alt="..." className="rounded-circle" width={84} />
                                 </div>
                                 <h4 className="sub-info">Thiết Kế Độc Đáo</h4>
                                 <p className="display-30 mb-5">Với sự sáng tạo không ngừng, ReVibe Co mang đến những thiết kế nến và quà tặng độc đáo, phù hợp với mọi dịp và phong cách. Bạn sẽ luôn tìm thấy một món quà đặc biệt và ý nghĩa tại cửa hàng của ReVibe Co.
                                 </p>
-                            </div>
+                            </div> */}
                             <div className="text-center text-sm-left mb-2-9">
                                 <div className="mb-2">
                                     <img src="/why/dichvutantam.gif" alt="..." className="rounded-circle" width={84} />

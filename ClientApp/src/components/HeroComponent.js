@@ -30,16 +30,47 @@ const HeroComponent = () => {
                                     Welcome to <br />
                                     <span className='' style={{
                                         color: "#9D6330"
-                                    }} >{text}<Cursor  /></span>
+                                    }} >{text}<Cursor /></span>
                                     {'\n'}
                                 </h1>
                                 <p><span className="cursor-span">
-                                        <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>Discover the Art of Fragrance</span>
-                                    </span><br />
+                                    <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>Discover the Art of Fragrance</span>
+                                </span><br />
                                     Chào mừng bạn đến với ReVibe Co, nơi bạn sẽ tìm thấy những sản phẩm nến thơm và phụ kiện quà tặng tinh tế nhất.<br />
-                                Mỗi sản phẩm của chúng tôi không chỉ mang lại hương thơm dễ chịu mà còn góp phần trang trí không gian sống của bạn trở nên ấm áp và sang trọng.</p>
+                                    Mỗi sản phẩm của chúng tôi không chỉ mang lại hương thơm dễ chịu mà còn góp phần trang trí không gian sống của bạn trở nên ấm áp và sang trọng.</p>
                                 <div className="banner-btn mt-4">
                                     <Link to={'https://localhost:44412/productpage'} className="sec-btn fw-bold">Check our Product</Link>
+                                </div>
+                            </div>
+
+                            <div className="banner-text d-flex justify-content-between mt-5">
+                                <div className='row'>
+                                    <h1 className='col-md-3' ><i class="bi bi-alarm"></i></h1>
+                                    <div className='col-md-9 d-flex flex-column align-items-start'>
+                                        <span>Time</span>
+                                        <p className='text-nowrap text-black'>Mon - Fri: 9:00 AM - 6:00 PM</p>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <h1 className='col-md-3'><i class="bi bi-envelope"></i></h1>
+                                    <div className='col-md-9 d-flex flex-column align-items-start'>
+                                        <span>Mail</span>
+                                        <a className='text-nowrap text-black'>revibeco2002@gmail.com</a>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <h1 className='col-md-3'><i class="bi bi-facebook"></i></h1>
+                                    <div className='col-md-9 d-flex flex-column align-items-start'>
+                                        <span>Facebook</span>
+                                        <a href='https://www.instagram.com/revibe_co_vn/?fbclid=IwZXh0bgNhZW0CMTAAAR0rMMX5MD88T5WUjFKTPllDNwVtAwM7-lCLzmoCHS3J9LTmXtUJMF7p4fQ_aem_AbILUfMisOSVa6eb1nIdveyqxRv1M5Ozw6Wv7Y-KXLG1ee3HyXd8ZqXpVAJHzUw2KilGnniRAuRusPz4xwDtN955' target='https://www.instagram.com/revibe_co_vn/?fbclid=IwZXh0bgNhZW0CMTAAAR0rMMX5MD88T5WUjFKTPllDNwVtAwM7-lCLzmoCHS3J9LTmXtUJMF7p4fQ_aem_AbILUfMisOSVa6eb1nIdveyqxRv1M5Ozw6Wv7Y-KXLG1ee3HyXd8ZqXpVAJHzUw2KilGnniRAuRusPz4xwDtN955' className='text-nowrap text-black'>Revibe Co</a>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <h1 className='col-md-3'><i class="bi bi-instagram"></i></h1>
+                                    <div className='col-md-9 d-flex flex-column align-items-start'>
+                                        <span>Instagram</span>
+                                        <a href='https://www.facebook.com/ReVibe.Co.VN' target='https://www.facebook.com/ReVibe.Co.VN' className='text-nowrap text-black'>revibe_co_vn</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

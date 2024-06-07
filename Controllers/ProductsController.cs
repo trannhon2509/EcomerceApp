@@ -96,7 +96,45 @@ namespace EcomerceApp.Controllers
 
             return Ok(new { TotalCount = totalCount, TotalPages = totalPages, Results = results });
         }
+        [HttpGet("by-category")]
+        public async Task<ActionResult<IEnumerable<object>>> GetProductsByCategoryNames([FromQuery] string categoryNames)
+        {
+            if (string.IsNullOrEmpty(categoryNames))
+            {
+                return BadRequest("Category names cannot be null or empty.");
+            }
 
+            var categoryNameList = categoryNames.Split(',').Select(name => name.Trim()).ToList();
+
+            var products = await _context.Products
+                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductComments)
+                .Where(p => categoryNameList.Contains(p.ProductCategory.Name))
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.Price,
+                    ProductCategoryName = p.ProductCategory.Name,
+                    Comments = p.ProductComments.Select(c => new
+                    {
+                        c.Id,
+                        c.Content,
+                        c.CreatedAt,
+                        User = new { c.UserId, UserName = _context.Users.FirstOrDefault(u => u.Id == c.UserId).UserName }
+                    }).ToList(),
+                    Images = p.ProductImages.Select(i => new
+                    {
+                        i.Id,
+                        i.ImageUrl
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(products);
+        }
 
         // GET: api/Products/5
         /*[HttpGet("{id}")]
@@ -263,6 +301,20 @@ namespace EcomerceApp.Controllers
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
 
+[HttpGet("search")]
+public async Task<ActionResult<IEnumerable<object>>> SearchProducts([FromQuery] string query)
+{
+    if (string.IsNullOrEmpty(query))
+    {
+        return BadRequest("Search query cannot be null or empty.");
+    }
+
+    var products = await _context.Products
+        .Include(p => p.ProductImages)
+        .ToListAsync();
+
+    return Ok(products);
+}
 
 
 

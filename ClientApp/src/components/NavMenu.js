@@ -45,10 +45,10 @@ export class NavMenu extends Component {
         const headerClassName = isScrolled ? 'site-header sticky_head' : 'site-header';
 
         const menuItems = [
-            { id: 1, name: 'Home', link: RoutePath.HOME },
-            { id: 2, name: 'Shop', link: RoutePath.ProductPage },
-            { id: 3, name: 'Blog', link: RoutePath.BlogPage },
-            { id: 4, name: 'Contact', link: RoutePath.CONTACTPage },
+            { id: 1, name: 'Trang chủ', link: RoutePath.HOME },
+            { id: 2, name: 'Mua sắm', link: RoutePath.ProductPage },
+            { id: 3, name: 'Bài viết', link: RoutePath.BlogPage },
+            { id: 4, name: 'Liên hệ', link: RoutePath.CONTACTPage },
         ];
 
         return (
@@ -72,26 +72,26 @@ export class NavMenu extends Component {
                                 <nav className={`header-menu ${isMenuOpen ? 'open' : ''}`}>
                                     <ul className="menu food-nav-menu">
                                         {menuItems.map((item) => (
-                                            <li key={item.id}>
-                                                <Link to={item.link} onClick={this.toggleMenu}>{item.name}</Link>
+                                            <li key={item.id} >
+                                                <Link to={item.link} onClick={this.toggleMenu} className='fw-bold'>{item.name}</Link>
                                             </li>
                                         ))}
                                     </ul>
                                 </nav>
                                 <div className="header-right">
                                     <form action="#" className="header-search-form for-des">
-                                        <input type="search" className="form-input" placeholder="Search Here..." />
+                                        <input type="search" className="form-input" placeholder="Tìm kiếm..." />
                                         <button type="submit">
-                                            <i className="bi bi-search text-success"></i>
+                                            <i className="bi bi-search" style={{color:'#9D6330'}}></i>
                                         </button>
                                     </form>
                                     <Link to={RoutePath.CARDPRODUCT} className="header-btn header-cart">
-                                        <i className="bi bi-bag-check-fill text-success"></i>
-                                        <span className="cart-number text-success">{cartItemCount}</span>
+                                        <i className="bi bi-bag-check-fill " style={{color:'#9D6330'}}></i>
+                                        <span className="cart-number text-danger">{cartItemCount}</span>
                                     </Link>
-                                    <Link to={'/'} className="header-btn">
+                                    {/* <Link to={'/'} className="header-btn">
                                         <i className="bi bi-chat-dots-fill text-success"></i>
-                                    </Link>
+                                    </Link> */}
                                     <LoginMenu className='d-flex' />
                                 </div>
                             </div>

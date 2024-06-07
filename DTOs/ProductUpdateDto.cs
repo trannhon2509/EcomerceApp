@@ -1,15 +1,33 @@
-﻿namespace EcomerceApp.DTOs
+﻿using System;
+using System.Collections.Generic;
+
+namespace EcommerceApp.DTOs
 {
-    public class ProductUpdateDto
+    public class ProductDto
     {
         public int Id { get; set; }
-        public string ProductName { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string Information { get; set; }
         public bool Status { get; set; }
-        public string ProductCategoryName { get; set; }
-        public List<string> Images { get; set; }
+        public int ProductCategoryId { get; set; }
+        public List<ProductCommentDto> Comments { get; set; }
+        public List<ProductImageDto> Images { get; set; }
+    }
+
+    public class ProductCommentDto
+    {
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string UserId { get; set; }
+    }
+
+    public class ProductImageDto
+    {
+        public int Id { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

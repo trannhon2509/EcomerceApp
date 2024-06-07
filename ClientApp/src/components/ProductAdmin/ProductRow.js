@@ -1,6 +1,6 @@
 ﻿import React, { useState } from 'react';
 
-const ProductRow = ({ product, onDelete, onEdit, loadingDelete }) => {
+const ProductRow = ({ product, onDelete, onEdit, loadingDelete, status }) => {
     const { id, name, description, price, productCategoryName, comments, images } = product;
     const [showImageList, setShowImageList] = useState(false);
 
@@ -10,17 +10,6 @@ const ProductRow = ({ product, onDelete, onEdit, loadingDelete }) => {
 
     return (
         <tr>
-            <td>{name}</td>
-            <td>{description}</td>
-            <td>{price}</td>
-            <td>{productCategoryName}</td>
-            <td>
-                <ul>
-                    {comments.map(comment => (
-                        <li key={comment.id}>{comment.content} (by {comment.user.userName})</li>
-                    ))}
-                </ul>
-            </td>
             <td>
                 <div className="image-gallery">
                     {showImageList ? (
@@ -45,6 +34,18 @@ const ProductRow = ({ product, onDelete, onEdit, loadingDelete }) => {
                     </button>
                 )}
             </td>
+            <td>{name}</td>
+            <td>{description}</td>
+            <td>{price}</td>
+            <td>{productCategoryName}</td>
+            <td>
+                <ul>
+                    {comments.map(comment => (
+                        <li key={comment.id}>{comment.content} (by {comment.user.userName})</li>
+                    ))}
+                </ul>
+            </td>
+            <td>{status ? 'Active' : 'Inactive'}</td>
             <td>
                 <button
                     onClick={() => onDelete(id)}
@@ -54,7 +55,7 @@ const ProductRow = ({ product, onDelete, onEdit, loadingDelete }) => {
                     Delete
                 </button>
                 <button
-                    onClick={() => onEdit(product)}
+                    onClick={() => onEdit(product)} // Pass the product object to onEdit
                     className="btn btn-primary"
                 >
                     Edit

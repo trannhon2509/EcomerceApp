@@ -9,6 +9,7 @@ using EcomerceApp.Data;
 using EcomerceApp.Models;
 using System.Net.NetworkInformation;
 using EcomerceApp.DTOs;
+using EcommerceApp.DTOs;
 
 namespace EcomerceApp.Controllers
 {
@@ -174,7 +175,7 @@ namespace EcomerceApp.Controllers
         }*/
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, [FromBody] ProductUpdateDto dto)
+        public async Task<IActionResult> PutProduct(int id, [FromBody] ProductDto dto)
         {
             if (id != dto.Id)
             {
@@ -191,7 +192,7 @@ namespace EcomerceApp.Controllers
             }
 
             // Cập nhật các thuộc tính của sản phẩm từ DTO
-            existingProduct.Name = dto.ProductName;
+            existingProduct.Name = dto.Name;
             existingProduct.Description = dto.Description;
             existingProduct.Price = dto.Price;
             existingProduct.Quantity = dto.Quantity;
@@ -199,9 +200,9 @@ namespace EcomerceApp.Controllers
             existingProduct.Status = dto.Status;
 
             // Cập nhật danh mục sản phẩm nếu có
-            if (!string.IsNullOrEmpty(dto.ProductCategoryName))
+            if (dto.ProductCategoryId != 0)
             {
-                var category = await _context.ProductCategories.FirstOrDefaultAsync(pc => pc.Name == dto.ProductCategoryName);
+                var category = await _context.ProductCategories.FirstOrDefaultAsync(pc => pc.Id == dto.ProductCategoryId);
                 if (category != null)
                 {
                     existingProduct.ProductCategoryId = category.Id;
@@ -213,9 +214,9 @@ namespace EcomerceApp.Controllers
             _context.ProductImages.RemoveRange(existingProduct.ProductImages);
 
             // Thêm hình ảnh mới cho sản phẩm
-            foreach (var imageUrl in dto.Images)
+            foreach (var imageDto in dto.Images)
             {
-                existingProduct.ProductImages.Add(new ProductImage { ImageUrl = imageUrl });
+                existingProduct.ProductImages.Add(new ProductImage { ImageUrl = imageDto.ImageUrl });
             }
 
             // Cập nhật sản phẩm trong cơ sở dữ liệu
@@ -237,6 +238,7 @@ namespace EcomerceApp.Controllers
 
             return NoContent();
         }
+
 
 
         // POST: api/Products

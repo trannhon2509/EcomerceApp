@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
+import { fetchProducts, deleteProduct, updateProductStatus, saveProduct } from '../../redux/actions/productActions';
 import authService from '../api-authorization/AuthorizeService';
 import ProductRow from './ProductRow';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import EditProductModal from './EditProductModal'; // Import EditProductModal
+import ProductModal from './ProductModal';
+import { Button } from 'react-bootstrap';
 
 class ProductComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            products: [],
-            loadingProducts: true,
-            loadingDelete: false,
             currentPage: 0,
             pageSize: 6,
-            totalPages: 0,
-            error: null,
-            showAddModal: false,
-            showEditModal: false,
-            editingProduct: null
+            showModal: false,
+            currentProduct: null
         };
     }
 
@@ -30,26 +25,9 @@ class ProductComponent extends Component {
     async populateProductData() {
         const token = await authService.getAccessToken();
         const roles = await authService.isinRole('Admin');
-
         if (roles) {
             const { currentPage, pageSize } = this.state;
-            try {
-                const response = await axios.get('/api/Products', {
-                    headers: !token ? {} : { 'Authorization': `Bearer ${token}` },
-                    params: {
-                        page: currentPage + 1,
-                        pageSize: pageSize
-                    }
-                });
-                this.setState({
-                    products: response.data.results,
-                    loadingProducts: false,
-                    totalPages: response.data.totalPages,
-                    error: null
-                });
-            } catch (error) {
-                this.setState({ loadingProducts: false, error: error.message });
-            }
+            this.props.fetchProducts(currentPage + 1, pageSize, token);
         } else {
             window.location.href = '/Identity/Account/AccessDenied';
         }
@@ -57,60 +35,29 @@ class ProductComponent extends Component {
 
     handlePageClick = (data) => {
         let selected = data.selected;
-        this.setState({ currentPage: selected, loadingProducts: true }, () => {
+        this.setState({ currentPage: selected }, () => {
             this.populateProductData();
         });
     };
 
-    deleteProduct = async (id) => {
-        const token = await authService.getAccessToken();
-        this.setState({ loadingDelete: true });
-        try {
-            await axios.delete(`/api/Products/${id}`, {
-                headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-            });
-            this.populateProductData();
-        } catch (error) {
-            this.setState({ error: error.message });
-        } finally {
-            this.setState({ loadingDelete: false });
-        }
+    handleShowModal = (product = null) => {
+        this.setState({ showModal: true, currentProduct: product });
     };
 
-    editProduct = (product) => {
-        this.setState({ editingProduct: product, showEditModal: true });
+    handleHideModal = () => {
+        this.setState({ showModal: false, currentProduct: null });
     };
 
-    updateProduct = async (updatedProduct) => {
-        const token = await authService.getAccessToken();
-        try {
-            await axios.put(`/api/Products/${updatedProduct.id}`, updatedProduct, {
-                headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-            });
-            this.setState({ editingProduct: null, showEditModal: false });
-            this.populateProductData();
-        } catch (error) {
-            this.setState({ error: error.message });
-        }
-    };
-
-    addProduct = async (newProduct) => {
-        const token = await authService.getAccessToken();
-        try {
-            await axios.post('/api/Products', newProduct, {
-                headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-            });
-            this.setState({ showAddModal: false });
-            this.populateProductData();
-        } catch (error) {
-            this.setState({ error: error.message });
-        }
+    handleSaveProduct = (product) => {
+        this.props.saveProduct(product);
+        this.handleHideModal();
     };
 
     render() {
-        const { loadingProducts, loadingDelete, products, error, totalPages, editingProduct, showAddModal, showEditModal } = this.state;
+        const { loading, loadingUpdate, products, error, totalPages, deleteProduct, updateProductStatus } = this.props;
+        const { showModal, currentProduct } = this.state;
 
-        let contents = loadingProducts
+        let contents = loading
             ? <p style={{ height: '600px' }}><em>Loading...</em></p>
             : error
                 ? <p><em>{error}</em></p>
@@ -118,12 +65,13 @@ class ProductComponent extends Component {
                     <table className="table table-striped" aria-labelledby="tableLabel" style={{ height: '600px' }}>
                         <thead>
                             <tr>
+                                <th>Images</th>
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Price</th>
                                 <th>Category</th>
                                 <th>Comments</th>
-                                <th>Images</th>
+                                <th>Status</th>
                                 <th style={{ width: '200px' }}>Action</th>
                             </tr>
                         </thead>
@@ -132,9 +80,11 @@ class ProductComponent extends Component {
                                 <ProductRow
                                     key={product.id}
                                     product={product}
-                                    onDelete={this.deleteProduct}
-                                    onEdit={this.editProduct}
-                                    loadingDelete={loadingDelete}
+                                    onDelete={deleteProduct}
+                                    onUpdateStatus={updateProductStatus}
+                                    loadingUpdate={loadingUpdate}
+                                    onEdit={() => this.handleShowModal(product)}
+                                    status={product.status ? 'Inactive' : 'Active'}
                                 />
                             )}
                         </tbody>
@@ -145,7 +95,7 @@ class ProductComponent extends Component {
             <div>
                 <h1 id="tableLabel">Product List</h1>
                 <p>This component demonstrates fetching product data from the server.</p>
-                <Button color="primary" onClick={() => this.setState({ showAddModal: true })}>Add Product</Button>
+                <Button variant="primary" onClick={() => this.handleShowModal()}>Add Product</Button>
                 {contents}
                 <ReactPaginate
                     previousLabel={'previous'}
@@ -167,23 +117,32 @@ class ProductComponent extends Component {
                     nextLinkClassName="page-link"
                     breakLinkClassName="page-link"
                 />
-
-                <Modal isOpen={showEditModal} toggle={() => this.setState({ showEditModal: false })}>
-                    <ModalHeader toggle={() => this.setState({ showEditModal: false })}>Edit Product</ModalHeader>
-                    <ModalBody>
-                        <EditProductModal
-                            isOpen={showEditModal}
-                            toggle={() => this.setState({ showEditModal: false })}
-                            product={editingProduct}
-                            categories={categories}  // Pass categories as a prop
-                            onSave={this.updateProduct}
-                            onCancel={() => this.setState({ showEditModal: false })}
-                        />
-                    </ModalBody>
-                </Modal>
+                <ProductModal
+                    show={showModal}
+                    onHide={this.handleHideModal}
+                    onSave={this.handleSaveProduct}
+                    product={currentProduct}
+                />
             </div>
         );
     }
 }
 
-export default ProductComponent;
+const mapStateToProps = state => {
+    return {
+        loadingProducts: state.products.loadingProducts,
+        loadingUpdate: state.products.loadingUpdate,
+        products: state.products.products,
+        error: state.products.error,
+        totalPages: state.products.totalPages
+    };
+};
+
+const mapDispatchToProps = {
+    fetchProducts,
+    deleteProduct,
+    updateProductStatus,
+    saveProduct
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductComponent);

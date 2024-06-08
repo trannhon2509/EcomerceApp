@@ -50,7 +50,7 @@ namespace EcomerceApp
                 options.User.RequireUniqueEmail = true;
 
                 // Sign-in settings
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             });
 

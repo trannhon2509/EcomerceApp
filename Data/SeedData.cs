@@ -16,7 +16,7 @@ namespace EcomerceApp.Data
                 context.AddRange(
                     new ProductCategory
                     {
-                        Name = "Sáp thơm hoa trà nước hoa",
+                        Name = "Sáp thơm",
                         Products = new List<Product>{
                             new Product{
                                 Name = "Amber Mun",
@@ -132,7 +132,7 @@ namespace EcomerceApp.Data
                     },
                     new ProductCategory
                     {
-                        Name = "Viên Đá Hoa Anh Đào Thơm",
+                        Name = "Viên Đá Hoa Anh Đào",
                         Products = new List<Product> {
                             new Product{
                                 Name = "Blue Wind Chime",
@@ -469,7 +469,17 @@ namespace EcomerceApp.Data
             }
             if (!context.Users.Any())
             {
-                const int numberOfUsers = 100; // Số lượng người dùng muốn tạo
+                var user = new ApplicationUser
+                {
+                    UserName = "admin",
+                    Email = "admin@gmail.com",
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                    PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null!, "123456"),
+                    imgUrl = "https://i1.sndcdn.com/artworks-000065334969-gmnp3t-t500x500.jpg",
+                };
+                context.Users.Add(user);
+                const int numberOfUsers = 100;
                 for (int i = 0; i < numberOfUsers; i++)
                 {
                     string userName = "User" + i;
@@ -499,7 +509,7 @@ namespace EcomerceApp.Data
             }
             if (!context.ProductComments.Any())
             {
-                const int numberOfComments = 800;
+                const int numberOfComments = 300;
                 for (int i = 0; i < numberOfComments; i++)
                 {
                     int randomProductId = random.Next(1, context.Products.Count());
@@ -511,14 +521,36 @@ namespace EcomerceApp.Data
                         listId.Add(user.Id);
                     }
                     string randomUserId = listId[random.Next(0, listId.Count)];
+                    int number = random.Next(0, 5);
+                    string contents = "1";
+                    switch (number)
+                    {
+                        case 1:
+                            contents = "Sản phẩm rất tuyệt vời phù hợp với giá thành.";
+                            break;
+                        case 2:
+                            contents = "Sản phẩm rất tốt, tôi rất hài lòng với sản phẩm này.";
+                            break;
+                        case 3:
+                            contents = "Tôi rất hài lòng với sản phẩm này.";    
+                            break;
+                        case 4:
+                            contents = "Tuyệt vời quá !";    
+                            break;
+                        case 5:
+                            contents = "Chất lượng sản phẩm rất tuyệt vời 10 điểm.";        
+                            break;
+                        default:
+                            contents = "Hóng ra mắt sản phẩm mới.";
+                            break;
+                    }
                     context.ProductComments.Add(new ProductComment
                     {
-                        Content = "Comment " + i,
+                        Content = contents,
                         ProductId = randomProductId,
                         UserId = randomUserId,
                         CreatedAt = RandomDateTime(2023, 2024)
                     });
-
                 }
                 try
                 {
@@ -531,13 +563,13 @@ namespace EcomerceApp.Data
             }
             if (!context.Coupons.Any())
             {
-                const int numberOfCoupons = 100; // Số lượng mã giảm giá muốn tạo
+                const int numberOfCoupons = 100; 
                 for (int i = 0; i < numberOfCoupons; i++)
                 {
                     context.Coupons.Add(new Coupon
                     {
                         Code = GenerateRandomString(random, 8),
-                        DiscountAmount = random.Next(1, 100), // Giảm giá từ 1 đến 100%
+                        DiscountAmount = random.Next(1, 20), 
                         ExpiryDate = RandomDateTime(2023, 2024),
                         Status = ((random.Next(1, 2) == 1) ? true : false)
                     });
@@ -553,15 +585,14 @@ namespace EcomerceApp.Data
             }
             if (!context.Orders.Any())
             {
-                const int numberOfOrders = 200; // Số lượng đơn hàng muốn tạo
+                const int numberOfOrders = 200;
                 var userList = context.Users.Select(user => user.Id).ToList();
                 var couponCount = context.Coupons.Count();
 
                 for (int i = 0; i < numberOfOrders; i++)
                 {
-                    string randomUserId = userList[random.Next(userList.Count)]; // Chọn ngẫu nhiên một người dùng
-                    bool hasNullCoupon = random.Next(0, 9) == 1; // Có sử dụng mã giảm giá hay không
-
+                    string randomUserId = userList[random.Next(userList.Count)]; 
+                    bool hasNullCoupon = random.Next(0, 9) == 1; 
                     Order newOrder = new Order
                     {
                         UserId = randomUserId,
@@ -574,10 +605,8 @@ namespace EcomerceApp.Data
                     {
                         newOrder.CouponId = random.Next(1, couponCount + 1); // Chọn ngẫu nhiên một mã giảm giá
                     }
-
                     context.Orders.Add(newOrder);
                 }
-
                 try
                 {
                     context.SaveChanges();
@@ -591,16 +620,16 @@ namespace EcomerceApp.Data
             {
                 if (context.Orders.Any() && context.Products.Any())
                 {
-                    const int numberOfOrderDetails = 800; // Số lượng chi tiết đơn hàng muốn tạo
+                    const int numberOfOrderDetails = 800; 
                     var orderIds = context.Orders.Select(order => order.Id).ToList();
                     var productIds = context.Products.Select(product => product.Id).ToList();
 
                     for (int i = 0; i < numberOfOrderDetails; i++)
                     {
-                        int randomOrderId = orderIds[random.Next(orderIds.Count)]; // Chọn ngẫu nhiên một đơn hàng từ danh sách tồn tại
-                        int randomProductId = productIds[random.Next(productIds.Count)]; // Chọn ngẫu nhiên một sản phẩm từ danh sách tồn tại
-                        int randomQuantity = random.Next(1, 100); // Số lượng từ 1 đến 100
-                        decimal randomPrice = GenerateRandomPrice(random); // Giá ngẫu nhiên
+                        int randomOrderId = orderIds[random.Next(orderIds.Count)]; 
+                        int randomProductId = productIds[random.Next(productIds.Count)]; 
+                        int randomQuantity = random.Next(1, 100); 
+                        decimal randomPrice = GenerateRandomPrice(random);
 
                         context.OrderDetails.Add(new OrderDetail
                         {
@@ -629,16 +658,10 @@ namespace EcomerceApp.Data
             {
                 var userList = context.Users.ToList();
                 var roleList = context.Roles.ToList();
-
                 foreach (var user in userList)
                 {
-                    // Random number of roles between 1 and 3
                     int numberOfRoles = random.Next(1, 4);
-
-                    // Select random roles
                     var selectedRoles = roleList.OrderBy(r => random.Next()).Take(numberOfRoles).ToList();
-
-                    // Add roles to user
                     foreach (var role in selectedRoles)
                     {
                         context.UserRoles.Add(new IdentityUserRole<string>
@@ -648,8 +671,6 @@ namespace EcomerceApp.Data
                         });
                     }
                 }
-
-                // Save changes
                 try
                 {
                     context.SaveChanges();
@@ -697,19 +718,15 @@ namespace EcomerceApp.Data
                         {
                             new BlogPostImage
                             {
-                                ImageUrl = "https://i.imgur.com/StdaEkP.jpg"
+                                ImageUrl = "https://i.imgur.com/YDQXj4j.jpg"
                             },
                             new BlogPostImage
                             {
-                                ImageUrl = "https://i.imgur.com/C0afSJG.jpg"
+                                ImageUrl = "https://i.imgur.com/yrGy6u7.jpg"
                             },
                             new BlogPostImage
                             {
-                                ImageUrl = "https://i.imgur.com/3YTBXjR.jpg"
-                            },
-                            new BlogPostImage
-                            {
-                                ImageUrl = "https://i.imgur.com/F1ViadK.jpg"
+                                ImageUrl = "https://i.imgur.com/pZO2IvP.jpg"
                             }
                         }
                     },
@@ -722,23 +739,19 @@ namespace EcomerceApp.Data
                         {
                             new BlogPostImage
                             {
-                                ImageUrl = "https://i.imgur.com/StdaEkP.jpg"
+                                ImageUrl = "https://i.imgur.com/3IrIh7v.jpg"
                             },
                             new BlogPostImage
                             {
-                                ImageUrl = "https://i.imgur.com/C0afSJG.jpg"
+                                ImageUrl = "https://i.imgur.com/GV6OUNr.jpg"
                             },
                             new BlogPostImage
                             {
-                                ImageUrl = "https://i.imgur.com/3YTBXjR.jpg"
-                            },
-                            new BlogPostImage
-                            {
-                                ImageUrl = "https://i.imgur.com/F1ViadK.jpg"
+                                ImageUrl = "https://i.imgur.com/LPD5Rx3.jpg"
                             }
                         }
                     },
-                     new BlogPost
+                    new BlogPost
                      {
                          Title = "Ý Nghĩa của Những Món Quà Nhỏ Bé: Sự Chăm Sóc và Ý Thức Tình Yêu",
                          Content = "Trong cuộc sống, không phải lúc nào những món quà đắt tiền mới là những món quà có ý nghĩa nhất. Thỉnh thoảng, những món quà nhỏ bé, dù đơn giản nhưng chứa đựng những tình cảm sâu sắc và ý thức tình yêu không thể nào đong đếm được. Dưới đây là một số ý nghĩa mà những món quà nhỏ có thể mang lại:\r\n1. Biểu Tượng của Sự Chăm Sóc:\r\nNhững món quà nhỏ như scrunchies, bandana hoặc kẹp tóc có thể là biểu tượng của sự chăm sóc và quan tâm tới người nhận. Dù chúng không có giá trị vật chất lớn, nhưng việc chọn lựa và tặng những món quà như vậy cho người khác thể hiện sự quan tâm và ý thức về sở thích và nhu cầu của họ.\r\n2. Tạo Ra Những Kỷ Niệm Đáng Nhớ:\r\nNhững món quà nhỏ có thể kết hợp với những sự kiện đặc biệt, như ngày kỷ niệm, sinh nhật hoặc những dịp đặc biệt khác. Mặc dù chúng có thể không đắt tiền, nhưng sẽ trở thành những kỷ niệm đáng nhớ và mang lại niềm vui mỗi khi người nhận nhìn thấy hoặc sử dụng chúng.\r\n3. Thể Hiện Sự Quan Tâm và Sự Ý Thức Về Người Nhận:\r\nNhững món quà nhỏ thường đòi hỏi người tặng phải dành thời gian và tâm huyết để lựa chọn và chuẩn bị. Việc này thể hiện sự quan tâm và sự ý thức về người nhận, khiến họ cảm thấy được đánh giá và quý trọng.\r\n4. Mang Lại Sự Sống Động và Hạnh Phúc Hàng Ngày:\r\nNhững món quà nhỏ như scrunchies, bandana hoặc kẹp tóc có thể mang lại sự sống động và hạnh phúc hàng ngày. Mỗi khi người nhận nhìn thấy hoặc sử dụng chúng, họ có thể nhớ đến người tặng và cảm nhận được tình cảm ấm áp mà món quà mang lại.\r\nTrên tất cả, những món quà nhỏ như scrunchies, bandana và kẹp tóc không chỉ là các món đồ thông thường, mà còn là biểu tượng của sự chăm sóc, ý thức và tình yêu. Hãy nhớ rằng, giá trị của một món quà không phụ thuộc vào giá trị vật chất, mà phụ thuộc vào tình cảm và ý nghĩa mà nó chứa đựng.\r\n",
@@ -747,7 +760,87 @@ namespace EcomerceApp.Data
                         {
                             new BlogPostImage
                             {
-                                ImageUrl = "https://i.imgur.com/StdaEkP.jpg"
+                                ImageUrl = "https://i.imgur.com/WBjNNaY.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/3DWjiKF.jpg"
+                            }
+                        }
+                    },
+                     new BlogPost
+                     {
+                         Title = "Sức Mạnh Của Những Phụ Kiện Nhỏ: Kẹp Tóc, Bandana, Scrunchies Và Ảnh Hưởng Đến Vẻ Ngoài Của Bạn",
+                         Content = "Trong thế giới của thời trang và phong cách cá nhân, thường xuyên nhiều người dừng lại ở việc tập trung vào việc lựa chọn quần áo, giày dép hoặc túi xách, không nhận ra rằng những phụ kiện nhỏ như kẹp tóc, bandana hay scrunchies cũng chính là những điểm nhấn quan trọng có thể làm thay đổi hoàn toàn cảm nhận về vẻ ngoài của bạn. Một chiếc kẹp tóc nhỏ xinh có thể tạo điểm nhấn đầy cuốn hút cho kiểu tóc của bạn, không chỉ làm cho mái tóc trở nên thanh lịch mà còn giữ cho kiểu tóc gọn gàng, đặc biệt là trong những ngày nắng oi ả. Bandana, một chiếc khăn đa năng, không chỉ làm cho trang phục của bạn thêm phần độc đáo và cá tính nhưng cũng là một cách tuyệt vời để thể hiện phong cách riêng của bạn, với vô số lựa chọn màu sắc và họa tiết. Trong khi đó, scrunchies - chiếc dây buộc tóc từ thập niên 90 đã trở lại với sự phổ biến ngày càng tăng - không chỉ bảo vệ tóc của bạn mà còn tạo điểm nhấn với vẻ ngoài dễ thương và gợi lại phong cách retro đầy cuốn hút. Những phụ kiện nhỏ này không chỉ là một phần nhỏ trong việc tự tin và thể hiện bản thân, mà còn là một phần quan trọng trong việc biến đổi và làm mới phong cách của bạn mỗi ngày. Đừng bao giờ coi thường sức mạnh của những chi tiết nhỏ này - chúng có thể là chìa khóa để bạn tỏa sáng trong mọi tình huống.",
+                         PostedOn = RandomDateTime(2023, 2024),
+                         BlogPostImages = new List<BlogPostImage>
+                         {
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/l7tc18t.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/lDMztLJ.jpg"
+                            }
+                         }
+                    },
+                     new BlogPost
+                     {
+                         Title = "Tại Sao Nến Thơm Là Món Quà Hoàn Hảo Để Tặng Người Yêu",
+                         Content = "Khi muốn thể hiện tình cảm đặc biệt với người mình yêu, nến thơm là món quà ý nghĩa và tinh tế. Nến thơm tạo ra không gian lãng mạn với ánh sáng ấm áp và hương thơm dịu nhẹ, hoàn hảo cho những buổi tối bên nhau. Việc chọn mùi hương phù hợp cho thấy bạn hiểu và trân trọng sở thích của người nhận, tạo nên sự kết nối tình cảm sâu sắc. Nến thơm có nhiều mùi hương và thiết kế đa dạng, từ hương hoa nhẹ nhàng như oải hương, hoa nhài đến hương trái cây tươi mát như chanh, cam, dễ dàng tìm thấy loại nến phù hợp với sở thích của người yêu. Hương thơm từ nến còn giúp giảm căng thẳng và cải thiện tâm trạng, mang lại cảm giác thư giãn sau một ngày làm việc mệt mỏi. Mỗi khi thắp nến, người yêu của bạn sẽ nhớ đến những kỷ niệm đẹp mà hai người đã chia sẻ. Nến thơm không phô trương nhưng tinh tế và ý nghĩa, thể hiện sự chu đáo và quan tâm đến từng chi tiết nhỏ trong cuộc sống của người nhận. Chọn nến thơm làm quà tặng là cách gửi gắm tình yêu và lời chúc tốt đẹp đến người yêu một cách nhẹ nhàng và lãng mạn.\r\n\r\n\r\n\r\n\r\n",
+                        PostedOn = RandomDateTime(2023, 2024),
+                         BlogPostImages = new List<BlogPostImage>
+                         {
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/EYmic26.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/vnnszzy.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/DVlo8Ff.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/F1ViadK.jpg"
+                            }
+                         }
+                     },
+                     new BlogPost
+                     {
+                         Title = "Nến Thơm Từ Nguyên Liệu Tự Nhiên: Sự Lựa Chọn Cho Sức Khỏe",
+                         Content = "Trong cuộc sống hiện đại, việc tạo ra một không gian sống an lành và thư giãn không chỉ là một ước mơ mà còn là một nhu cầu cần thiết. Và để đảm bảo không chỉ không gian mà còn sức khỏe của chúng ta được bảo vệ, Revibe Co. tự hào giới thiệu dòng sản phẩm nến thơm từ nguyên liệu tự nhiên, là sự lựa chọn hoàn hảo cho sức khỏe của bạn.\r\n\r\n1. An Toàn Cho Sức Khỏe: Nến thơm từ nguyên liệu tự nhiên của chúng tôi được làm từ các thành phần an toàn như sáp đậu nành và sáp ong, không chứa các hóa chất độc hại hay chất phụ gia gây kích ứng. Điều này đảm bảo rằng bạn và gia đình có thể thưởng thức hương thơm mà không cần lo lắng về tác động tiêu cực đến sức khỏe.\r\n2. Không Gây Ô Nhiễm Không Khí: Không giống như các loại nến truyền thống làm từ sáp parafin, nến thơm từ nguyên liệu tự nhiên không tạo ra khói độc hại và các chất khí thải gây ô nhiễm không khí trong nhà. Điều này giúp cải thiện chất lượng không khí và làm cho không gian sống của bạn trở nên trong lành hơn.\r\n3. Tạo Không Gian Thư Giãn: Việc sử dụng nến thơm từ nguyên liệu tự nhiên không chỉ là một phương tiện trang trí mà còn là một cách tuyệt vời để tạo ra một không gian sống thư giãn và yên bình. Hương thơm dịu nhẹ từ nến giúp bạn thư giãn sau một ngày làm việc căng thẳng và tận hưởng những khoảnh khắc bình yên.\r\n\r\nVới những lợi ích đặc biệt mà nến thơm từ nguyên liệu tự nhiên mang lại cho sức khỏe của bạn, hãy để Revibe Co. là người bạn đồng hành đáng tin cậy của bạn trong việc tạo ra một không gian sống an lành và thư giãn. Khám phá thêm về dòng sản phẩm này tại trang web của chúng tôi và bắt đầu hành trình chăm sóc sức khỏe của bạn ngay hôm nay!\r\n",
+                        PostedOn = RandomDateTime(2023, 2024),
+                         BlogPostImages = new List<BlogPostImage>
+                         {
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/T7GfrC4.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/0RCxnTJ.jpg"
+                            },
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/IIvcCbc.jpg"
+                            }
+                         }
+                     },
+                     new BlogPost
+                     {
+                         Title = "Câu Chuyện Khởi Nghiệp Của ReVibe Co",
+                         Content = "Từ Những Cảm Hứng Ban Đầu...\r\nCó một điều thú vị về nến thơm: nó không chỉ là một nguồn sáng và hương thơm, mà còn mang lại sự ấm cúng, thư giãn, và niềm vui giản dị. Đối với chúng tôi – những người sáng lập ReVibe Co. – tình yêu dành cho nến thơm đã bắt đầu từ những khoảnh khắc giản dị trong cuộc sống hàng ngày: một buổi tối đọc sách bên ánh nến, một không gian làm việc trở nên dễ chịu hơn nhờ hương thơm dịu nhẹ, hay đơn giản là những phút giây thư giãn trong bồn tắm với nến thơm lung linh.\r\nNhưng câu chuyện khởi nghiệp của chúng tôi không chỉ dừng lại ở đam mê dành cho nến thơm. Chúng tôi cũng nhận thấy rằng những phụ kiện như sáp thơm, viên đá hoa anh đào, kẹp tóc, scrunchie, và bandana có thể trở thành những món quà tinh tế, thêm phần hoàn hảo cho trải nghiệm nến thơm. Ý tưởng về ReVibe Co. đã nảy mầm từ mong muốn kết hợp cả hai – những sản phẩm mang lại niềm vui, vẻ đẹp và sự thư giãn cho mọi người.\r\n… Đến Khởi Đầu Đầy Táo Bạo\r\nBan đầu, việc sản xuất và kinh doanh nến thơm và phụ kiện quà tặng dường như là một hành trình đầy thách thức. Chúng tôi không có nhiều kiến thức về sản xuất nến hay tiếp thị phụ kiện. Nhưng với niềm tin rằng sản phẩm của chúng tôi có thể mang lại giá trị thực sự cho khách hàng, chúng tôi đã bắt đầu nghiên cứu, thử nghiệm và học hỏi từng ngày.\r\nChúng tôi bắt đầu bằng việc thử nghiệm các loại sáp nến và hương liệu khác nhau,  tạo ra những cây nến thơm không chỉ đẹp mắt mà còn an toàn cho sức khỏe. Chúng tôi cũng tìm hiểu về các xu hướng phụ kiện thời trang, kết hợp chúng với những món quà tặng độc đáo như kẹp tóc trang nhã, crunchie xinh xắn, và bandana cá tính.\r\n",
+                         PostedOn = RandomDateTime(2023, 2024),
+                         BlogPostImages = new List<BlogPostImage>
+                         {
+                            new BlogPostImage
+                            {
+                                ImageUrl = "https://i.imgur.com/TaNl2Ej.jpg"
                             },
                             new BlogPostImage
                             {
@@ -761,8 +854,9 @@ namespace EcomerceApp.Data
                             {
                                 ImageUrl = "https://i.imgur.com/F1ViadK.jpg"
                             }
-                        }
+                         }
                      }
+
                 );
                 try
                 {

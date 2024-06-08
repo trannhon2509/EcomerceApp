@@ -1,4 +1,6 @@
-﻿namespace EcomerceApp.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EcomerceApp.Models
 {
     public class Order
     {
@@ -16,9 +18,11 @@
         public ICollection<OrderDetail> OrderDetails { get; set; }
 
         // Định nghĩa quan hệ n-1 với bảng User
+             [JsonIgnore]
         public ApplicationUser User { get; set; }
 
         // Định nghĩa quan hệ n-1 với bảng Coupon
+                [JsonIgnore]
         public Coupon? Coupon { get; set; }
     }
 }

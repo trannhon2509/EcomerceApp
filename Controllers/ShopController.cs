@@ -30,7 +30,7 @@ namespace EcomerceApp.Controllers
                   /*  .ThenInclude(pc => pc.User)*/
                 .FirstOrDefaultAsync(p => p.Id == productId);
 
-            
+
             if (product == null)
             {
                 return NotFound("Product not found.");
@@ -142,6 +142,52 @@ namespace EcomerceApp.Controllers
 
             return Ok(products);
         }
+
+        [HttpPost("checkout")]
+        public async Task<IActionResult> Checkout(string username, int? couponId, string? note)
+        {
+            // Tìm kiếm người dùng theo tên
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user == null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            var userId = user.Id;
+
+            var cartItems = HttpContext.Session.GetObjectFromJson<List<CartItem>>(CartSessionKey) ?? new List<CartItem>();
+
+            if (cartItems.Count == 0)
+            {
+                return BadRequest("Your cart is empty.");
+            }
+
+            // Tạo đơn hàng mới từ giỏ hàng
+            var order = new Order
+            {
+                UserId = userId,
+                OrderDate = DateTime.Now,
+                Status = "Pending", // Hoặc trạng thái mặc định khác tùy thuộc vào logic của bạn
+                CouponId = couponId,
+                note = note,
+                OrderDetails = cartItems.Select(item => new OrderDetail
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.Price
+                }).ToList()
+            };
+
+            // Lưu đơn hàng vào cơ sở dữ liệu
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            // Xóa giỏ hàng sau khi đã tạo đơn hàng thành công
+            HttpContext.Session.Remove(CartSessionKey);
+
+            return Ok(order);
+        }
+
 
 
 

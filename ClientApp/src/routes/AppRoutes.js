@@ -23,6 +23,7 @@ import CardProduct from '../views/CardProduct';
 import LikeProduct from '../views/LikeProduct';
 import Checkout from '../views/Checkout';
 import BlogDetail from '../views/BlogDetail';
+import QR from '../views/QR';
 const AppRoutes = [
   {
     index: true,
@@ -132,6 +133,12 @@ const AppRoutes = [
   {
     path: RoutePath.BLOGDETAIL,
     element: <BlogDetail />,
+    layout: DefaultLayout
+  },
+  ,
+  {
+    path: RoutePath.QRCODE,
+    element: <QR />,
     layout: DefaultLayout
   },
 

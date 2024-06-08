@@ -20,6 +20,7 @@ const RoutePath = {
     FAVORITEPRODUCT: '/favoriteproduct',
     CHECKOUT: '/checkout',
     BLOGDETAIL: '/blogdetail/:blogId',
+    QRCODE: '/qr'
 }
 
 export default RoutePath;

@@ -23,12 +23,12 @@ namespace EcomerceApp.Controllers
             _context = context;
         }
 
-        
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetProducts(
-            int? page = 1, 
-            int? pageSize = 10, 
-            string orderBy = "Id", 
+            int? page = 1,
+            int? pageSize = 10,
+            string orderBy = "Id",
             bool descending = false)
         {
             if (page == null || pageSize == null || page <= 0 || pageSize <= 0)
@@ -166,7 +166,7 @@ namespace EcomerceApp.Controllers
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductComments)
-                  /*  .ThenInclude(pc => pc.User)*/
+                /*  .ThenInclude(pc => pc.User)*/
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
@@ -174,7 +174,7 @@ namespace EcomerceApp.Controllers
                 return NotFound();
             }
 
-            
+
 
             return Ok(product);
         }
@@ -301,20 +301,20 @@ namespace EcomerceApp.Controllers
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
 
-[HttpGet("search")]
-public async Task<ActionResult<IEnumerable<object>>> SearchProducts([FromQuery] string query)
-{
-    if (string.IsNullOrEmpty(query))
-    {
-        return BadRequest("Search query cannot be null or empty.");
-    }
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<object>>> SearchProducts([FromQuery] string query)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                return BadRequest("Search query cannot be null or empty.");
+            }
 
-    var products = await _context.Products
-        .Include(p => p.ProductImages)
-        .ToListAsync();
+            var products = await _context.Products
+                .Include(p => p.ProductImages)
+                .ToListAsync();
 
-    return Ok(products);
-}
+            return Ok(products);
+        }
 
 
 
@@ -352,7 +352,7 @@ public async Task<ActionResult<IEnumerable<object>>> SearchProducts([FromQuery] 
 
             return NoContent();
         }
-   
+
 
         private bool ProductExists(int id)
         {

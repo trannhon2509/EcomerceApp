@@ -71,6 +71,9 @@ export class Login extends Component {
         break;
       case AuthenticationResultStatus.Success:
         await this.navigateToReturnUrl(returnUrl);
+        const user = await authService.getUser();
+
+        console.log(user)
         break;
       case AuthenticationResultStatus.Fail:
         this.setState({ message: result.message });
@@ -90,6 +93,11 @@ export class Login extends Component {
         throw new Error('Should not redirect.');
       case AuthenticationResultStatus.Success:
         await this.navigateToReturnUrl(this.getReturnUrl(result.state));
+        const user = await authService.getUser();
+        // Log user information to console
+        console.log(user);
+        // Save user information to localStorage
+        localStorage.setItem('user', JSON.stringify(user));
         break;
       case AuthenticationResultStatus.Fail:
         this.setState({ message: result.message });

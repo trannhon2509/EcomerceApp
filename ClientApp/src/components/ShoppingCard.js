@@ -10,6 +10,7 @@ const ShoppingCard = () => {
 
     useEffect(() => {
         setLocalCartItems(cartItems);
+        console.log(cartItems);
     }, [cartItems]);
 
     const updateQuantity = async (productId, quantity) => {
@@ -91,7 +92,7 @@ const ShoppingCard = () => {
                                             <td className="hidden-xs d-flex justify-content-center align-items-center">
                                                 <img src={item.imageUrl[0].imageUrl} alt={item.name} title width={50} />
                                             </td>
-                                            <td>{item.name}</td>
+                                            <td>{item.categoryName} {item.name}</td>
                                             <td>{item.price.toFixed(0)} VNĐ</td>
                                             <td>
                                                 <div className="input-group">

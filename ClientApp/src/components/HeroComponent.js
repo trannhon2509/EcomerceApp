@@ -43,7 +43,9 @@ const HeroComponent = () => {
                                 </div>
                             </div>
 
-                            <div className="banner-text d-flex justify-content-between mt-5">
+                            <div className="banner-text d-flex justify-content-between mt-5" style={{
+                                paddingTop: '60px'
+                            }}>
                                 <div className='row'>
                                     <h1 className='col-md-3' ><i class="bi bi-alarm"></i></h1>
                                     <div className='col-md-9 d-flex flex-column align-items-start'>

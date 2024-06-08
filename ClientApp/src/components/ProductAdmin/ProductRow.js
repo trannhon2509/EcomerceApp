@@ -14,7 +14,8 @@ const ProductRow = ({ product, onDelete, onEdit, loadingDelete, status }) => {
                 <div className="image-gallery">
                     {showImageList ? (
                         <ul>
-                            {images.map(image => (
+                            {/*{images.map(image => (*/}
+                            {images.filter(image => image.productId === product.productId).map(image => (
                                 <li key={image.id}>
                                     <img src={image.imageUrl} alt={name} style={{ width: '100px' }} />
                                 </li>
@@ -22,7 +23,8 @@ const ProductRow = ({ product, onDelete, onEdit, loadingDelete, status }) => {
                         </ul>
                     ) : (
                         <img
-                            src={images[0].imageUrl}
+                                /*src={images[0].imageUrl}*/
+                                src={images.find(image => image.productId === product.productId)?.imageUrl || ""}
                             alt={name}
                             style={{ width: '100px' }}
                         />

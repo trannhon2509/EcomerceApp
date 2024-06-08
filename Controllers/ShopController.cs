@@ -26,7 +26,7 @@ namespace EcomerceApp.Controllers
         public async Task<IActionResult> AddToCart(int productId)
         {
             var product = await _context.Products
-                .Include(p => p.ProductImages)
+                .Include(p => p.ProductImages).Include(p=>p.ProductCategory)
                   /*  .ThenInclude(pc => pc.User)*/
                 .FirstOrDefaultAsync(p => p.Id == productId);
 
@@ -48,6 +48,7 @@ namespace EcomerceApp.Controllers
                 cartItems.Add(new CartItem
                 {
                     ProductId = product.Id,
+                    CategoryName = product.ProductCategory.Name,
                     Name = product.Name,
                     Price = product.Price,
                     ImageUrl = product.ProductImages,

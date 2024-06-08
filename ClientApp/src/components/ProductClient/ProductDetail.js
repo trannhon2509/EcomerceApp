@@ -83,7 +83,7 @@ const ProductDetail = () => {
                         <hr />
                         <div>
                             <h3 className="price-container">
-                                ${product.price}
+                                {product.price} VNĐ
                             </h3>
                         </div>
                         <hr />

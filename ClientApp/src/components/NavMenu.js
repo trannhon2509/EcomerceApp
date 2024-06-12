@@ -45,10 +45,10 @@ export class NavMenu extends Component {
         const headerClassName = isScrolled ? 'site-header sticky_head' : 'site-header';
 
         const menuItems = [
-            { id: 1, name: 'Trang chủ', link: RoutePath.HOME },
-            { id: 2, name: 'Mua sắm', link: RoutePath.ProductPage },
-            { id: 3, name: 'Bài viết', link: RoutePath.BlogPage },
-            { id: 4, name: 'Liên hệ', link: RoutePath.CONTACTPage },
+            { id: 1, name: 'Home', link: RoutePath.HOME },
+            { id: 2, name: 'Shop', link: RoutePath.ProductPage },
+            // { id: 3, name: 'Blog', link: RoutePath.BlogPage },
+            { id: 4, name: 'Contact', link: RoutePath.CONTACTPage },
         ];
 
         return (
@@ -58,12 +58,9 @@ export class NavMenu extends Component {
                         <div className="col-lg-2">
                             <div className="d-flex align-items-center">
                                 <Link to={'/'}>
-                                    <img src="/logo.png" style={{
-                                        width: "300px",
-                                        maxWidth: "100%"
-                                    }} alt="Logo" />
+                                    <i class="bi bi-book-fill"></i>
                                 </Link>
-                                <h2 className='' style={{ color: "#9D6330", textWrap: "nowrap" }}>RevibeCo.</h2>
+                                <h2 className='' style={{ color: "#3E00EF", textWrap: "nowrap" }}>BookStore</h2>
                             </div>
                         </div>
                         <div className="col-lg-10">
@@ -79,14 +76,14 @@ export class NavMenu extends Component {
                                     </ul>
                                 </nav>
                                 <div className="header-right">
-                                    <form action="#" className="header-search-form for-des">
+                                    {/* <form action="#" className="header-search-form for-des">
                                         <input type="search" className="form-input" placeholder="Tìm kiếm..." />
                                         <button type="submit">
-                                            <i className="bi bi-search" style={{color:'#9D6330'}}></i>
+                                            <i className="bi bi-search" style={{color:'#3E00EF'}}></i>
                                         </button>
-                                    </form>
+                                    </form> */}
                                     <Link to={RoutePath.CARDPRODUCT} className="header-btn header-cart">
-                                        <i className="bi bi-bag-check-fill " style={{color:'#9D6330'}}></i>
+                                        <i className="bi bi-bag-check-fill " style={{color:'#3E00EF'}}></i>
                                         <span className="cart-number text-danger">{cartItemCount}</span>
                                     </Link>
                                     {/* <Link to={'/'} className="header-btn">

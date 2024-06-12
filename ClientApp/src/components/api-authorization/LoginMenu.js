@@ -56,7 +56,7 @@ export class LoginMenu extends Component {
             <Fragment>
                 <div className="dropdown" style={{ width: '40px', marginRight: '15px' }}>
                     <button className="border-0 header-btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" onClick={this.toggleDropdown}>
-                        <i className="bi bi-person-circle " style={{color:'#9D6330'}}></i>
+                        <i className="bi bi-person-circle " style={{color:'#3E00EF'}}></i>
                     </button>
                     <ul className={`dropdown-menu dropdown-effect${dropdownOpen ? ' show' : ''}`} aria-labelledby="dropdownMenuButton1">
                         <li><Link className="dropdown-item" tag={Link} to={profilePath} >Profile</Link></li>
@@ -73,10 +73,10 @@ export class LoginMenu extends Component {
         return (
             <div className='d-lg-flex d-md-flex list-unstyled'>
                 <NavItem>
-                    <NavLink tag={Link} className="text-dark fw-bold header-btn" style={{color:'#9D6330'}} to={registerPath}><i class="bi bi-r-circle-fill" style={{color:'#9D6330'}}></i></NavLink>
+                    <NavLink tag={Link} className="text-dark fw-bold header-btn" style={{color:'#3E00EF'}} to={registerPath}><i class="bi bi-r-circle-fill" style={{color:'#3E00EF'}}></i></NavLink>
                 </NavItem>
                 <NavItem>
-                    <NavLink tag={Link} className="text-dark fw-bold header-btn" style={{color:'#9D6330'}} to={loginPath}><i class="bi bi-box-arrow-right" style={{color:'#9D6330'}}></i></NavLink>
+                    <NavLink tag={Link} className="text-dark fw-bold header-btn" style={{color:'#3E00EF'}} to={loginPath}><i class="bi bi-box-arrow-right" style={{color:'#3E00EF'}}></i></NavLink>
                 </NavItem>
             </div>
         );

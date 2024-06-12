@@ -7,14 +7,14 @@ export default class AskQuestion extends Component {
         <div className="container">
           <div className="row">
             <div className="col-lg-6 order-md-last">
-              <div className="img img-video d-flex align-self-stretch align-items-center justify-content-center justify-content-md-center mb-4 mb-sm-0" style={{ backgroundImage: 'url(https://www.bootdey.com/image/350x280/87CEFA/000000)' }}>
+                        <div className="img img-video d-flex align-self-stretch align-items-center justify-content-center justify-content-md-center mb-4 mb-sm-0" style={{ backgroundImage: 'url(https://tumuado.com/wp-content/uploads/2019/08/Cach-bao-quan-nen-thom-700x700.jpg)' }}>
                 <a href="#" className="icon-video popup-vimeo d-flex justify-content-center align-items-center">
                   <span className="fa fa-play" />
                 </a>
               </div>
               <div className="d-flex mt-3">
-                <div className="img img-2 mr-md-2" style={{ backgroundImage: 'url(https://www.bootdey.com/image/240x240/FFB6C1/000000)' }} />
-                <div className="img img-2 ml-md-2" style={{ backgroundImage: 'url(https://www.bootdey.com/image/240x240/20B2AA/000000)' }} />
+                            <div className="img img-2 mr-md-2" style={{ backgroundImage: 'url(https://th.bing.com/th/id/OIP.zu9xHFBPSFjOHIHDHeJhEgHaJq?w=600&h=783&rs=1&pid=ImgDetMain)' }} />
+                            <div className="img img-2 ml-md-2" style={{ backgroundImage: 'url(https://file.hstatic.net/200000407501/article/il_fullxfull.4365542170_nk5b_bf2267d3aa614cbe9aba5b8cd5a819f5.jpg)' }} />
               </div>
             </div>
             <div className="col-lg-6">

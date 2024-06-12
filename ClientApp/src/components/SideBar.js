@@ -22,7 +22,7 @@ export default class SideBar extends Component {
                     </Link>
                     <Link to={RoutePath.PRODUCT} className="list-group-item list-group-item-action py-3 lh-tight">
                         <img alt='product-icon' src='/icon/product.gif' width={40} />
-                        <strong className="mb-1">Product management</strong>
+                        <strong className="mb-1">Book management</strong>
                     </Link>
                     <Link to={RoutePath.CATEGORIES} className="list-group-item list-group-item-action py-3 lh-tight">
                         <img alt='categories-icon' src='/icon/category.gif' width={40} />

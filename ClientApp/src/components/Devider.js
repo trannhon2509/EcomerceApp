@@ -15,7 +15,7 @@ class Divider extends Component {
                             <div className="sec-title-shape mb-4">
                                 <img src="/img/title-shape.svg" alt='' />
                             </div>
-                            <p>{content}</p>
+                            <p style={{ color: '#FFFBF9 !important' }}>{content}</p>
                         </div>
                     </div>
                 </div>

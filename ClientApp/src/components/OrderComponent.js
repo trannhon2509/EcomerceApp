@@ -154,10 +154,10 @@ const OrderComponent = () => {
                         <tbody>
                             {orderDetails.map(orderDetail => (
                                 <tr key={orderDetail.id}>
-                                    <td>{orderDetail.Product && detail.Product.Name}</td>
+                                    <td>{orderDetail.Product}</td>
                                     <td>{orderDetail.Quantity}</td>
                                     <td>{orderDetail.UnitPrice}</td>
-                                    <td>{orderDetail.Quantity * detail.UnitPrice}</td>
+                                    <td>{orderDetail.Quantity * orderDetail.UnitPrice}</td>
                                 </tr>
                             ))}
                         </tbody>

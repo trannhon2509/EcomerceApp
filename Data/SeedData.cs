@@ -16,425 +16,158 @@ namespace EcomerceApp.Data
                 context.AddRange(
                     new ProductCategory
                     {
-                        Name = "Sáp thơm",
+                        Name = "Tiểu thuyết",
                         Products = new List<Product>{
                             new Product{
-                                Name = "Amber Mun",
-                                Description = "Sáp thơm hoa trà nước hoa là một hòa quyện tinh tế giữa hương thơm dịu dàng của hoa trà và sự tinh tế của sáp thơm. Mỗi viên sáp đều chứa đựng một cảm xúc, một hình ảnh hoa trà nở rộ trong ánh nắng chiều, lan tỏa một hương thơm thanh khiết, dịu dàng và quyến rũ.\r\nKhi bạn cháy sáp, từng giọt hương thơm nhẹ nhàng lan tỏa, lấp đầy không gian với một bản hòa âm dịu dàng, mang lại cảm giác thư thái, êm dịu và lạc quan. Hương thơm của hoa trà nước hoa không chỉ là sự kết hợp hoàn hảo giữa sự tươi mới của hoa và đất, mà còn là một lời tri ân đến vẻ đẹp tự nhiên và sự tinh tế của cuộc sống.\r\n",
+                                Name = "Người Mẹ Nữa",
+                                Description = "Một câu chuyện cảm động về tình mẹ và khát vọng sống của con người, đặc biệt là trong bối cảnh cuộc sống khó khăn và thăng trầm của nền văn minh Việt Nam.\r\n\r\n",
                                 Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
                                 Price = 30000,
                                 Quantity = GenerateRandomQuantity(random),
                                 ProductImages = new List<ProductImage>{
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/GRWuC6K.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/OIP.3iKO1ZCao8KpG1s7I772VgAAAA?w=118&h=180&c=7&r=0&o=5&pid=1.7"
                                     },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/9kK4JLF.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/mh8t0K2.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/BOVg2DY.jpg"
-                                    },
-
+                                    new ProductImage
+                                    {
+                                        ImageUrl = "https://readvii.com/wp-content/uploads/2019/12/sach-nguoi-me-macxim-gorki.png"
+                                    }
                                 }
                             },
                             new Product{
-                                Name = "Freesia",
-                                Description = "Sáp thơm hoa trà nước hoa là một hòa quyện tinh tế giữa hương thơm dịu dàng của hoa trà và sự tinh tế của sáp thơm. Mỗi viên sáp đều chứa đựng một cảm xúc, một hình ảnh hoa trà nở rộ trong ánh nắng chiều, lan tỏa một hương thơm thanh khiết, dịu dàng và quyến rũ.\r\nKhi bạn cháy sáp, từng giọt hương thơm nhẹ nhàng lan tỏa, lấp đầy không gian với một bản hòa âm dịu dàng, mang lại cảm giác thư thái, êm dịu và lạc quan. Hương thơm của hoa trà nước hoa không chỉ là sự kết hợp hoàn hảo giữa sự tươi mới của hoa và đất, mà còn là một lời tri ân đến vẻ đẹp tự nhiên và sự tinh tế của cuộc sống.\r\n",
+                                Name = "Harry Potter",
+                                Description = "Một series tiểu thuyết phù hợp cho mọi lứa tuổi, mô tả cuộc phiêu lưu kỳ diệu của cậu bé phù thủy Harry Potter và những người bạn ở trường phù thủy Hogwarts.",
                                 Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
                                 Price = 30000,
                                 Quantity = GenerateRandomQuantity(random),
                                 ProductImages = new List<ProductImage>{
                                      new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/Z3UAEDs.jpg"
+                                        ImageUrl = "https://cf.shopee.vn/file/3397d071b86255239050c387d1b339cc"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/9kK4JLF.jpg"
+                                        ImageUrl = "https://cf.shopee.vn/file/acb8281a39116b198902251875e12219"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/mh8t0K2.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/BOVg2DY.jpg"
-                                    },
-
-
+                                        ImageUrl = "https://cf.shopee.vn/file/daeff47a76a76f4c6cc70b2aed573687"
+                                    }
                                 }
                             },
                             new Product{
-                                Name = "Gardenia",
-                                Description = "Sáp thơm hoa trà nước hoa là một hòa quyện tinh tế giữa hương thơm dịu dàng của hoa trà và sự tinh tế của sáp thơm. Mỗi viên sáp đều chứa đựng một cảm xúc, một hình ảnh hoa trà nở rộ trong ánh nắng chiều, lan tỏa một hương thơm thanh khiết, dịu dàng và quyến rũ.\r\nKhi bạn cháy sáp, từng giọt hương thơm nhẹ nhàng lan tỏa, lấp đầy không gian với một bản hòa âm dịu dàng, mang lại cảm giác thư thái, êm dịu và lạc quan. Hương thơm của hoa trà nước hoa không chỉ là sự kết hợp hoàn hảo giữa sự tươi mới của hoa và đất, mà còn là một lời tri ân đến vẻ đẹp tự nhiên và sự tinh tế của cuộc sống.\r\n",
+                                Name = "Bố Già",
+                                Description = "Một tác phẩm kinh điển về mafia, tập trung vào gia đình Corleone và cuộc đấu tranh vì quyền lực trong thế giới ngầm ở Mỹ.",
                                 Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
                                 Price = 30000,
                                 Quantity = GenerateRandomQuantity(random),
                                 ProductImages = new List<ProductImage>{
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/fEIHxYO.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/OIP.nhxShjKglVGhHHR166Cr5QHaKX?rs=1&pid=ImgDetMain"
                                     },
                                      new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/9kK4JLF.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/R.af2573e7c144b6face0b3996d5e2ea3e?rik=Cc5KpFl1tJeStQ&pid=ImgRaw&r=0"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/mh8t0K2.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/BOVg2DY.jpg"
-                                    },
+                                        ImageUrl = "https://dungplus.com/wp-content/uploads/2020/08/review-sach-bo-gia-1.jpg"
+                                    }
 
                                 }
                             },
-                            new Product{
-                                Name = "Bluebell",
-                                Description = "Sáp thơm hoa trà nước hoa là một hòa quyện tinh tế giữa hương thơm dịu dàng của hoa trà và sự tinh tế của sáp thơm. Mỗi viên sáp đều chứa đựng một cảm xúc, một hình ảnh hoa trà nở rộ trong ánh nắng chiều, lan tỏa một hương thơm thanh khiết, dịu dàng và quyến rũ.\r\nKhi bạn cháy sáp, từng giọt hương thơm nhẹ nhàng lan tỏa, lấp đầy không gian với một bản hòa âm dịu dàng, mang lại cảm giác thư thái, êm dịu và lạc quan. Hương thơm của hoa trà nước hoa không chỉ là sự kết hợp hoàn hảo giữa sự tươi mới của hoa và đất, mà còn là một lời tri ân đến vẻ đẹp tự nhiên và sự tinh tế của cuộc sống.\r\n",
-                                Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
-                                Price = 30000,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/5S7gG0U.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/9kK4JLF.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/mh8t0K2.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/BOVg2DY.jpg"
-                                    },
-                                }
-                            },
-                            new Product{
-                                Name = "Trà trắng",
-                                Description = "Sáp thơm hoa trà nước hoa là một hòa quyện tinh tế giữa hương thơm dịu dàng của hoa trà và sự tinh tế của sáp thơm. Mỗi viên sáp đều chứa đựng một cảm xúc, một hình ảnh hoa trà nở rộ trong ánh nắng chiều, lan tỏa một hương thơm thanh khiết, dịu dàng và quyến rũ.\r\nKhi bạn cháy sáp, từng giọt hương thơm nhẹ nhàng lan tỏa, lấp đầy không gian với một bản hòa âm dịu dàng, mang lại cảm giác thư thái, êm dịu và lạc quan. Hương thơm của hoa trà nước hoa không chỉ là sự kết hợp hoàn hảo giữa sự tươi mới của hoa và đất, mà còn là một lời tri ân đến vẻ đẹp tự nhiên và sự tinh tế của cuộc sống.\r\n",
-                                Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
-                                Price = 30000,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/iiM84ej.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/9kK4JLF.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/mh8t0K2.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/BOVg2DY.jpg"
-                                    },
-                                }
-                            }
-
                         }
                     },
                     new ProductCategory
                     {
-                        Name = "Viên Đá Hoa Anh Đào",
+                        Name = "Kinh điển",
                         Products = new List<Product> {
                             new Product{
-                                Name = "Blue Wind Chime",
-                                Description = "Sáp thơm hoa trà nước hoa là một hòa quyện tinh tế giữa hương thơm dịu dàng của hoa trà và sự tinh tế của sáp thơm. Mỗi viên sáp đều chứa đựng một cảm xúc, một hình ảnh hoa trà nở rộ trong ánh nắng chiều, lan tỏa một hương thơm thanh khiết, dịu dàng và quyến rũ.\r\nKhi bạn cháy sáp, từng giọt hương thơm nhẹ nhàng lan tỏa, lấp đầy không gian với một bản hòa âm dịu dàng, mang lại cảm giác thư thái, êm dịu và lạc quan. Hương thơm của hoa trà nước hoa không chỉ là sự kết hợp hoàn hảo giữa sự tươi mới của hoa và đất, mà còn là một lời tri ân đến vẻ đẹp tự nhiên và sự tinh tế của cuộc sống.\r\n",
-                                Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
+                                Name = "Tôi là Legend",
+                                Description = "Một câu chuyện hậu apocalyptic về một người đàn ông cô đơn, ngăn chặn các xác sống muốn tấn công vào an toàn của mình.\r\n",
+                               Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
                                 Price = 30000,
                                 Quantity = GenerateRandomQuantity(random),
                                 ProductImages = new List<ProductImage>{
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/Fg7CRBc.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/OIP.YZzVMunr8TfSIfuDVBzHnQHaL6?rs=1&pid=ImgDetMain"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/mIcnZiG.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/uDcR5PR.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/X3hUMML.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/7xUs09e.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/Dqmmn6J.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/SRfFHcp.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/oNLBchk.jpg"
+                                        ImageUrl = "https://i.pinimg.com/originals/18/85/2f/18852f236f381dfb023e6621017f98ab.jpg"
                                     }
                                 }
                             },
                             new Product{
-                                Name = "White Peach Olong",
-                                Description = "Sáp thơm hoa trà nước hoa là một hòa quyện tinh tế giữa hương thơm dịu dàng của hoa trà và sự tinh tế của sáp thơm. Mỗi viên sáp đều chứa đựng một cảm xúc, một hình ảnh hoa trà nở rộ trong ánh nắng chiều, lan tỏa một hương thơm thanh khiết, dịu dàng và quyến rũ.\r\nKhi bạn cháy sáp, từng giọt hương thơm nhẹ nhàng lan tỏa, lấp đầy không gian với một bản hòa âm dịu dàng, mang lại cảm giác thư thái, êm dịu và lạc quan. Hương thơm của hoa trà nước hoa không chỉ là sự kết hợp hoàn hảo giữa sự tươi mới của hoa và đất, mà còn là một lời tri ân đến vẻ đẹp tự nhiên và sự tinh tế của cuộc sống.\r\n",
+                                Name = "Nhà giả kim",
+                                Description = "Một câu chuyện về sự tìm kiếm ý nghĩa cuộc sống và sức mạnh của niềm tin, dựa trên hành trình của một người phàm muốn biến kim loại thành vàng.\r\n",
                                 Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
                                 Price = 30000,
                                 Quantity = GenerateRandomQuantity(random),
                                 ProductImages = new List<ProductImage>{
                                      new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/JNc7PSk.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/R.d967e8dca9af534546f581019bfc8731?rik=Z2eC5gIsO1oyCA&pid=ImgRaw&r=0"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/mIcnZiG.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/OIP.Nn3PXMNdjVHALiotLIDysQHaHa?rs=1&pid=ImgDetMain"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/uDcR5PR.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/X3hUMML.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/7xUs09e.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/Dqmmn6J.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/SRfFHcp.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/oNLBchk.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/R.1542ce1405c5cc79fc52377ca5bccf7b?rik=xsA0aRGsqN57eA&pid=ImgRaw&r=0"
                                     }
                                 }
                             },
                             new Product{
-                                Name = "British pear & Freesia",
+                                Name = "Thời Gian",
                                 Description = "Sáp thơm hoa trà nước hoa là một hòa quyện tinh tế giữa hương thơm dịu dàng của hoa trà và sự tinh tế của sáp thơm. Mỗi viên sáp đều chứa đựng một cảm xúc, một hình ảnh hoa trà nở rộ trong ánh nắng chiều, lan tỏa một hương thơm thanh khiết, dịu dàng và quyến rũ.\r\nKhi bạn cháy sáp, từng giọt hương thơm nhẹ nhàng lan tỏa, lấp đầy không gian với một bản hòa âm dịu dàng, mang lại cảm giác thư thái, êm dịu và lạc quan. Hương thơm của hoa trà nước hoa không chỉ là sự kết hợp hoàn hảo giữa sự tươi mới của hoa và đất, mà còn là một lời tri ân đến vẻ đẹp tự nhiên và sự tinh tế của cuộc sống.\r\n",
                                 Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
                                 Price = 30000,
                                 Quantity = GenerateRandomQuantity(random),
                                 ProductImages = new List<ProductImage>{
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/J5j9tOo.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/R.ef3f8c965794d31de1c0fe88e8d5a3cf?rik=M2PfX7MoORUcZQ&pid=ImgRaw&r=0"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/mIcnZiG.jpg"
+                                        ImageUrl = "https://thuviensach.vn/img/news/2022/11/larger/12463-thoi-gian-tuoi-dep-t1-1.jpg"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/uDcR5PR.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/X3hUMML.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/7xUs09e.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/Dqmmn6J.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/SRfFHcp.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/oNLBchk.jpg"
+                                        ImageUrl = "https://tusachtiasang.org/wp-content/uploads/2022/05/122-quan-ly-thoi-gian-min.jpg"
                                     }
                                 }
-                            },
-                            new Product{
-                                Name = "Westin White Tea",
-                                Description = "Sáp thơm hoa trà nước hoa là một hòa quyện tinh tế giữa hương thơm dịu dàng của hoa trà và sự tinh tế của sáp thơm. Mỗi viên sáp đều chứa đựng một cảm xúc, một hình ảnh hoa trà nở rộ trong ánh nắng chiều, lan tỏa một hương thơm thanh khiết, dịu dàng và quyến rũ.\r\nKhi bạn cháy sáp, từng giọt hương thơm nhẹ nhàng lan tỏa, lấp đầy không gian với một bản hòa âm dịu dàng, mang lại cảm giác thư thái, êm dịu và lạc quan. Hương thơm của hoa trà nước hoa không chỉ là sự kết hợp hoàn hảo giữa sự tươi mới của hoa và đất, mà còn là một lời tri ân đến vẻ đẹp tự nhiên và sự tinh tế của cuộc sống.\r\n",
-                                Information = "Trọng lượng: 50G.\r\nNguyên liệu: Làm từ tinh dầu thiên nhiên nguyên chất và thạch cao.\r\nThời gian lưu hương: 20-30 ngày.\r\nKích thước hộp: 16.5x10.5cm.\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất.\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\n",
-                                Price = 30000,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/YTSre7C.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/mIcnZiG.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/uDcR5PR.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/X3hUMML.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/7xUs09e.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/Dqmmn6J.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/SRfFHcp.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/oNLBchk.jpg"
-                                    }
-                                }
-                            },
+                            }
                         }
                     },
                     new ProductCategory
                     {
-                        Name = "Nến thơm",
+                        Name = "Kinh tế",
                         Products = new List<Product>
                         {
                             new Product{
-                                Name = "Hộp 4 nến thơm",
+                                Name = "Nghệ thuật chiến lược",
                                 Description = "Nến thơm không chỉ là một nguồn ánh sáng ấm áp mà còn là một phương tiện để tạo không gian thơm dịu và thư giãn. Mỗi chiếc nến mang theo một câu chuyện riêng, từng giọt sáp tan chảy là một khoảnh khắc của hương thơm êm dịu tràn ngập không gian.\r\nHương thơm từ nến thơm có thể đa dạng, từ những hương trái cây tươi mới, đến những hương hoa nồng nàn hay những hương gỗ ấm áp. Khi nến được đốt, hương thơm dịu nhẹ lan tỏa, tạo ra một bản hòa âm đầy quyến rũ cho không gian xung quanh.\r\nNến thơm không chỉ làm cho không gian trở nên ấm áp và lãng mạn hơn, mà còn có thể giúp giảm căng thẳng và lo lắng, tạo ra một môi trường thư giãn và yên bình. Với nến thơm, mỗi không gian trở nên đặc biệt hơn, mỗi khoảnh khắc trở nên đáng nhớ hơn, tạo ra những trải nghiệm tuyệt vời cho mọi người.\r\n",
                                 Information = "Trọng lượng: 30gr/c\r\nNguyên liệu: Sáp đậu nành cao cấp.\r\nKích thước hộp:\r\n+ Hộp 4chiếc: 7x7x4\r\n+ Hộp 1c: 6x6x3\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\nCÔNG DỤNG:\r\n- Nến toả hương thơm ngay cả khi chưa đốt, khử mùi hôi, ẩm mốc trong không gian.\r\n- Nến giải tỏa stress, căng thẳng, mệt mỏi, tăng khả năng tập trung.\r\n- Nến tăng cường kháng khuẩn trong không khí.\r\n",
                                 Price = 30000,
                                 Quantity = GenerateRandomQuantity(random),
                                 ProductImages = new List<ProductImage>{
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/Cks5JSj.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/OIP.gf7rVyWdX3mhFMW36mNJGwAAAA?rs=1&pid=ImgDetMain"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/uVj3Z9q.jpg"
+                                        ImageUrl = "https://th.bing.com/th/id/OIP.DaN_IFDsV6_FG8Z6sm53ZgHaHa?w=800&h=800&rs=1&pid=ImgDetMain"
                                     },
                                 }
                             },
                             new Product{
-                                Name = "Hộp 1 nến thơm",
+                                Name = "Số phận và định mệnh",
                                 Description = "Nến thơm không chỉ là một nguồn ánh sáng ấm áp mà còn là một phương tiện để tạo không gian thơm dịu và thư giãn. Mỗi chiếc nến mang theo một câu chuyện riêng, từng giọt sáp tan chảy là một khoảnh khắc của hương thơm êm dịu tràn ngập không gian.\r\nHương thơm từ nến thơm có thể đa dạng, từ những hương trái cây tươi mới, đến những hương hoa nồng nàn hay những hương gỗ ấm áp. Khi nến được đốt, hương thơm dịu nhẹ lan tỏa, tạo ra một bản hòa âm đầy quyến rũ cho không gian xung quanh.\r\nNến thơm không chỉ làm cho không gian trở nên ấm áp và lãng mạn hơn, mà còn có thể giúp giảm căng thẳng và lo lắng, tạo ra một môi trường thư giãn và yên bình. Với nến thơm, mỗi không gian trở nên đặc biệt hơn, mỗi khoảnh khắc trở nên đáng nhớ hơn, tạo ra những trải nghiệm tuyệt vời cho mọi người.\r\n",
                                 Information = "Trọng lượng: 30gr/c\r\nNguyên liệu: Sáp đậu nành cao cấp.\r\nKích thước hộp:\r\n+ Hộp 4chiếc: 7x7x4\r\n+ Hộp 1c: 6x6x3\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\nCÔNG DỤNG:\r\n- Nến toả hương thơm ngay cả khi chưa đốt, khử mùi hôi, ẩm mốc trong không gian.\r\n- Nến giải tỏa stress, căng thẳng, mệt mỏi, tăng khả năng tập trung.\r\n- Nến tăng cường kháng khuẩn trong không khí.\r\n",
                                 Price = 30000,
                                 Quantity = GenerateRandomQuantity(random),
                                 ProductImages = new List<ProductImage>{
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/7RfPkeO.jpg"
+                                        ImageUrl = "https://salt.tikicdn.com/cache/w1200/media/catalog/product/b/i/bia_quyen-nang-lam-giau--1-.u5505.d20170828.t104451.294189.jpg"
                                     },
                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/yUDeF7Q.jpg"
-                                    },
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/uVj3Z9q.jpg"
+                                        ImageUrl = "https://muasachhay.vn/wp-content/uploads/2021/05/bi-quyet-thanh-cong-cua-napoleon-hill-mua-sach-hay.jpg"
                                     }
                                 }
                             },
-                        }
-                    },
-                    new ProductCategory
-                    {
-                        Name = "Hairclip",
-                        Products = new List<Product>
-                        {
-                             new Product{
-                                Name = "Hairclip 11cm",
-                                Description = "Nến thơm không chỉ là một nguồn ánh sáng ấm áp mà còn là một phương tiện để tạo không gian thơm dịu và thư giãn. Mỗi chiếc nến mang theo một câu chuyện riêng, từng giọt sáp tan chảy là một khoảnh khắc của hương thơm êm dịu tràn ngập không gian.\r\nHương thơm từ nến thơm có thể đa dạng, từ những hương trái cây tươi mới, đến những hương hoa nồng nàn hay những hương gỗ ấm áp. Khi nến được đốt, hương thơm dịu nhẹ lan tỏa, tạo ra một bản hòa âm đầy quyến rũ cho không gian xung quanh.\r\nNến thơm không chỉ làm cho không gian trở nên ấm áp và lãng mạn hơn, mà còn có thể giúp giảm căng thẳng và lo lắng, tạo ra một môi trường thư giãn và yên bình. Với nến thơm, mỗi không gian trở nên đặc biệt hơn, mỗi khoảnh khắc trở nên đáng nhớ hơn, tạo ra những trải nghiệm tuyệt vời cho mọi người.\r\n",
-                                Information = "Trọng lượng: 30gr/c\r\nNguyên liệu: Sáp đậu nành cao cấp.\r\nKích thước hộp:\r\n+ Hộp 4chiếc: 7x7x4\r\n+ Hộp 1c: 6x6x3\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\nCÔNG DỤNG:\r\n- Nến toả hương thơm ngay cả khi chưa đốt, khử mùi hôi, ẩm mốc trong không gian.\r\n- Nến giải tỏa stress, căng thẳng, mệt mỏi, tăng khả năng tập trung.\r\n- Nến tăng cường kháng khuẩn trong không khí.\r\n",
-                                Price = 40000 ,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/ZTisVNI.jpg"
-                                    }
-
-                                }
-                            },
-                             new Product{
-                                Name = "Hairclip 8cm",
-                                Description = "Nến thơm không chỉ là một nguồn ánh sáng ấm áp mà còn là một phương tiện để tạo không gian thơm dịu và thư giãn. Mỗi chiếc nến mang theo một câu chuyện riêng, từng giọt sáp tan chảy là một khoảnh khắc của hương thơm êm dịu tràn ngập không gian.\r\nHương thơm từ nến thơm có thể đa dạng, từ những hương trái cây tươi mới, đến những hương hoa nồng nàn hay những hương gỗ ấm áp. Khi nến được đốt, hương thơm dịu nhẹ lan tỏa, tạo ra một bản hòa âm đầy quyến rũ cho không gian xung quanh.\r\nNến thơm không chỉ làm cho không gian trở nên ấm áp và lãng mạn hơn, mà còn có thể giúp giảm căng thẳng và lo lắng, tạo ra một môi trường thư giãn và yên bình. Với nến thơm, mỗi không gian trở nên đặc biệt hơn, mỗi khoảnh khắc trở nên đáng nhớ hơn, tạo ra những trải nghiệm tuyệt vời cho mọi người.\r\n",
-                                Information = "Trọng lượng: 30gr/c\r\nNguyên liệu: Sáp đậu nành cao cấp.\r\nKích thước hộp:\r\n+ Hộp 4chiếc: 7x7x4\r\n+ Hộp 1c: 6x6x3\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\nCÔNG DỤNG:\r\n- Nến toả hương thơm ngay cả khi chưa đốt, khử mùi hôi, ẩm mốc trong không gian.\r\n- Nến giải tỏa stress, căng thẳng, mệt mỏi, tăng khả năng tập trung.\r\n- Nến tăng cường kháng khuẩn trong không khí.\r\n",
-                                Price = 31000  ,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/L9j1kWJ.jpg"
-                                    }
-                                }
-                            },
-                            new Product{
-                                Name = "Hairclip 7,5cm",
-                                Description = "Nến thơm không chỉ là một nguồn ánh sáng ấm áp mà còn là một phương tiện để tạo không gian thơm dịu và thư giãn. Mỗi chiếc nến mang theo một câu chuyện riêng, từng giọt sáp tan chảy là một khoảnh khắc của hương thơm êm dịu tràn ngập không gian.\r\nHương thơm từ nến thơm có thể đa dạng, từ những hương trái cây tươi mới, đến những hương hoa nồng nàn hay những hương gỗ ấm áp. Khi nến được đốt, hương thơm dịu nhẹ lan tỏa, tạo ra một bản hòa âm đầy quyến rũ cho không gian xung quanh.\r\nNến thơm không chỉ làm cho không gian trở nên ấm áp và lãng mạn hơn, mà còn có thể giúp giảm căng thẳng và lo lắng, tạo ra một môi trường thư giãn và yên bình. Với nến thơm, mỗi không gian trở nên đặc biệt hơn, mỗi khoảnh khắc trở nên đáng nhớ hơn, tạo ra những trải nghiệm tuyệt vời cho mọi người.\r\n",
-                                Information = "Trọng lượng: 30gr/c\r\nNguyên liệu: Sáp đậu nành cao cấp.\r\nKích thước hộp:\r\n+ Hộp 4chiếc: 7x7x4\r\n+ Hộp 1c: 6x6x3\r\nHạn sử dụng: 3 năm kể từ ngày sản xuất\r\nTốc độ tỏa mùi nhanh, bung tỏa hương thơm chỉ trong giây lát\r\nCÔNG DỤNG:\r\n- Nến toả hương thơm ngay cả khi chưa đốt, khử mùi hôi, ẩm mốc trong không gian.\r\n- Nến giải tỏa stress, căng thẳng, mệt mỏi, tăng khả năng tập trung.\r\n- Nến tăng cường kháng khuẩn trong không khí.\r\n",
-                                Price = 28000  ,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/gW6dPAq.jpg"
-                                    }
-                                }
-                            },
-                            new Product{
-                                Name = "Hairclip 8,3cm",
-                                Description = "- Được sử dụng để kẹp tóc, làm phụ kiện và tạo kiểu cho tóc\r\n- Giúp bạn đẹp hơn, nổi bật hơn, phù hợp cho bạn trong nhiều hoạt động\r\n- Giá thành phù hợp để bạn dễ dàng thay đổi phong cách mỗi ngày\r\n- Được làm bằng hợp kim kết hợp các chi tiết đẹp\r\n- Nhỏ gọn, xinh xắn, rất dễ dàng cho việc sử dụng, bảo quan và mang theo mỗi khi di chuyển\r\n",
-                                Information = "- Chất liệu: hợp kim\r\n- Màu sắc:  Như ảnh minh họa\r\n- Style: Hàn Quốc\r\n- Trọng lượng: 20g\r\n- Kích thước: tương ứng ở từng sản phẩm\r\n",
-                               Price = 36000   ,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/UByhNXz.jpg"
-                                    }
-                                }
-                            },
-                        }
-                    },
-                    new ProductCategory
-                    {
-                        Name = "Bandana",
-                        Products = new List<Product>
-                        {
-                            new Product{
-                                Name = "Màu Trắng",
-                                Description = "- Bandana được sử dụng để buộc tóc, làm phụ kiện thời trang\r\n- Giúp bạn đẹp hơn, nổi bật hơn, phù hợp cho bạn trong nhiều hoạt động\r\n- Giá thành phù hợp để bạn dễ dàng thay đổi phong cách mỗi ngày\r\n- Nhỏ gọn, xinh xắn, rất dễ dàng cho việc sử dụng\r\nHướng dẫn giặt và bảo quản :\r\n-Giặt tay nhẹ nhàng \r\n-Phơi tránh ánh nắng trực tiếp. \r\n-Ủi ở nhiệt độ thấp.\r\n",
-                                Information = "- Chất liệu:  Ren\r\n- Màu sắc:  màu kem, hồng, xanh\r\n- Style: Hán Quốc\r\n- Trọng lượng: 15g\r\n- Kích thước: khoảng 90*35cm\r\n",
-                                Price = 35000,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/BdYFOLP.jpg"
-                                    },
-                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/micwz7l.jpg"
-                                    },
-                                      new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/fhLksxI.jpg"
-                                    },
-                                       new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/cpdIfyT.jpg"
-                                    }
-                                }
-                            },
-                            new Product{
-                                Name = "Màu Xanh",
-                                Description = "- Bandana được sử dụng để buộc tóc, làm phụ kiện thời trang\r\n- Giúp bạn đẹp hơn, nổi bật hơn, phù hợp cho bạn trong nhiều hoạt động\r\n- Giá thành phù hợp để bạn dễ dàng thay đổi phong cách mỗi ngày\r\n- Nhỏ gọn, xinh xắn, rất dễ dàng cho việc sử dụng\r\nHướng dẫn giặt và bảo quản :\r\n-Giặt tay nhẹ nhàng \r\n-Phơi tránh ánh nắng trực tiếp. \r\n-Ủi ở nhiệt độ thấp.\r\n",
-                                Information = "- Chất liệu:  Ren\r\n- Màu sắc:  màu kem, hồng, xanh\r\n- Style: Hán Quốc\r\n- Trọng lượng: 15g\r\n- Kích thước: khoảng 90*35cm\r\n",
-                                Price = 35000,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/2vDAX9R.jpg"
-                                    },
-                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/micwz7l.jpg"
-                                    },
-                                      new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/fhLksxI.jpg"
-                                    },
-                                       new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/cpdIfyT.jpg"
-                                    }
-                                }
-                            },
-                            new Product{
-                                Name = "Màu Hồng",
-                                Description = "- Bandana được sử dụng để buộc tóc, làm phụ kiện thời trang\r\n- Giúp bạn đẹp hơn, nổi bật hơn, phù hợp cho bạn trong nhiều hoạt động\r\n- Giá thành phù hợp để bạn dễ dàng thay đổi phong cách mỗi ngày\r\n- Nhỏ gọn, xinh xắn, rất dễ dàng cho việc sử dụng\r\nHướng dẫn giặt và bảo quản :\r\n-Giặt tay nhẹ nhàng \r\n-Phơi tránh ánh nắng trực tiếp. \r\n-Ủi ở nhiệt độ thấp.\r\n",
-                                Information = "- Chất liệu:  Ren\r\n- Màu sắc:  màu kem, hồng, xanh\r\n- Style: Hán Quốc\r\n- Trọng lượng: 15g\r\n- Kích thước: khoảng 90*35cm\r\n",
-                                Price = 35000,
-                                Quantity = GenerateRandomQuantity(random),
-                                ProductImages = new List<ProductImage>{
-                                    new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/275NVVJ.jpg"
-                                    },
-                                     new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/micwz7l.jpg"
-                                    },
-                                      new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/fhLksxI.jpg"
-                                    },
-                                       new ProductImage{
-                                        ImageUrl = "https://i.imgur.com/cpdIfyT.jpg"
-                                    }
-                                }
-                            },
-
                         }
                     }
+             
                 );
                 try
                 {

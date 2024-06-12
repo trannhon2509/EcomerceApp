@@ -28,22 +28,22 @@ const HeroComponent = () => {
                             <div className="banner-text">
                                 <h1 className="h1-title">
                                     Welcome to <br />
-                                    <span className='' style={{
-                                        color: "#9D6330"
-                                    }} >{text}<Cursor /></span>
+                                    {/* <span className='' style={{
+                                        color: "#3E00EF"
+                                    }} >{text}<Cursor /></span> */}
                                     {'\n'}
                                 </h1>
                                 <p><span className="cursor-span">
-                                    <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>Discover the Art of Fragrance</span>
+                                    <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>BookStore create by TranDuyNguyenNhon</span>
                                 </span><br />
-                                    Chào mừng bạn đến với ReVibe Co, nơi bạn sẽ tìm thấy những sản phẩm nến thơm và phụ kiện quà tặng tinh tế nhất.<br />
-                                    Mỗi sản phẩm của chúng tôi không chỉ mang lại hương thơm dễ chịu mà còn góp phần trang trí không gian sống của bạn trở nên ấm áp và sang trọng.</p>
+                                    Chào mừng bạn đến với BookStore, nơi bạn có thể đọc được những cuốn sách hay và lấy thêm kiến thức<br />
+                                    Trải nghiệm - Kinh nghiệm - Kiến thức.</p>
                                 <div className="banner-btn mt-4">
                                     <Link to={'https://localhost:44412/productpage'} className="sec-btn fw-bold">Check our Product</Link>
                                 </div>
                             </div>
 
-                            <div className="banner-text d-flex justify-content-between mt-5" style={{
+                            {/* <div className="banner-text d-flex justify-content-between mt-5" style={{
                                 paddingTop: '60px'
                             }}>
                                 <div className='row'>
@@ -74,7 +74,7 @@ const HeroComponent = () => {
                                         <a href='https://www.facebook.com/ReVibe.Co.VN' target='https://www.facebook.com/ReVibe.Co.VN' className='text-nowrap text-black'>revibe_co_vn</a>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="col-lg-6">
                             {/* <div className="banner-img-wp">

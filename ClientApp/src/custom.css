@@ -111,7 +111,7 @@ ul {
 .main-navigation .menu li a:hover,
 .main-navigation .menu li .active-menu,
 .main-navigation .menu .sub-menu li .active-sub-menu {
-    color: #9D6330;
+    color: #3E00EF;
     background: #f3f3f5;
     box-shadow: inset 8px 8px 12px #e2e2e2, inset -8px -8px 12px #ffffff;
 }
@@ -651,7 +651,7 @@ p {
 }
 
 .sec-btn-custom {
-    background: #9D6330;
+    background: #3E00EF;
     box-shadow: 9px 9px 12px #b2b2b3, #ffffff;
     display: inline-flex;
     justify-content: center;

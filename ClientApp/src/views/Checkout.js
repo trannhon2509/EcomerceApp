@@ -32,7 +32,7 @@ function Checkout() {
   }, []);
 
   const handleSubmit = (event) => {
-    // Prevent the default form submission behavior
+      // Prevent the default form submission behavior
     event.preventDefault();
 
     // Retrieve form field values
@@ -108,14 +108,14 @@ function Checkout() {
   const calculateTotalAfterDiscount = () => {
     let total = calculateTotal();
     if (discount != 0) {
-      total = (total * discount.discountAmount) / 100;
+      total = total-((total * discount.discountAmount) / 100);
     }
     return total;
   };
 
 
   // Function to handle checkout
-  const handleCheckout = async (name, disID, noteText) => {
+  const handleCheckout = async (name, disID, noteText, amount) => {
 
     if (disID == undefined) {
       disID = '';
@@ -123,11 +123,13 @@ function Checkout() {
     if (noteText == undefined) {
       noteText = '';
     }
-    try {
-      const response = await axios.post(`https://localhost:44412/api/shop/checkout?username=${name}&couponId=${disID}&note=${noteText}`);
+      try {
+        const response = await axios.post(`https://localhost:44412/api/shop/checkout?username=${name}&couponId=${disID}&note=${noteText}&amount=${amount}`);
 
-      // Chuyển hướng đến trang cảm ơn sau khi thanh toán thành công
-      window.location.href = RoutePath.QRCODE;
+        // Chuyển hướng đến trang cảm ơn sau khi thanh toán thành công
+        const totalPrice = calculateTotalAfterDiscount(); // Get total price
+          const redirectUrl = `${RoutePath.QRCODE.replace(":total", totalPrice)}`;
+        window.location.href = redirectUrl;
     } catch (error) {
       console.error('Error during checkout:', error);
       // Hiển thị thông báo lỗi cho người dùng nếu có lỗi trong quá trình thanh toán
@@ -387,7 +389,7 @@ function Checkout() {
             </div>
             <div className="col">
               <div className="text-end mt-2 mt-sm-0">
-                <button className="btn btn-success" onClick={() => handleCheckout(userData.name, discount.id, noteText)}>
+                              <button className="btn btn-success" onClick={() => handleCheckout(userData.name, discount.id, noteText, calculateTotalAfterDiscount)}>
                   <i className="mdi mdi-cart-outline me-1" /> Tiến hành thanh toán </button>
               </div>
             </div>

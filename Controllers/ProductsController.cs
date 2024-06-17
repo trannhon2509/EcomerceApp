@@ -349,11 +349,28 @@ namespace EcomerceApp.Controllers
                 return NotFound();
             }
 
+            // Convert boolean status to match your desired representation (true for Active, false for Inactive)
             product.Status = status;
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
+
 
 
         private bool ProductExists(int id)

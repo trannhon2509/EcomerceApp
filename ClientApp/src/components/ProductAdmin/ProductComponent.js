@@ -4,7 +4,8 @@ import ReactPaginate from 'react-paginate';
 import { fetchProducts, deleteProduct, updateProductStatus, saveProduct } from '../../redux/actions/productActions';
 import authService from '../api-authorization/AuthorizeService';
 import ProductRow from './ProductRow';
-import ProductModal from './ProductModal';
+import AddProductModal from './AddProductModal';
+import EditProductModal from './EditProductModal';
 import { Button } from 'react-bootstrap';
 
 class ProductComponent extends Component {
@@ -13,13 +14,14 @@ class ProductComponent extends Component {
         this.state = {
             currentPage: 0,
             pageSize: 6,
-            showModal: false,
+            showAddModal: false,
+            showEditModal: false,
             currentProduct: null
         };
     }
 
     componentDidMount() {
-        this.fetchProducts(1);
+        this.populateProductData();
     }
 
     async populateProductData() {
@@ -40,22 +42,35 @@ class ProductComponent extends Component {
         });
     };
 
-    handleShowModal = (product = null) => {
-        this.setState({ showModal: true, currentProduct: product });
+    handleShowAddModal = () => {
+        this.setState({ showAddModal: true });
     };
 
-    handleHideModal = () => {
-        this.setState({ showModal: false, currentProduct: null });
+    handleShowEditModal = (product) => {
+        this.setState({ showEditModal: true, currentProduct: product });
+    };
+
+    handleHideAddModal = () => {
+        this.setState({ showAddModal: false });
+    };
+
+    handleHideEditModal = () => {
+        this.setState({ showEditModal: false, currentProduct: null });
     };
 
     handleSaveProduct = (product) => {
         this.props.saveProduct(product);
-        this.handleHideModal();
+        this.handleHideAddModal();
+    };
+
+    handleUpdateProduct = (product) => {
+        this.props.saveProduct(product);
+        this.handleHideEditModal();
     };
 
     render() {
         const { loading, loadingUpdate, products, error, totalPages, deleteProduct, updateProductStatus } = this.props;
-        const { showModal, currentProduct } = this.state;
+        const { showAddModal, showEditModal, currentProduct } = this.state;
 
         let contents = loading
             ? <p style={{ height: '600px' }}><em>Loading...</em></p>
@@ -83,7 +98,7 @@ class ProductComponent extends Component {
                                     onDelete={deleteProduct}
                                     onUpdateStatus={updateProductStatus}
                                     loadingUpdate={loadingUpdate}
-                                    onEdit={() => this.handleShowModal(product)}
+                                    onEdit={() => this.handleShowEditModal(product)}
                                     status={product.status ? 'Inactive' : 'Active'}
                                 />
                             )}
@@ -95,7 +110,7 @@ class ProductComponent extends Component {
             <div>
                 <h1 id="tableLabel">Product List</h1>
                 <p>This component demonstrates fetching product data from the server.</p>
-                <Button variant="primary" onClick={() => this.handleShowModal()}>Add Product</Button>
+                <Button variant="primary" onClick={this.handleShowAddModal}>Add Product</Button>
                 {contents}
                 <ReactPaginate
                     previousLabel={'previous'}
@@ -110,10 +125,15 @@ class ProductComponent extends Component {
                     subContainerClassName={'pages pagination'}
                     activeClassName={'active'}
                 />
-                <ProductModal
-                    show={showModal}
-                    onHide={this.handleHideModal}
+                <AddProductModal
+                    show={showAddModal}
+                    onHide={this.handleHideAddModal}
                     onSave={this.handleSaveProduct}
+                />
+                <EditProductModal
+                    show={showEditModal}
+                    onHide={this.handleHideEditModal}
+                    onSave={this.handleUpdateProduct}
                     product={currentProduct}
                 />
             </div>

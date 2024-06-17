@@ -1,11 +1,17 @@
 ﻿import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
 
-const ProductRow = ({ product, onDelete, onEdit, loadingDelete, status }) => {
+const ProductRow = ({ product, onDelete, onEdit, loadingDelete, onUpdateStatus, loadingUpdate, status }) => {
     const { id, name, description, price, productCategoryName, comments, images } = product;
     const [showImageList, setShowImageList] = useState(false);
 
     const toggleImageList = () => {
         setShowImageList(prevState => !prevState);
+    };
+
+    const handleStatusUpdate = () => {
+        const newStatus = !product.status; // Đảo ngược trạng thái hiện tại (true -> false, false -> true)
+        onUpdateStatus(product.id, newStatus);
     };
 
     return (
@@ -49,19 +55,17 @@ const ProductRow = ({ product, onDelete, onEdit, loadingDelete, status }) => {
             </td>
             <td>{status ? 'Active' : 'Inactive'}</td>
             <td>
-                <button
-                    onClick={() => onDelete(id)}
-                    disabled={loadingDelete}
-                    className="btn btn-danger"
+                <Button variant="warning" onClick={() => onEdit(product)}>Edit</Button>
+                {' '}
+                <Button variant="danger" onClick={() => onDelete(product.id)}>Delete</Button>
+                {' '}
+                <Button
+                    variant={product.status ? 'danger' : 'success'} // Màu sắc button tùy thuộc vào trạng thái
+                    onClick={handleStatusUpdate}
+                    disabled={loadingUpdate}
                 >
-                    Delete
-                </button>
-                <button
-                    onClick={() => onEdit(product)} // Pass the product object to onEdit
-                    className="btn btn-primary"
-                >
-                    Edit
-                </button>
+                    {product.status ? 'Deactivate' : 'Activate'}
+                </Button>
             </td>
         </tr>
     );

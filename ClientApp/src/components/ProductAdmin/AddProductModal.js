@@ -1,30 +1,15 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const ProductModal = ({ show, onHide, onSave, product }) => {
+const AddProductModal = ({ show, onHide, onSave }) => {
     const [formData, setFormData] = useState({
-        id: product ? product.id : '',
-        name: product ? product.name : '',
-        description: product ? product.description : '',
-        price: product ? product.price : '',
-        productCategoryName: product ? product.productCategoryName : '',
-        status: product ? product.status : false,
-        images: product ? product.images.map(image => image.imageUrl).join(',') : '' // join images into a string
+        name: '',
+        description: '',
+        price: '',
+        productCategoryName: '',
+        status: false,
+        images: ''
     });
-
-    useEffect(() => {
-        if (product) {
-            setFormData({
-                id: product.id,
-                name: product.name,
-                description: product.description,
-                price: product.price,
-                productCategoryName: product.productCategoryName,
-                status: product.status,
-                images: product.images.map(image => image.imageUrl).join(',') // join images into a string
-            });
-        }
-    }, [product]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -35,18 +20,18 @@ const ProductModal = ({ show, onHide, onSave, product }) => {
     };
 
     const handleSave = () => {
-        const updatedProduct = {
+        const newProduct = {
             ...formData,
-            images: formData.images.split(',') // convert images back to an array
+            images: formData.images.split(',') // convert images to an array
         };
-        onSave(updatedProduct);
+        onSave(newProduct);
         onHide();
     };
 
     return (
         <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
-                <Modal.Title>{product ? 'Edit Product' : 'Add Product'}</Modal.Title>
+                <Modal.Title>Add Product</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
@@ -114,4 +99,4 @@ const ProductModal = ({ show, onHide, onSave, product }) => {
     );
 };
 
-export default ProductModal;
+export default AddProductModal;

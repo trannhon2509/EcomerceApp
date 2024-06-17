@@ -1,4 +1,4 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 import { toast } from 'react-toastify';
 import {
     FETCH_PRODUCTS_REQUEST,
@@ -50,32 +50,34 @@ export const deleteProduct = (productId) => async dispatch => {
     }
 };
 
-export const updateProductStatus = (productId, status) => async dispatch => {
-    dispatch({ type: 'UPDATE_PRODUCT_STATUS_REQUEST' });
-
+export const updateProductStatus = (productId, newStatus) => async dispatch => {
     try {
-        await axios.patch(`/api/products/${productId}/status`, { status });
+        const response = await axios.patch(`/api/products/${productId}/status`, { status: newStatus });
         dispatch({
             type: UPDATE_PRODUCT_STATUS_SUCCESS,
-            payload: { productId, status }
+            payload: { productId, status: newStatus }
         });
+        // Có thể thực hiện các thao tác khác sau khi cập nhật thành công
     } catch (error) {
         dispatch({
             type: UPDATE_PRODUCT_STATUS_FAILURE,
             payload: error.message
         });
+        // Xử lý khi gặp lỗi trong quá trình cập nhật
     }
 };
 
 export const saveProduct = (product, token) => async (dispatch) => {
     try {
         console.log("Sending product data:", product);
-        const response = await axios.post('/api/products', product, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        let response;
+        if (product.id) {
+            // Updating existing product
+            response = await axios.put(`/api/products/${product.id}`, product);
+        } else {
+            // Adding new product
+            response = await axios.post(`/api/products`, product);
+        }
         console.log("Response data:", response.data);
         dispatch({ type: SAVE_PRODUCT_SUCCESS, payload: response.data });
         toast.success('Product saved successfully!');

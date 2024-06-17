@@ -1,174 +1,193 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Table, Button, Modal, DropdownButton, Dropdown } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
-import authService from './api-authorization/AuthorizeService';
 
-const OrderComponent = () => {
-    const [orders, setOrders] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
-    const [selectedOrder, setSelectedOrder] = useState(null);
-    const [showDetailsModal, setShowDetailsModal] = useState(false);
-    const [orderDetails, setOrderDetails] = useState([]);
-    const [isAdmin, setIsAdmin] = useState(false);
+function OrderComponent() {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [orderBy, setOrderBy] = useState('OrderDate');
+  const [descending, setDescending] = useState(false);
 
-    useEffect(() => {
-        checkAdminRole();
-    }, [currentPage]);
+  const ordersPerPage = 10; // số đơn hàng trên mỗi trang
 
-    useEffect(() => {
-        if (isAdmin) {
-            fetchOrders();
-        }
-    }, [isAdmin, currentPage]);
-
+  useEffect(() => {
     const fetchOrders = async () => {
-        try {
-            const token = await authService.getAccessToken();
-            const response = await axios.get('/api/Orders', {
-                params: {
-                    page: currentPage + 1,
-                    pageSize: 10
-                },
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setOrders(response.data.results);
-            setTotalPages(response.data.totalPages);
-            console.log(typeof response.data.results.coupon)
-        } catch (error) {
-            console.error('Error fetching orders:', error);
-        }
+      try {
+        const response = await axios.get('/api/orders', {
+          params: {
+            page: currentPage + 1,
+            pageSize: ordersPerPage,
+            orderBy: orderBy,
+            descending: descending
+          }
+        });
+        setOrders(response.data.results);
+        setTotalPages(response.data.totalPages);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const checkAdminRole = async () => {
-        try {
-            const isAdmin = await authService.isinRole('Admin');
-            setIsAdmin(isAdmin);
-            if (!isAdmin) {
-                window.location.href = '/Identity/Account/AccessDenied';
-            }
-        } catch (error) {
-            console.error('Error checking admin role:', error);
-        }
-    };
+    fetchOrders();
+  }, [currentPage, orderBy, descending]);
 
-    const handlePageClick = (data) => {
-        const selectedPage = data.selected;
-        setCurrentPage(selectedPage);
-    };
+  const handleShowModal = (order) => {
+    setSelectedOrder(order);
+    setShowModal(true);
+  };
 
-    const handleShowDetails = async (order) => {
-        try {
-            const token = await authService.getAccessToken();
-            const response = await axios.get(`/api/Orders/${order.id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setSelectedOrder(response.data);
-            setOrderDetails(response.data.OrderDetails);
-            setShowDetailsModal(true);
-            console.log(response.data.OrderDetails)
-        } catch (error) {
-            console.error('Error fetching order details:', error);
-        }
-    };
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
-    const handleCloseDetailsModal = () => {
-        setSelectedOrder(null);
-        setOrderDetails([]);
-        setShowDetailsModal(false);
-    };
+  const calculateTotalAmount = (orderDetails) => {
+    return orderDetails.reduce((total, detail) => total + detail.quantity * detail.unitPrice, 0);
+  };
 
-    return (
-        <div>
-            <h2>Orders</h2>
-            <table className="table">
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
+
+  const handleSortChange = (sortBy) => {
+    if (sortBy === orderBy) {
+      setDescending(!descending);
+    } else {
+      setOrderBy(sortBy);
+      setDescending(false); // Default to ascending when changing sort criteria
+    }
+    setCurrentPage(0); // Reset to the first page when changing sorting criteria
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return (
+    <div>
+      <h1>Orders</h1>
+
+      <div className="sort-options d-flex gap-2 mb-2">
+        <DropdownButton id="dropdown-basic-button" title={`Sort by ${orderBy}`}>
+          <Dropdown.Item onClick={() => handleSortChange('OrderDate')}>Order Date</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleSortChange('Status')}>Status</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleSortChange('Username')}>Username</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleSortChange('CouponCode')}>Coupon Code</Dropdown.Item>
+        </DropdownButton>
+
+        <DropdownButton id="dropdown-basic-button" title={`Order ${descending ? 'Descending' : 'Ascending'}`}>
+          <Dropdown.Item onClick={() => setDescending(false)}>Ascending</Dropdown.Item>
+          <Dropdown.Item onClick={() => setDescending(true)}>Descending</Dropdown.Item>
+        </DropdownButton>
+      </div>
+
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>User</th>
+            <th>Coupon</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map(order => (
+            <tr key={order.id}>
+              <td>{order.id}</td>
+              <td>{new Date(order.orderDate).toLocaleDateString()}</td>
+              <td>{order.status}</td>
+              <td>{order.user ? order.user.userName : 'N/A'}</td>
+              <td>{order.coupon ? order.coupon.code : 'N/A'}</td>
+              <td>
+                <Button variant="info" onClick={() => handleShowModal(order)}>
+                  Order Details
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+
+      <ReactPaginate
+        previousLabel={"Previous"}
+        nextLabel={"Next"}
+        breakLabel={"..."}
+        breakClassName={"break-me"}
+        pageCount={totalPages}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageClick}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+        pageClassName="page-item"
+        pageLinkClassName="page-link"
+        previousClassName="page-item"
+        previousLinkClassName="page-link"
+        nextClassName="page-item"
+        nextLinkClassName="page-link"
+        breakLinkClassName="page-link"
+      />
+
+      <Modal show={showModal} onHide={handleCloseModal} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Order Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedOrder && (
+            <div>
+              <h4>Order ID: {selectedOrder.id}</h4>
+              <p>Order Date: {new Date(selectedOrder.orderDate).toLocaleDateString()}</p>
+              <p>Status: {selectedOrder.status}</p>
+              <p>User: {selectedOrder.user ? selectedOrder.user.userName : 'N/A'}</p>
+              <p>Coupon: {selectedOrder.coupon ? selectedOrder.coupon.code : 'N/A'}</p>
+              <h5>Order Details:</h5>
+              <Table striped bordered hover>
                 <thead>
-                    <tr>
-                        <th>UserName</th>
-                        <th>OrderDate</th>
-                        <th>CouponCode</th>
-                        <th>Note</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
+                  <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                  </tr>
                 </thead>
                 <tbody>
-                    {orders.map (order =>  (
-                        <tr key={order.id}>
-                            <td>{order.user.userName}</td>
-                            <td>{order.orderDate}</td>
-                            <td>CouponCode dang test</td>
-                            {/*<td>{order.coupon.code}</td>*/}
-                            <td style={{
-                                maxWidth: '200px',
-                                overflowWrap: 'break-word'
-                            }}>{order.note && order.note.length > 100 ? order.note.slice(0, 50) + '...' : order.note}</td>
-                            <td>{order.status}</td>
-                            <td>
-                                <Button color="info" onClick={() => handleShowDetails(order)}>Show Details</Button>
-                            </td>
-                        </tr>
-                    ))}
+                  {selectedOrder.orderDetails.map(detail => (
+                    <tr key={detail.id}>
+                      <td>{detail.product.id}</td>
+                      <td>{detail.product.name}</td>
+                      <td>{detail.quantity}</td>
+                      <td>{detail.unitPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+                      <td>{(detail.quantity * detail.unitPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+                    </tr>
+                  ))}
                 </tbody>
-            </table>
-            <ReactPaginate
-                pageCount={totalPages}
-                onPageChange={handlePageClick}
-                containerClassName="pagination"
-                activeClassName="active"
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousClassName="page-item"
-                previousLinkClassName="page-link"
-                nextClassName="page-item"
-                nextLinkClassName="page-link"
-                breakLinkClassName="page-link"
-            />
-
-            {/* Details Modal */}
-            <Modal isOpen={showDetailsModal} toggle={handleCloseDetailsModal}>
-                <ModalHeader toggle={handleCloseDetailsModal}>Order Details</ModalHeader>
-                <ModalBody>
-                    <h4>Order Information:</h4>
-                    <p>User Name: {selectedOrder && selectedOrder.User && selectedOrder.User.UserName}</p>
-                    <p>Order Date: {selectedOrder && selectedOrder.OrderDate}</p>
-                    <p>Coupon Name: {selectedOrder && selectedOrder.Coupon && selectedOrder.Coupon.Code}</p>
-                    <p>Note: {selectedOrder && selectedOrder.note}</p>
-                    <p>Status: {selectedOrder && selectedOrder.Status}</p>
-                    <hr />
-                    <h4>Order Details:</h4>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Quantity</th>
-                                <th>Unit Price</th>
-                                <th>Total Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {orderDetails.map(orderDetail => (
-                                <tr key={orderDetail.id}>
-                                    <td>{orderDetail.Product && detail.Product.Name}</td>
-                                    <td>{orderDetail.Quantity}</td>
-                                    <td>{orderDetail.UnitPrice}</td>
-                                    <td>{orderDetail.Quantity * detail.UnitPrice}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="secondary" onClick={handleCloseDetailsModal}>Close</Button>
-                </ModalFooter>
-            </Modal>
-        </div>
-    );
-};
+              </Table>
+              <p><strong>Total Amount:</strong> {calculateTotalAmount(selectedOrder.orderDetails).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+}
 
 export default OrderComponent;

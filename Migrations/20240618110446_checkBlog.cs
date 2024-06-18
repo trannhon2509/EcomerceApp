@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EcomerceApp.Migrations
 {
     /// <inheritdoc />
-    public partial class Ver2 : Migration
+    public partial class checkBlog : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcomerceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240606152350_Ver2")]
-    partial class Ver2
+    [Migration("20240618110446_checkBlog")]
+    partial class checkBlog
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

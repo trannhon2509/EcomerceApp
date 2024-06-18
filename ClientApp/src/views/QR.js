@@ -17,7 +17,7 @@ const QR = () => {
     const generateQuickLinkUrl = (bankId, accountNo, template, total, description, accountName) => {
         const encodedDescription = encodeURIComponent(description);
         const encodedAccountName = encodeURIComponent(accountName);
-        return `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png?amount=${total}&addInfo=${encodedDescription}&accountName=${encodedAccountName}`;
+        return `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png?amount=${total}&accountName=${encodedAccountName}`;
     };
 
     const quickLinkUrl = generateQuickLinkUrl(bankId, accountNo, template, total, description, accountName);
@@ -29,25 +29,37 @@ const QR = () => {
     };
 
     return (
-        <div className="checkout-container">
-            {!isPaid ? (
-                <div>
-                    <h2>Thông tin thanh toán</h2>
-                    <p>Số tiền cần thanh toán: {total} VNĐ</p>
-                    <p>Mô tả: {description}</p>
-                    <p>Tên tài khoản: {accountName}</p>
-                    <img src={quickLinkUrl} alt="QR Code" />
-                    <button className="btn btn-success" onClick={handlePayment}>
-                        Xác nhận thanh toán
-                    </button>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-8">
+                    <div className="card">
+                        <div className="card-body text-center">
+                            {!isPaid ? (
+                                <div>
+                                    <h2 className="card-title">Thông tin thanh toán</h2>
+                                    <p className="card-text">Số tiền cần thanh toán: {total} VNĐ</p>
+                                    <p className="card-text">Mô tả: {description}</p>
+                                    <p className="card-text">Tên tài khoản: {accountName}</p>
+                                    <img src={quickLinkUrl} className="img-fluid" alt="QR Code" />
+                                </div>
+                            ) : (
+                                <div>
+                                    <h2 className="card-title">Thanh toán thành công!</h2>
+                                    <p className="card-text">Cảm ơn bạn đã thanh toán thành công.</p>
+                                    {/* You can add a button or link here to redirect to another page */}
+                                </div>
+                            )}
+                        </div>
+                        {!isPaid && (
+                            <div className="card-footer d-flex justify-content-center">
+                                <button className="btn btn-success" onClick={handlePayment}>
+                                    Xác nhận thanh toán
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            ) : (
-                <div>
-                    <h2>Thanh toán thành công!</h2>
-                    <p>Cảm ơn bạn đã thanh toán thành công.</p>
-                    {/* You can add a button or link here to redirect to another page */}
-                </div>
-            )}
+            </div>
         </div>
     );
 };

@@ -563,7 +563,7 @@ namespace EcomerceApp.Data
             }
             if (!context.Coupons.Any())
             {
-                const int numberOfCoupons = 100; 
+                const int numberOfCoupons = 5; 
                 for (int i = 0; i < numberOfCoupons; i++)
                 {
                     context.Coupons.Add(new Coupon
@@ -585,7 +585,7 @@ namespace EcomerceApp.Data
             }
             if (!context.Orders.Any())
             {
-                const int numberOfOrders = 200;
+                const int numberOfOrders = 10;
                 var userList = context.Users.Select(user => user.Id).ToList();
                 var couponCount = context.Coupons.Count();
 
@@ -620,7 +620,7 @@ namespace EcomerceApp.Data
             {
                 if (context.Orders.Any() && context.Products.Any())
                 {
-                    const int numberOfOrderDetails = 800; 
+                    const int numberOfOrderDetails = 40; 
                     var orderIds = context.Orders.Select(order => order.Id).ToList();
                     var productIds = context.Products.Select(product => product.Id).ToList();
 

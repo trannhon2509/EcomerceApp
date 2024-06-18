@@ -63,32 +63,41 @@ class Product extends Component {
         const { categories, products } = this.state;
 
         return (
-            <div>
-                <div className="container">
-                    <div className="row">
-                        <div className='d-flex justify-content-center'>
-                            <div className='d-flex'>
-                                {categories.map(category => (
-                                    <p className='btn ' key={category.name} onClick={() => this.handleCategoryClick(category.name)}>
+            <div className="container my-5">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="d-flex justify-content-center mb-4">
+                            <div className="d-flex flex-wrap">
+                                {categories.map((category) => (
+                                    <button
+                                        key={category.name}
+                                        className="btn btn-outline m-2"
+                                        style={{
+                                            borderColor: '#9D6330',
+                                            color: '#9D6330',
+                                        }}
+                                        onClick={() => this.handleCategoryClick(category.name)}
+                                        onMouseEnter={(e) => (e.target.style.backgroundColor = '#9D6330', e.target.style.color = '#fff')}
+                                        onMouseLeave={(e) => (e.target.style.backgroundColor = 'transparent', e.target.style.color = '#9D6330')}
+                                    >
                                         {category.name}
-                                    </p>
+                                    </button>
                                 ))}
                             </div>
-                           
                         </div>
-                        <div className='container my-5'>
-                            <div className="menu-list-row">
-                                <div className="row g-xxl-5 bydefault_show" id="menu-dish">
-                                    {products.map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            name={product.name}
-                                            price={product.price}
-                                            imageUrl={product.images[0].imageUrl}
-                                            productId={product.id}
-                                        />
-                                    ))}
-                                </div>
+                    </div>
+                    <div className='container my-5'>
+                        <div className="menu-list-row">
+                            <div className="row g-xxl-5 bydefault_show" id="menu-dish">
+                                {products.map((product) => (
+                                    <ProductCard
+                                        key={product.id}
+                                        name={product.name}
+                                        price={product.price}
+                                        imageUrl={product.images[0].imageUrl}
+                                        productId={product.id}
+                                    />
+                                ))}
                             </div>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 import axios from "axios";
 import "../assets/css/DashBoard.css"
 import { Bar, Pie } from "react-chartjs-2";
+import authService from './api-authorization/AuthorizeService';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -37,10 +38,21 @@ class DashBoard extends Component {
         uniqueUsersCount: 0,
     };
 
-    componentDidMount() {
-        const { selectedDate, selectedPrevMonthDate } = this.state;
-        this.fetchData(selectedDate, selectedPrevMonthDate);
-        this.fetchSalesStatistics();
+    async componentDidMount() {
+        try {
+            const token = await authService.getAccessToken();
+            const roles = await authService.isinRole('Admin');
+            if (roles) {
+                const { selectedDate, selectedPrevMonthDate } = this.state;
+                this.fetchData(selectedDate, selectedPrevMonthDate);
+                this.fetchSalesStatistics();
+            } else {
+                window.location.href = '/Identity/Account/AccessDenied';
+            }
+        } catch (error) {
+            console.error('Error during authentication or data fetching:', error);
+            // Handle the error appropriately (e.g., show an error message, log out the user, etc.)
+        }
     }
 
     calculateFirstDayOfPreviousMonth() {
@@ -233,7 +245,7 @@ class DashBoard extends Component {
                             </div>
                             <div class="sale-details">
                                 <h3 class="text-red">{this.formatCurrency(totalRevenue*60/100)}</h3>
-                                <p>Code</p>
+                                <p>Cost</p>
                             </div>
                         </div>
                     </div>

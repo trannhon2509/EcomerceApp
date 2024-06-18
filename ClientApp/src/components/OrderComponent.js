@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Button, Modal, DropdownButton, Dropdown } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
+import authService from './api-authorization/AuthorizeService';
 
 function OrderComponent() {
   const [orders, setOrders] = useState([]);
@@ -17,23 +18,29 @@ function OrderComponent() {
   const ordersPerPage = 10; // số đơn hàng trên mỗi trang
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get('/api/orders', {
-          params: {
-            page: currentPage + 1,
-            pageSize: ordersPerPage,
-            orderBy: orderBy,
-            descending: descending
+      const fetchOrders = async () => {
+          const token = await authService.getAccessToken();
+          const roles = await authService.isinRole('Admin');
+          if (roles) {
+              try {
+                  const response = await axios.get('/api/orders', {
+                      params: {
+                          page: currentPage + 1,
+                          pageSize: ordersPerPage,
+                          orderBy: orderBy,
+                          descending: descending
+                      }
+                  });
+                  setOrders(response.data.results);
+                  setTotalPages(response.data.totalPages);
+              } catch (err) {
+                  setError(err.message);
+              } finally {
+                  setLoading(false);
+              }
+          } else {
+              window.location.href = '/Identity/Account/AccessDenied';
           }
-        });
-        setOrders(response.data.results);
-        setTotalPages(response.data.totalPages);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
     };
 
     fetchOrders();

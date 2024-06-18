@@ -59,5 +59,30 @@ namespace EcomerceApp.Controllers
 
             return Ok(productSales);
         }
+
+
+        [HttpGet("GetSalesStatistics")]
+        public IActionResult GetSalesStatistics()
+        {
+            // Calculate total quantity of products sold
+            int totalQuantitySold = _context.OrderDetails.Sum(od => od.Quantity);
+
+            // Calculate total revenue from all orders
+            decimal totalRevenue = _context.OrderDetails.Sum(od => od.Quantity * od.UnitPrice);
+
+            // Count the number of unique users who made orders
+            int uniqueUsersCount = _context.Users.Count();
+
+            var statistics = new
+            {
+                TotalQuantitySold = totalQuantitySold,
+                TotalRevenue = totalRevenue,
+                UniqueUsersCount = uniqueUsersCount
+            };
+
+            return Ok(statistics);
+        }
+
+
     }
 }

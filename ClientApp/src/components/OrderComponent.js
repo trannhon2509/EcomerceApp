@@ -79,7 +79,8 @@ function OrderComponent() {
       <h1>Orders</h1>
 
       <div className="sort-options d-flex gap-2 mb-2">
-        <DropdownButton id="dropdown-basic-button" title={`Sort by ${orderBy}`}>
+              <DropdownButton id="dropdown-basic-button" title={`Sort by ${orderBy}`}>
+                  <Dropdown.Item onClick={() => handleSortChange('Id')}>Id</Dropdown.Item>
           <Dropdown.Item onClick={() => handleSortChange('OrderDate')}>Order Date</Dropdown.Item>
           <Dropdown.Item onClick={() => handleSortChange('Status')}>Status</Dropdown.Item>
           <Dropdown.Item onClick={() => handleSortChange('Username')}>Username</Dropdown.Item>

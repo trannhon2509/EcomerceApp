@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcomerceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Migrations/20240618110446_checkBlog.Designer.cs
-    [Migration("20240618110446_checkBlog")]
-    partial class checkBlog
-========
-    [Migration("20240619022947_Initial")]
-    partial class Initial
->>>>>>>> 781356f8c4940fc36414c60dfd9e0e170abda090:Migrations/20240619022947_Initial.Designer.cs
+    [Migration("20240619084830_LastCode")]
+    partial class LastCode
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

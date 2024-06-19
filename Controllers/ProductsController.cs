@@ -10,6 +10,7 @@ using EcomerceApp.Models;
 using System.Net.NetworkInformation;
 using EcomerceApp.DTOs;
 using EcommerceApp.DTOs;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace EcomerceApp.Controllers
 {
@@ -282,7 +283,7 @@ namespace EcomerceApp.Controllers
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
+        public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductDto createProductDto)
         {
             if (!ModelState.IsValid)
             {
@@ -291,17 +292,23 @@ namespace EcomerceApp.Controllers
 
             try
             {
-                // Thêm sản phẩm vào cơ sở dữ liệu
+                var product = createProductDto.Product;
+                product.ProductImages = createProductDto.Images;
+
+                // Add the product to the database
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
+
+                // Return created response with product information
+                return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
+
+
 
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<object>>> SearchProducts([FromQuery] string query)
@@ -341,7 +348,7 @@ namespace EcomerceApp.Controllers
         }
 
         [HttpPatch("{id}/status")]
-        public async Task<IActionResult> UpdateProductStatus(int id, [FromBody] bool status)
+        public async Task<IActionResult> UpdateProductStatus(int id)
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)
@@ -349,26 +356,10 @@ namespace EcomerceApp.Controllers
                 return NotFound();
             }
 
-            // Convert boolean status to match your desired representation (true for Active, false for Inactive)
-            product.Status = status;
+            product.Status = !product.Status;
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(product);
         }
 
 

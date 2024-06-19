@@ -17,11 +17,11 @@ namespace EcomerceApp.Models
         public int ProductCategoryId { get; set; } // Khóa ngoại đến bảng ProductCategory
         // Quan hệ n-1 với ProductCategory
         [JsonIgnore]
-        public ProductCategory ProductCategory { get; set; }
+        public ProductCategory? ProductCategory { get; set; }
         // Quan hệ 1-n với ProductComment
         public ICollection<ProductComment>? ProductComments { get; set; }
 
         // Quan hệ 1-n với ProductImage
-        public ICollection<ProductImage> ProductImages { get; set; }
+        public ICollection<ProductImage>? ProductImages { get; set; }
     }
 }

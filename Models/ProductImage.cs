@@ -8,6 +8,6 @@ namespace EcomerceApp.Models
         public string ImageUrl { get; set; }
         public int ProductId { get; set; }
         [JsonIgnore]
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
     }
 }

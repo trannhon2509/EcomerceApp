@@ -15,6 +15,7 @@ const ProductCrudComponent = () => {
     });
     const [images, setImages] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [showModalDetail, setShowModalDetail] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -38,6 +39,7 @@ const ProductCrudComponent = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
+        setShowModalDetail(false);
         setSelectedProduct(null); // Clear selected product
         setProduct({
             name: '',
@@ -58,13 +60,13 @@ const ProductCrudComponent = () => {
     };
 
     const handleCloseModalDetails = () => {
-        setShowModal(false);
+        setShowModalDetail(false);
         setSelectedProductDetails(null); // Clear selected product
     };
 
     const handleShowModalDetails = (product) => {
         setSelectedProductDetails(product);
-        setShowModal(true);
+        setShowModalDetail(true);
     };
 
     const handleShowEditModal = (product) => {
@@ -245,7 +247,7 @@ const ProductCrudComponent = () => {
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showModal} onHide={handleCloseModalDetails} size="lg">
+            <Modal show={showModalDetail} onHide={handleCloseModalDetails} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>Product Details</Modal.Title>
                 </Modal.Header>

@@ -17,7 +17,9 @@ const ProductCrudComponent = () => {
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [selectedProduct, setSelectedProduct] = useState(null); // State to store selected product
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedProductDetails, setSelectedProductDetails] = useState(null);// State to store selected product
+    const [modalAction, setModalAction] = useState('Create');
     const pageSize = 10;
 
     useEffect(() => {
@@ -37,10 +39,47 @@ const ProductCrudComponent = () => {
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedProduct(null); // Clear selected product
+        setProduct({
+            name: '',
+            description: '',
+            price: 0,
+            quantity: 1,
+            information: '',
+            status: true,
+            productCategoryId: 1
+        }); // Reset product form fields
+        setImages([]); // Clear images array
+        setModalAction('Create'); // Reset modal action to 'Create'
     };
 
-    const handleShowModal = (product) => {
+    const handleShowCreateModal = () => {
+        setModalAction('Create');
+        setShowModal(true);
+    };
+
+    const handleCloseModalDetails = () => {
+        setShowModal(false);
+        setSelectedProductDetails(null); // Clear selected product
+    };
+
+    const handleShowModalDetails = (product) => {
+        setSelectedProductDetails(product);
+        setShowModal(true);
+    };
+
+    const handleShowEditModal = (product) => {
+        setModalAction('Edit');
         setSelectedProduct(product);
+        setProduct({
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            quantity: product.quantity,
+            information: product.information,
+            status: product.status,
+            productCategoryId: product.productCategoryId
+        });
+        setImages(product.images.map(img => img.imageUrl));
         setShowModal(true);
     };
 
@@ -61,31 +100,167 @@ const ProductCrudComponent = () => {
         }
     };
 
+    const handleEditProduct = async () => {
+        try {
+            const productData = {
+                product,
+                images: images.map(url => ({ imageUrl: url }))
+            };
+
+            const response = await axios.put(`/api/Products/${selectedProduct.id}`, productData);
+            console.log('Product updated:', response.data);
+
+            handleCloseModal();
+            fetchProducts(); // Reload products after edit
+        } catch (error) {
+            console.error('Error updating product:', error);
+        }
+    };
+
+    const handleDeleteProduct = async (productId) => {
+        try {
+            await axios.delete(`/api/Products/${productId}`);
+            fetchProducts(); // Reload products after deletion
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    };
+
+    const handleUpdateProductStatus = async (productId) => {
+        try {
+            await axios.patch(`/api/Products/${productId}/status`);
+            // Update products array after successful status update
+            const updatedProducts = products.map(product => {
+                if (product.id === productId) {
+                    return {
+                        ...product,
+                        status: !product.status // Toggle status
+                    };
+                }
+                return product;
+            });
+            setProducts(updatedProducts); // Update state with updated products array
+        } catch (error) {
+            console.error('Error updating product status:', error);
+        }
+    };
+
+
+
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
     return (
         <div className="container">
-            <Button variant="primary" onClick={() => handleShowModal()}>
+            <Button variant="primary" onClick={handleShowCreateModal}>
                 Create Product
             </Button>
             <Modal show={showModal} onHide={handleCloseModal} size="lg">
                 <Modal.Header closeButton>
+                    <Modal.Title>{modalAction === 'Create' ? 'Create Product' : 'Edit Product'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="productName">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter product name"
+                                value={product.name}
+                                onChange={(e) => setProduct({ ...product, name: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="productDescription">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                placeholder="Enter product description"
+                                value={product.description}
+                                onChange={(e) => setProduct({ ...product, description: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="productPrice">
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="Enter product price"
+                                value={product.price}
+                                onChange={(e) => setProduct({ ...product, price: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="productQuantity">
+                            <Form.Label>Quantity</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="Enter product quantity"
+                                value={product.quantity}
+                                onChange={(e) => setProduct({ ...product, quantity: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="productInformation">
+                            <Form.Label>Information</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                placeholder="Enter product information"
+                                value={product.information}
+                                onChange={(e) => setProduct({ ...product, information: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="productStatus">
+                            <Form.Check
+                                type="switch"
+                                id="productStatusSwitch"
+                                label="Status"
+                                checked={product.status}
+                                onChange={(e) => setProduct({ ...product, status: e.target.checked })}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="productImages">
+                            <Form.Label>Images</Form.Label>
+                            {images.map((image, index) => (
+                                <div key={index}>
+                                    <img src={image} alt={`Product ${index}`} style={{ width: '100px', margin: '10px' }} />
+                                </div>
+                            ))}
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                    {modalAction === 'Create' ? (
+                        <Button variant="primary" onClick={handleCreateProduct}>
+                            Create
+                        </Button>
+                    ) : (
+                        <Button variant="primary" onClick={handleEditProduct}>
+                            Save Changes
+                        </Button>
+                    )}
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showModal} onHide={handleCloseModalDetails} size="lg">
+                <Modal.Header closeButton>
                     <Modal.Title>Product Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {selectedProduct && (
+                    {selectedProductDetails && (
                         <div>
-                            <h4>{selectedProduct.name}</h4>
-                            <p><strong>Description:</strong> {selectedProduct.description}</p>
-                            <p><strong>Price:</strong> ${selectedProduct.price}</p>
-                            <p><strong>Quantity:</strong> {selectedProduct.quantity}</p>
-                            <p><strong>Category:</strong> {selectedProduct.productCategoryName}</p>
-                            <p><strong>Status:</strong> {selectedProduct.status ? "Deactive" : "Active"}</p>
-                            <p><strong>Information:</strong> {selectedProduct.product.information}</p>
+                            <h4>{selectedProductDetails.name}</h4>
+                            <p><strong>Description:</strong> {selectedProductDetails.description}</p>
+                            <p><strong>Price:</strong> ${selectedProductDetails.price}</p>
+                            <p><strong>Quantity:</strong> {selectedProductDetails.quantity}</p>
+                            <p><strong>Category:</strong> {selectedProductDetails.productCategoryName}</p>
+                            <p><strong>Status:</strong> {selectedProductDetails.status ? "Deactive" : "Active"}</p>
+                            <p><strong>Information:</strong> {selectedProductDetails.product.information}</p>
                             <div className="d-flex justify-content-center">
-                                {selectedProduct.images.map((image, index) => (
+                                {selectedProductDetails.images.map((image, index) => (
                                     <img key={index} src={image.imageUrl} alt={`Product ${index}`} style={{ width: '100px', margin: '10px' }} />
                                 ))}
                             </div>
@@ -124,19 +299,19 @@ const ProductCrudComponent = () => {
                                 <td>{product.productCategoryName}</td>
                                 <td>{product.status ? "Deactive" : "Active"}</td>
                                 <td className="d-flex flex-column gap-2">
-                                    <Button variant="warning" onClick={() => handleShowModal(product)}>
+                                    <Button variant="warning" onClick={() => handleShowEditModal(product)}>
                                         Edit
                                     </Button>
 
-                                    <Button variant="danger" onClick={() => handleShowModal(product)}>
+                                    <Button variant="danger" onClick={() => handleDeleteProduct(product.id)}>
                                         Delete
                                     </Button>
 
-                                    <Button variant="success" onClick={() => handleShowModal(product)}>
-                                        Active
+                                    <Button variant="success" onClick={() => handleUpdateProductStatus(product.id)}>
+                                        {product.status ? "Active" : "Deactivate"}
                                     </Button>
 
-                                    <Button variant="info" onClick={() => handleShowModal(product)}>
+                                    <Button variant="info" onClick={() => handleShowModalDetails(product)}>
                                         Detail
                                     </Button>
                                 </td>

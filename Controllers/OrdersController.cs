@@ -247,6 +247,77 @@ namespace EcomerceApp.Controllers
             return NoContent();
         }
 
+        // PATCH: api/orders/{id}/status
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] string newStatus)
+        {
+            var order = await _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.Coupon)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound(); // Trả về NotFound nếu không tìm thấy đơn hàng
+            }
+
+            // Kiểm tra xem newStatus có hợp lệ không (có nằm trong danh sách các trạng thái cho phép)
+            var statusValues = new[] { "Pending", "Processing", "Delivering", "Completed", "Cancelled" };
+            if (!statusValues.Contains(newStatus))
+            {
+                return BadRequest("Invalid status value.");
+            }
+
+            // Lấy index của trạng thái hiện tại trong mảng statusValues
+            int currentIndex = Array.IndexOf(statusValues, order.Status);
+
+            // Nếu trạng thái hiện tại là "Cancelled", cho phép cập nhật sang các trạng thái khác
+            if (order.Status == "Cancelled" && newStatus != "Cancelled")
+            {
+                order.Status = newStatus;
+            }
+            // Nếu trạng thái hiện tại không phải "Cancelled", kiểm tra xem newStatus có phải là trạng thái tiếp theo trong mảng
+            else if (order.Status != "Cancelled" && newStatus != statusValues[currentIndex + 1])
+            {
+                return BadRequest("Cannot update to a lower status.");
+            }
+            else
+            {
+                order.Status = newStatus;
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            // Sau khi cập nhật thành công, lấy lại order với thông tin đầy đủ
+            order = await _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.Coupon)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            return Ok(order); // Trả về thông tin đầy đủ của đơn hàng sau khi cập nhật
+        }
+
+
+
+
         private bool OrderExists(int id)
         {
             return (_context.Orders?.Any(e => e.Id == id)).GetValueOrDefault();

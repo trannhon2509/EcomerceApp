@@ -4,11 +4,12 @@ import { Button, Modal, Form, Pagination, Table } from 'react-bootstrap';
 
 const ProductCrudComponent = () => {
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [product, setProduct] = useState({
         name: '',
         description: '',
         price: 0,
-        quantity: 1, // You can set default values here
+        quantity: 1,
         information: '',
         status: true,
         productCategoryId: 1
@@ -19,12 +20,14 @@ const ProductCrudComponent = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [selectedProductDetails, setSelectedProductDetails] = useState(null);// State to store selected product
+    const [selectedProductDetails, setSelectedProductDetails] = useState(null);
     const [modalAction, setModalAction] = useState('Create');
+    const [imageUrlInput, setImageUrlInput] = useState('');
     const pageSize = 10;
 
     useEffect(() => {
         fetchProducts();
+        fetchCategories();
     }, [currentPage]);
 
     const fetchProducts = async () => {
@@ -37,10 +40,20 @@ const ProductCrudComponent = () => {
         }
     };
 
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get(`/api/ProductCategories`);
+            setCategories(response.data.results);
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+
     const handleCloseModal = () => {
         setShowModal(false);
         setShowModalDetail(false);
-        setSelectedProduct(null); // Clear selected product
+        setSelectedProduct(null);
         setProduct({
             name: '',
             description: '',
@@ -49,9 +62,10 @@ const ProductCrudComponent = () => {
             information: '',
             status: true,
             productCategoryId: 1
-        }); // Reset product form fields
-        setImages([]); // Clear images array
-        setModalAction('Create'); // Reset modal action to 'Create'
+        });
+        setImages([]);
+        setModalAction('Create');
+        setImageUrlInput('');
     };
 
     const handleShowCreateModal = () => {
@@ -61,7 +75,7 @@ const ProductCrudComponent = () => {
 
     const handleCloseModalDetails = () => {
         setShowModalDetail(false);
-        setSelectedProductDetails(null); // Clear selected product
+        setSelectedProductDetails(null);
     };
 
     const handleShowModalDetails = (product) => {
@@ -96,7 +110,7 @@ const ProductCrudComponent = () => {
             console.log('Product created:', response.data);
 
             handleCloseModal();
-            fetchProducts(); // Reload products after creation
+            fetchProducts();
         } catch (error) {
             console.error('Error creating product:', error);
         }
@@ -105,7 +119,14 @@ const ProductCrudComponent = () => {
     const handleEditProduct = async () => {
         try {
             const productData = {
-                product,
+                id: selectedProduct.id,
+                name: product.name,
+                description: product.description,
+                price: product.price,
+                quantity: product.quantity,
+                information: product.information,
+                status: product.status,
+                productCategoryId: product.productCategoryId,
                 images: images.map(url => ({ imageUrl: url }))
             };
 
@@ -113,7 +134,7 @@ const ProductCrudComponent = () => {
             console.log('Product updated:', response.data);
 
             handleCloseModal();
-            fetchProducts(); // Reload products after edit
+            fetchProducts();
         } catch (error) {
             console.error('Error updating product:', error);
         }
@@ -122,7 +143,7 @@ const ProductCrudComponent = () => {
     const handleDeleteProduct = async (productId) => {
         try {
             await axios.delete(`/api/Products/${productId}`);
-            fetchProducts(); // Reload products after deletion
+            fetchProducts();
         } catch (error) {
             console.error('Error deleting product:', error);
         }
@@ -131,27 +152,30 @@ const ProductCrudComponent = () => {
     const handleUpdateProductStatus = async (productId) => {
         try {
             await axios.patch(`/api/Products/${productId}/status`);
-            // Update products array after successful status update
             const updatedProducts = products.map(product => {
                 if (product.id === productId) {
                     return {
                         ...product,
-                        status: !product.status // Toggle status
+                        status: !product.status
                     };
                 }
                 return product;
             });
-            setProducts(updatedProducts); // Update state with updated products array
+            setProducts(updatedProducts);
         } catch (error) {
             console.error('Error updating product status:', error);
         }
     };
 
-
-
-
     const handlePageChange = (page) => {
         setCurrentPage(page);
+    };
+
+    const handleAddImageUrl = () => {
+        if (imageUrlInput.trim() !== '') {
+            setImages([...images, imageUrlInput]);
+            setImageUrlInput('');
+        }
     };
 
     return (
@@ -212,6 +236,20 @@ const ProductCrudComponent = () => {
                                 onChange={(e) => setProduct({ ...product, information: e.target.value })}
                             />
                         </Form.Group>
+                        <Form.Group controlId="productCategory">
+                            <Form.Label>Category</Form.Label>
+                            <Form.Control
+                                as="select"
+                                value={product.productCategoryId}
+                                onChange={(e) => setProduct({ ...product, productCategoryId: parseInt(e.target.value) })}
+                            >
+                                {categories.map(category => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
                         <Form.Group controlId="productStatus">
                             <Form.Check
                                 type="switch"
@@ -228,6 +266,13 @@ const ProductCrudComponent = () => {
                                     <img src={image} alt={`Product ${index}`} style={{ width: '100px', margin: '10px' }} />
                                 </div>
                             ))}
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter image URL"
+                                value={imageUrlInput}
+                                onChange={(e) => setImageUrlInput(e.target.value)}
+                            />
+                            <Button variant="primary" onClick={handleAddImageUrl}>Add Image</Button>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
@@ -247,92 +292,84 @@ const ProductCrudComponent = () => {
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showModalDetail} onHide={handleCloseModalDetails} size="lg">
+            <Modal show={showModalDetail} onHide={handleCloseModalDetails}>
                 <Modal.Header closeButton>
                     <Modal.Title>Product Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {selectedProductDetails && (
                         <div>
-                            <h4>{selectedProductDetails.name}</h4>
+                            <p><strong>Name:</strong> {selectedProductDetails.name}</p>
                             <p><strong>Description:</strong> {selectedProductDetails.description}</p>
-                            <p><strong>Price:</strong> ${selectedProductDetails.price}</p>
+                            <p><strong>Price:</strong> {selectedProductDetails.price}</p>
                             <p><strong>Quantity:</strong> {selectedProductDetails.quantity}</p>
-                            <p><strong>Category:</strong> {selectedProductDetails.productCategoryName}</p>
-                            <p><strong>Status:</strong> {selectedProductDetails.status ? "Deactive" : "Active"}</p>
-                            <p><strong>Information:</strong> {selectedProductDetails.product.information}</p>
-                            <div className="d-flex justify-content-center">
-                                {selectedProductDetails.images.map((image, index) => (
-                                    <img key={index} src={image.imageUrl} alt={`Product ${index}`} style={{ width: '100px', margin: '10px' }} />
-                                ))}
-                            </div>
+                            <p><strong>Information:</strong> {selectedProductDetails.information}</p>
+                            <p><strong>Status:</strong> {selectedProductDetails.status ? 'Active' : 'Inactive'}</p>
+                            <p><strong>Category:</strong> {categories.find(c => c.id === selectedProductDetails.productCategoryId)?.name}</p>
+                            <p><strong>Images:</strong></p>
+                            {selectedProductDetails.images.map((image, index) => (
+                                <img key={index} src={image.imageUrl} alt={`Product ${index}`} style={{ width: '100px', margin: '10px' }} />
+                            ))}
                         </div>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
+                    <Button variant="secondary" onClick={handleCloseModalDetails}>
                         Close
                     </Button>
                 </Modal.Footer>
             </Modal>
 
-            <div className="mt-3">
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Images</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Category</th>
-                            <th>Status</th>
-                            <th>Action</th>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {products.map(product => (
+                        <tr key={product.id}>
+                            <td>{product.id}</td>
+                            <td>{product.name}</td>
+                            <td>{product.description}</td>
+                            <td>{product.price}</td>
+                            <td>{product.quantity}</td>
+                            <td>{product.status ? 'Active' : 'Inactive'}</td>
+                            <td>{categories.find(c => c.id === product.productCategoryId)?.name}</td>
+                            <td>
+                                <Button variant="info" onClick={() => handleShowModalDetails(product)}>View</Button>
+                                <Button variant="primary" onClick={() => handleShowEditModal(product)}>Edit</Button>
+                                <Button variant="danger" onClick={() => handleDeleteProduct(product.id)}>Delete</Button>
+                                <Button variant="warning" onClick={() => handleUpdateProductStatus(product.id)}>
+                                    {product.status ? 'Deactivate' : 'Activate'}
+                                </Button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {products.map(product => (
-                            <tr key={product.id}>
-                                <td>
-                                    <img src={product.images[0]?.imageUrl} alt={`Product ${product.id}`} style={{ width: '100px' }} />
-                                </td>
-                                <td>{product.name}</td>
-                                <td>{product.description}</td>
-                                <td>${product.price}</td>
-                                <td>{product.productCategoryName}</td>
-                                <td>{product.status ? "Deactive" : "Active"}</td>
-                                <td className="d-flex flex-column gap-2">
-                                    <Button variant="warning" onClick={() => handleShowEditModal(product)}>
-                                        Edit
-                                    </Button>
+                    ))}
+                </tbody>
+            </Table>
 
-                                    <Button variant="danger" onClick={() => handleDeleteProduct(product.id)}>
-                                        Delete
-                                    </Button>
-
-                                    <Button variant="success" onClick={() => handleUpdateProductStatus(product.id)}>
-                                        {product.status ? "Active" : "Deactivate"}
-                                    </Button>
-
-                                    <Button variant="info" onClick={() => handleShowModalDetails(product)}>
-                                        Detail
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            </div>
-
-            <Pagination className="mt-3">
-                {[...Array(totalPages).keys()].map(page => (
+            <Pagination>
+                <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+                <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                {[...Array(totalPages)].map((_, pageIndex) => (
                     <Pagination.Item
-                        key={page + 1}
-                        active={page + 1 === currentPage}
-                        onClick={() => handlePageChange(page + 1)}
+                        key={pageIndex + 1}
+                        active={pageIndex + 1 === currentPage}
+                        onClick={() => handlePageChange(pageIndex + 1)}
                     >
-                        {page + 1}
+                        {pageIndex + 1}
                     </Pagination.Item>
                 ))}
+                <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+                <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
             </Pagination>
         </div>
     );

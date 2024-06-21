@@ -13,7 +13,6 @@ namespace EcommerceApp.DTOs
         public string Information { get; set; }
         public bool Status { get; set; }
         public int ProductCategoryId { get; set; }
-        public List<ProductCommentDto> Comments { get; set; }
         public List<ProductImageDto> Images { get; set; }
     }
 
@@ -27,7 +26,6 @@ namespace EcommerceApp.DTOs
 
     public class ProductImageDto
     {
-        public int Id { get; set; }
         public string ImageUrl { get; set; }
     }
 }

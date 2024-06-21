@@ -198,7 +198,7 @@ namespace EcomerceApp.Controllers
                 return NotFound();
             }
 
-            // Cập nhật các thuộc tính của sản phẩm từ DTO
+            // Update product properties
             existingProduct.Name = dto.Name;
             existingProduct.Description = dto.Description;
             existingProduct.Price = dto.Price;
@@ -206,7 +206,7 @@ namespace EcomerceApp.Controllers
             existingProduct.Information = dto.Information;
             existingProduct.Status = dto.Status;
 
-            // Cập nhật danh mục sản phẩm nếu có
+            // Update product category if provided
             if (dto.ProductCategoryId != 0)
             {
                 var category = await _context.ProductCategories.FirstOrDefaultAsync(pc => pc.Id == dto.ProductCategoryId);
@@ -214,19 +214,31 @@ namespace EcomerceApp.Controllers
                 {
                     existingProduct.ProductCategoryId = category.Id;
                 }
-                // Nếu danh mục không tồn tại, chỉ bỏ qua việc cập nhật
             }
 
-            // Xóa hình ảnh hiện tại của sản phẩm
-            _context.ProductImages.RemoveRange(existingProduct.ProductImages);
+            // Update product images
+            var currentImages = existingProduct.ProductImages.ToList();
+            var updatedImageUrls = dto.Images.Select(i => i.ImageUrl).ToList();
 
-            // Thêm hình ảnh mới cho sản phẩm
-            foreach (var imageDto in dto.Images)
+            // Remove images that are no longer in the DTO
+            foreach (var image in currentImages)
             {
-                existingProduct.ProductImages.Add(new ProductImage { ImageUrl = imageDto.ImageUrl });
+                if (!updatedImageUrls.Contains(image.ImageUrl))
+                {
+                    _context.ProductImages.Remove(image);
+                }
             }
 
-            // Cập nhật sản phẩm trong cơ sở dữ liệu
+            // Add new images that are not in the current images
+            foreach (var imageUrl in updatedImageUrls)
+            {
+                if (!currentImages.Any(i => i.ImageUrl == imageUrl))
+                {
+                    existingProduct.ProductImages.Add(new ProductImage { ImageUrl = imageUrl });
+                }
+            }
+
+            // Save changes to the database
             try
             {
                 await _context.SaveChangesAsync();
@@ -245,8 +257,6 @@ namespace EcomerceApp.Controllers
 
             return NoContent();
         }
-
-
 
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

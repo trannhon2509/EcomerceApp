@@ -78,22 +78,24 @@ function Checkout() {
 
 
   // Function to handle applying coupon
-  const applyCoupon = async () => {
-    try {
-      const response = await axios.get(`api/Coupons/search?code=${couponCode}`);
-      if (response.data) {
-        // Coupon found, update the discount
-        setDiscount(response.data);
-        console.log(response.data)
-      } else {
-        // Coupon not found or invalid, display an error message to the user
-        setDiscount(0);
-        alert('Invalid coupon code');
-      }
-    } catch (error) {
-      console.error('Error applying coupon:', error);
-    }
-  };
+    const applyCoupon = async () => {
+        try {
+            const response = await axios.get(`api/Coupons/search?code=${couponCode}`);
+            if (response.data && response.data.status) {
+                // Coupon found and status is true, update the discount
+                setDiscount(response.data);
+                toast.success('Áp dụng mã giảm giá thành công!');
+            } else {
+                // Coupon not found or status is false, display an error message
+                setDiscount(0);
+                toast.error('Mã giảm giá bạn nhập không hợp lệ.');
+            }
+        } catch (error) {
+            console.error('Error applying coupon:', error);
+        }
+    };
+
+
 
   // Calculate total price
   const calculateTotal = () => {
@@ -316,65 +318,6 @@ function Checkout() {
                     </div>
                   </div>
                 </li>
-                {/* <li className="checkout-item">
-                  <div className="avatar checkout-icon p-1">
-                    <div className="avatar-title rounded-circle bg-primary">
-                      <i className="bx bxs-truck text-white font-size-20" />
-                    </div>
-                  </div>
-                  <div className="feed-item-list">
-                    <div>
-                      <h5 className="font-size-16 mb-1">Thông tin vận chuyển</h5>
-                      <p className="text-muted text-truncate mb-4">Chọn địa chỉ của bạn</p>
-                      <div className="mb-3">
-                        <div className="row">
-                          <div className="col-lg-4 col-sm-6">
-                            <div data-bs-toggle="collapse">
-                              <label className="card-radio-label mb-0">
-                                <input type="radio" name="address" id="info-address1" className="card-radio-input" defaultChecked />
-                                <div className="card-radio text-truncate p-3">
-                                  <span className="fs-14 mb-4 d-block">Address 1</span>
-                                  <span className="fs-14 mb-2 d-block">Bradley
-                                    McMillian</span>
-                                  <span className="text-muted fw-normal text-wrap mb-1 d-block">109
-                                    Clarksburg Park Road Show Low, AZ 85901</span>
-                                  <span className="text-muted fw-normal d-block">Mo.
-                                    012-345-6789</span>
-                                </div>
-                              </label>
-                              <div className="edit-btn bg-light  rounded">
-                                <a href="#" data-bs-toggle="tooltip" data-placement="top" title data-bs-original-title="Edit">
-                                  <i className="bx bx-pencil font-size-16" />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-lg-4 col-sm-6">
-                            <div>
-                              <label className="card-radio-label mb-0">
-                                <input type="radio" name="address" id="info-address2" className="card-radio-input" />
-                                <div className="card-radio text-truncate p-3">
-                                  <span className="fs-14 mb-4 d-block">Address 2</span>
-                                  <span className="fs-14 mb-2 d-block">Bradley
-                                    McMillian</span>
-                                  <span className="text-muted fw-normal text-wrap mb-1 d-block">109
-                                    Clarksburg Park Road Show Low, AZ 85901</span>
-                                  <span className="text-muted fw-normal d-block">Mo.
-                                    012-345-6789</span>
-                                </div>
-                              </label>
-                              <div className="edit-btn bg-light  rounded">
-                                <a href="#" data-bs-toggle="tooltip" data-placement="top" title data-bs-original-title="Edit">
-                                  <i className="bx bx-pencil font-size-16" />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li> */}
                 <li className="checkout-item">
 
                 </li>

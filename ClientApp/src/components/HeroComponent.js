@@ -33,7 +33,9 @@ const HeroComponent = () => {
                                     }} >{text}<Cursor /></span>
                                     {'\n'}
                                 </h1>
-                                <p><span className="cursor-span">
+                                <p style={{
+                                    fontSize:'17px'
+                                }}><span className="cursor-span">
                                     <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>Discover the Art of Fragrance</span>
                                 </span><br />
                                     Chào mừng bạn đến với ReVibe Co, nơi bạn sẽ tìm thấy những sản phẩm nến thơm và phụ kiện quà tặng tinh tế nhất.<br />
@@ -64,14 +66,14 @@ const HeroComponent = () => {
                                     <h1 className='col-md-3'><i class="bi bi-facebook"></i></h1>
                                     <div className='col-md-9 d-flex flex-column align-items-start'>
                                         <span>Facebook</span>
-                                        <a href='https://www.instagram.com/revibe_co_vn/?fbclid=IwZXh0bgNhZW0CMTAAAR0rMMX5MD88T5WUjFKTPllDNwVtAwM7-lCLzmoCHS3J9LTmXtUJMF7p4fQ_aem_AbILUfMisOSVa6eb1nIdveyqxRv1M5Ozw6Wv7Y-KXLG1ee3HyXd8ZqXpVAJHzUw2KilGnniRAuRusPz4xwDtN955' target='https://www.instagram.com/revibe_co_vn/?fbclid=IwZXh0bgNhZW0CMTAAAR0rMMX5MD88T5WUjFKTPllDNwVtAwM7-lCLzmoCHS3J9LTmXtUJMF7p4fQ_aem_AbILUfMisOSVa6eb1nIdveyqxRv1M5Ozw6Wv7Y-KXLG1ee3HyXd8ZqXpVAJHzUw2KilGnniRAuRusPz4xwDtN955' className='text-nowrap text-black'>Revibe Co</a>
+                                        <a href='https://www.facebook.com/ReVibe.Co.VN' target='https://www.instagram.com/revibe_co_vn/?fbclid=IwZXh0bgNhZW0CMTAAAR0rMMX5MD88T5WUjFKTPllDNwVtAwM7-lCLzmoCHS3J9LTmXtUJMF7p4fQ_aem_AbILUfMisOSVa6eb1nIdveyqxRv1M5Ozw6Wv7Y-KXLG1ee3HyXd8ZqXpVAJHzUw2KilGnniRAuRusPz4xwDtN955' className='text-nowrap text-black'>Revibe Co</a>
                                     </div>
                                 </div>
                                 <div className='row'>
                                     <h1 className='col-md-3'><i class="bi bi-instagram"></i></h1>
                                     <div className='col-md-9 d-flex flex-column align-items-start'>
                                         <span>Instagram</span>
-                                        <a href='https://www.facebook.com/ReVibe.Co.VN' target='https://www.facebook.com/ReVibe.Co.VN' className='text-nowrap text-black'>revibe_co_vn</a>
+                                        <a href='https://www.instagram.com/revibe_co_vn' target='https://www.facebook.com/ReVibe.Co.VN' className='text-nowrap text-black'>revibe_co_vn</a>
                                     </div>
                                 </div>
                             </div>

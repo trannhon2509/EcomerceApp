@@ -158,7 +158,7 @@ const CouponComponent = () => {
                 <thead>
                     <tr>
                         <th>Code</th>
-                        <th>Discount Amount</th>
+                        <th>Discount Amount (%)</th>
                         <th>Expiry Date</th>
                         <th>Status</th>
                         <th>Actions</th>
